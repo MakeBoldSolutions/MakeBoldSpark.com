@@ -134,17 +134,25 @@ builder.Services.AddOpenApi(options =>
             new OpenApiTag { Name = ApiSparkOpenApiTags.RecipesCatalog, Description = "Public recipe browsing and detail lookup." },
             new OpenApiTag { Name = ApiSparkOpenApiTags.RecipesCategories, Description = "Recipe category browsing and category management." },
             new OpenApiTag { Name = ApiSparkOpenApiTags.RecipesPublishing, Description = "Publisher-only recipe creation, update, and deletion." },
-            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkDomains, Description = "WebSpark CMS website and domain management." },
-            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkBlogs, Description = "WebSpark CMS blog management." },
-            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkAuthors, Description = "WebSpark CMS author management." },
-            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkPosts, Description = "WebSpark CMS blog post management." },
-            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkCategories, Description = "WebSpark CMS category management." },
-            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkMenu, Description = "WebSpark CMS navigation menu management." },
-            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkKeywords, Description = "WebSpark CMS keyword and SEO tag management." },
-            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkContentParts, Description = "WebSpark CMS reusable content part management." },
-            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkSubscribers, Description = "WebSpark CMS subscriber management." },
-            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkNewsletters, Description = "WebSpark CMS newsletter management." },
-            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkMailSettings, Description = "WebSpark CMS mail settings management." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkPublicDomains, Description = "Anonymous read access to CMS site and domain records." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkPublicBlogs, Description = "Anonymous read access to CMS blog containers." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkPublicAuthors, Description = "Anonymous read access to public author profiles. Password hashes are never returned." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkPublicPosts, Description = "Anonymous read access to CMS posts and published content entries." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkPublicCategories, Description = "Anonymous read access to CMS categories." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkPublicMenus, Description = "Anonymous read access to CMS navigation menus." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkPublicKeywords, Description = "Anonymous read access to CMS keyword and SEO tag records." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkPublicContentParts, Description = "Anonymous read access to reusable CMS content fragments and page parts." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkAdminDomains, Description = "Admin-only CMS domain creation, update, and deletion." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkAdminBlogs, Description = "Admin-only CMS blog creation, update, and deletion." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkAdminAuthors, Description = "Admin-only CMS author creation, update, and deletion. Responses never return password hashes." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkAdminPosts, Description = "Admin-only CMS post creation, update, and deletion." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkAdminCategories, Description = "Admin-only CMS category creation, update, and deletion." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkAdminMenus, Description = "Admin-only CMS menu creation, update, and deletion." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkAdminKeywords, Description = "Admin-only CMS keyword creation, update, and deletion." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkAdminContentParts, Description = "Admin-only CMS content-part creation, update, and deletion." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkMessagingSubscribers, Description = "Admin-only CMS newsletter subscriber records." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkMessagingNewsletters, Description = "Admin-only CMS newsletter campaign records." },
+            new OpenApiTag { Name = ApiSparkOpenApiTags.WebSparkMessagingMailSettings, Description = "Admin-only CMS mail sender configuration. SMTP passwords are accepted in requests but never returned." },
             new OpenApiTag { Name = ApiSparkOpenApiTags.AsyncWeatherPatterns, Description = "Demonstrates async best-practices using live weather data: slow baseline, timeout, retry with Polly, and parallel fan-out." },
             new OpenApiTag { Name = ApiSparkOpenApiTags.AsyncCancellationPatterns, Description = "Contrasts operations with and without CancellationToken support, including linked timeout tokens." },
             new OpenApiTag { Name = ApiSparkOpenApiTags.AsyncConcurrencyPatterns, Description = "Compares sequential execution, unbounded Task.WhenAll, and SemaphoreSlim-throttled concurrency." },
@@ -221,6 +229,7 @@ app.MapApiTestSpark(options =>
     options.OpenApiUrl  = "/openapi/v1.json";
     options.AuthScheme  = "Bearer";
     options.Environments = ["Development", "Production", "Release", "Test"];
+    options.EnableDemoIntegrations = false;
 });
 
 

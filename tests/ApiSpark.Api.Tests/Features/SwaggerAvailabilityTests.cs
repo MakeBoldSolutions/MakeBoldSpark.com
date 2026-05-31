@@ -50,7 +50,10 @@ public class ApiDocsAvailabilityTests
             "Health: Diagnostics",
             "Public Content: Articles",
             "Recipes: Catalog",
-            "WebSpark: Domains",
+            "CMS Public: Domains",
+            "CMS Admin: Posts",
+            "CMS Public: Authors",
+            "CMS Messaging: Newsletters",
             "Async Demo: Weather Patterns"
         }, tagNames);
 
