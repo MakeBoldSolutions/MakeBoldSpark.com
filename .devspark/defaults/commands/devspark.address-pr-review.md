@@ -5,7 +5,7 @@ handoffs:
     agent: devspark.pr-review
     prompt: Run /devspark.pr-review UPDATE for this PR after fixes are committed
 scripts:
-  sh: pwsh -File .devspark/scripts/powershell/address-pr-review.ps1 -PrId $ARGUMENTS -Json
+  sh: .devspark/scripts/bash/address-pr-review.sh --pr-id $ARGUMENTS --json
   ps: .devspark/scripts/powershell/address-pr-review.ps1 -PrId $ARGUMENTS -Json
 ---
 
@@ -30,15 +30,15 @@ This command is the **author-side companion** to `/devspark.pr-review`. It helps
 
 - Existing PR review file at `/.documentation/specs/pr-review/pr-{PR_ID}.md`
 - Git repository with the PR source branch checked out
-- PowerShell 7+ (`pwsh`) available for the gate helper script
+- PowerShell 7+ (`pwsh`) on Windows, or Bash on macOS/Linux, for the gate helper script
 
 ## Outline
 
 ### Phase 0 — Load context
 
-> **Script Resolution**: Before running `{SCRIPT}`, apply the 2-tier override check for PowerShell only — if `.documentation/scripts/powershell/address-pr-review.ps1` exists on disk, run that file instead, preserving all arguments. Team override in `.documentation/scripts/powershell/` takes priority over `.devspark/scripts/powershell/`.
+> **Script Resolution**: Before running `{SCRIPT}`, apply the 2-tier override check — if `.documentation/scripts/powershell/address-pr-review.ps1` (PowerShell) or `.documentation/scripts/bash/address-pr-review.sh` (Bash) exists on disk, run that file instead, preserving all arguments. Team overrides in `.documentation/scripts/` always take priority over `.devspark/scripts/`.
 
-1. Run `{SCRIPT}` with `-PrId {PR_ID} -Json`.
+1. Run `{SCRIPT}` with the PR id and JSON output enabled (`-PrId {PR_ID} -Json` on PowerShell, `--pr-id {PR_ID} --json` on Bash).
 2. Fail fast if `/.documentation/specs/pr-review/pr-{PR_ID}.md` is missing.
 3. Parse open findings from checklist lines matching:
    - `- [ ] **C-##**`
@@ -77,7 +77,7 @@ For each selected finding:
 
 ### Phase 4 — Commit code fixes (isolation gate #1)
 
-1. Run gate script with `-Gate code-only` before commit.
+1. Run gate script with code-only mode before commit (`-Gate code-only` on PowerShell, `--gate code-only` on Bash).
 2. If the gate fails, **abort** and print offending staged paths.
 3. Review staged diff and commit with:
 
@@ -104,7 +104,7 @@ Then update metadata:
 
 ### Phase 6 — Commit review file (isolation gate #2)
 
-1. Run gate script with `-Gate review-only` before commit.
+1. Run gate script with review-only mode before commit (`-Gate review-only` on PowerShell, `--gate review-only` on Bash).
 2. If the gate fails, **abort** and print offending staged paths.
 3. Commit with:
 

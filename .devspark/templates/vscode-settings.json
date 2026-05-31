@@ -1,4 +1,4 @@
-{
+﻿{
     "chat.promptFilesRecommendations": {
         "devspark.constitution": true,
         "devspark.specify": true,
@@ -11,5 +11,4 @@
         ".documentation/scripts/powershell/": true
     }
 }
-
 

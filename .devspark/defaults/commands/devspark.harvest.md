@@ -1,12 +1,12 @@
 ﻿---
-description: Canonical knowledge-preserving cleanup workflow for completed specs, stale docs, comment cleanup, and archival
+description: Post-release cleanup — preserve knowledge into living docs, rewrite spec-linked code comments, and move stale artifacts to /.archive/
 handoffs:
-  - label: Review Release Artifacts
-    agent: devspark.release
-    prompt: Review completed specs and release documentation before archival
   - label: Run Documentation Audit
     agent: devspark.site-audit
-    prompt: Audit documentation quality and stale references before harvest
+    prompt: Audit documentation quality and stale references after harvest
+  - label: Run Release First
+    agent: devspark.release
+    prompt: Seal the release and archive completed specs before running harvest
 scripts:
   sh: .devspark/scripts/bash/harvest.sh $ARGUMENTS --json
   ps: .devspark/scripts/powershell/harvest.ps1 $ARGUMENTS -Json
@@ -20,9 +20,17 @@ $ARGUMENTS
 
 You **MUST** consider the user input before proceeding (if not empty).
 
+## Prerequisites
+
+**Run `/devspark.release` before harvest** if you are closing out a version. Release seals the version, archives completed specs to `/.documentation/releases/v{VERSION}/`, and generates the CHANGELOG entry. Harvest then picks up afterward to clean up stale docs, rewrite spec-linked code comments, and move obsolete files to `/.archive/`.
+
+Harvest may also be run standalone (without a preceding release) for routine documentation housekeeping.
+
 ## Overview
 
 Harvest valuable knowledge from completed specs, stale documentation, and in-process drafts into living project documentation, then archive obsolete source material.
+
+**Scope boundary**: `/devspark.harvest` moves files to `/.archive/` only. It does **not** write to `/.documentation/releases/`, bump versions, or create ADRs — those are `/devspark.release` responsibilities.
 
 `/devspark.harvest` is the canonical lifecycle cleanup command. `/devspark.archive` is a deprecated compatibility alias and should be treated as an invocation of `/devspark.harvest`, not as a separate workflow.
 
@@ -120,12 +128,14 @@ Treat spec folders under `/.documentation/specs/` as:
 
 | Status | Criteria | Action |
 |--------|----------|--------|
-| `completed` | `**Status**: Complete` in spec.md AND tasks complete AND reflected in CHANGELOG or review evidence | Harvest then archive |
-| `completed-needs-changelog` | `**Status**: Complete` AND tasks complete but no CHANGELOG entry found | Harvest then add CHANGELOG entry |
+| `completed` | `**Status**: Complete` in spec.md AND all tasks checked AND CHANGELOG entry present | Harvest knowledge then move to `/.archive/` |
+| `completed-needs-changelog` | `**Status**: Complete` AND all tasks checked but no CHANGELOG entry found | Add CHANGELOG entry, then harvest and archive — or run `/devspark.release` first if this work has not been released |
 | `in-progress` | `**Status**: In Progress` OR some tasks incomplete | Keep active |
 | `draft` | `**Status**: Draft` OR planning exists but implementation is incomplete or absent | Keep active |
 
-**Lifecycle consistency check**: If the `**Status**:` field in spec.md disagrees with the task completion state (e.g., all tasks checked but status is `Draft`), flag the inconsistency and recommend running `/devspark.implement` to reconcile the status before harvesting.
+**Lifecycle consistency check**: If the `**Status**:` field in spec.md disagrees with the task completion state (e.g., all tasks checked but status is `Draft`), do not archive. Update the status field to `Complete` first, then re-run. If the spec has not gone through `/devspark.release`, recommend doing so before harvesting — release creates the CHANGELOG entry and versioned archive that makes the spec eligible for `completed` status.
+
+**Archive destination**: Specs archived by harvest go to `/.archive/YYYY-MM-DD/.documentation/specs/{spec-name}/`, not to `/.documentation/releases/`. Specs already moved to `/.documentation/releases/` by a prior release run should not be re-archived by harvest.
 
 #### Documentation
 
