@@ -33,7 +33,7 @@ public class WebSparkEndpointTests
 
     // ── Public read endpoints (anonymous) ────────────────────────────────────
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("/api/public/webspark/domains")]
     [DataRow("/api/public/webspark/blogs")]
     [DataRow("/api/public/webspark/authors")]
@@ -48,7 +48,7 @@ public class WebSparkEndpointTests
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("/api/public/webspark/domains")]
     [DataRow("/api/public/webspark/blogs")]
     [DataRow("/api/public/webspark/authors")]
@@ -65,7 +65,7 @@ public class WebSparkEndpointTests
         Assert.IsNotNull(body);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("/api/public/webspark/domains/99999")]
     [DataRow("/api/public/webspark/blogs/99999")]
     [DataRow("/api/public/webspark/authors/99999")]
@@ -82,7 +82,7 @@ public class WebSparkEndpointTests
 
     // ── Admin endpoints: unauthenticated → 401 ───────────────────────────────
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("POST",   "/api/admin/webspark/domains")]
     [DataRow("PUT",    "/api/admin/webspark/domains/1")]
     [DataRow("DELETE", "/api/admin/webspark/domains/1")]
@@ -105,7 +105,7 @@ public class WebSparkEndpointTests
 
     // ── Admin endpoints: authenticated Admin → authorization accepted ─────────
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("/api/admin/webspark/subscribers")]
     [DataRow("/api/admin/webspark/newsletters")]
     [DataRow("/api/admin/webspark/mail-settings")]
@@ -115,7 +115,7 @@ public class WebSparkEndpointTests
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow("/api/admin/webspark/domains")]
     [DataRow("/api/admin/webspark/blogs")]
     [DataRow("/api/admin/webspark/authors")]

@@ -1,4 +1,5 @@
 using ApiSpark.Api.Infrastructure.Data;
+using ApiSpark.Api.Infrastructure.OpenApi;
 
 namespace ApiSpark.Api.Features.Health;
 
@@ -21,10 +22,14 @@ public static class AdminHealthEndpoints
 
             var allOk = checks.Values.All(v => v == "ok");
             var response = new DeepHealthResponse(allOk ? "Healthy" : "Degraded", checks);
-            return allOk ? Results.Ok(response) : Results.StatusCode(503);
+            return allOk ? Results.Ok(response) : Results.Json(response, statusCode: 503);
         })
         .WithName("GetDeepHealth")
-        .WithTags("Health");
+        .WithTags(ApiSparkOpenApiTags.HealthDiagnostics)
+        .WithSummary("Deep health probe (admin)")
+        .WithDescription("Checks each downstream dependency (database, etc.) and returns 200 when all are healthy or 503 when one or more are degraded. Requires the AdminOnly policy.")
+        .Produces<DeepHealthResponse>(200)
+        .Produces<DeepHealthResponse>(503);
 
         return group;
     }
