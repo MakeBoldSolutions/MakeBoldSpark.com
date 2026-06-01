@@ -67,6 +67,7 @@ public static class DatabaseSetup
                 }
                 else
                 {
+                    await PreMarkAppliedIfTablesExistAsync(recipeDb, logger, cancellationToken);
                     await recipeDb.Database.MigrateAsync(cancellationToken);
                     await recipeDb.Database.ExecuteSqlRawAsync("PRAGMA journal_mode=WAL;", cancellationToken);
                     logger.LogInformation("Recipe database migrations applied");
@@ -131,4 +132,41 @@ public static class DatabaseSetup
     private static bool IsInMemory(string connStr)
         => connStr.Contains("Mode=Memory", StringComparison.OrdinalIgnoreCase)
         || connStr.Contains(":memory:", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
+    /// If there are pending migrations but their tables already exist (created by a prior context),
+    /// insert those migration IDs into __EFMigrationsHistory so MigrateAsync skips them cleanly.
+    /// </summary>
+    private static async Task PreMarkAppliedIfTablesExistAsync(DbContext db, ILogger logger, CancellationToken cancellationToken)
+    {
+        var pending = (await db.Database.GetPendingMigrationsAsync(cancellationToken)).ToList();
+        if (pending.Count == 0) return;
+
+        // Check whether the first migration's sentinel table already exists in sqlite_master
+        var tableCount = await db.Database.ExecuteSqlRawAsync(
+            "CREATE TABLE IF NOT EXISTS \"__EFMigrationsHistory\" (\"MigrationId\" TEXT NOT NULL CONSTRAINT \"PK___EFMigrationsHistory\" PRIMARY KEY, \"ProductVersion\" TEXT NOT NULL);",
+            cancellationToken);
+
+        // Use sqlite_master to detect pre-existing tables
+        var conn = db.Database.GetDbConnection();
+        await conn.OpenAsync(cancellationToken);
+        int existingTableCount;
+        await using (var cmd = conn.CreateCommand())
+        {
+            cmd.CommandText = "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name NOT LIKE '__EF%' AND name NOT LIKE 'sqlite_%';";
+            existingTableCount = Convert.ToInt32(await cmd.ExecuteScalarAsync(cancellationToken));
+        }
+        await conn.CloseAsync();
+
+        if (existingTableCount == 0) return;
+
+        // Tables exist from a prior system — mark all pending migrations as already applied
+        foreach (var migrationId in pending)
+        {
+            await db.Database.ExecuteSqlRawAsync(
+                $"INSERT OR IGNORE INTO \"__EFMigrationsHistory\" (\"MigrationId\", \"ProductVersion\") VALUES ('{migrationId}', '10.0.0')",
+                cancellationToken);
+        }
+        logger.LogInformation("Database: {Count} pending migration(s) pre-marked as applied (tables already existed)", pending.Count);
+    }
 }

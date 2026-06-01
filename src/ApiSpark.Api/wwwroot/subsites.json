@@ -2,7 +2,7 @@
   "meta": {
     "domain": "makeboldspark.com",
     "description": "All active subdomains on makeboldspark.com",
-    "lastUpdated": "2025-05-13"
+    "lastUpdated": "2026-06-01"
   },
   "subsites": [
     {
@@ -132,9 +132,9 @@
       "url": "https://museum.makeboldspark.com",
       "icon": "🏛️",
       "description": "Digital museum experience showcasing curated collections and interactive exhibits.",
-      "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
-      "hostType": "azure",
-      "tag": "Azure",
+      "host": "markhazleton.github.io",
+      "hostType": "github",
+      "tag": "GitHub Pages",
       "active": true
     },
     {
@@ -207,6 +207,102 @@
       "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
       "hostType": "azure",
       "tag": "Azure",
+      "active": true
+    },
+    {
+      "id": "apitest",
+      "name": "API Test Spark",
+      "subdomain": "apitest",
+      "url": "https://apitest.makeboldspark.com",
+      "icon": "⚡",
+      "description": "Interactive API test harness embedded into .NET 10 Minimal API projects. Autodiscovers OpenAPI v3 endpoints with no separate deployment required.",
+      "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
+      "hostType": "azure",
+      "tag": "Azure",
+      "active": true
+    },
+    {
+      "id": "dev",
+      "name": "DevSpark",
+      "subdomain": "dev",
+      "url": "https://dev.makeboldspark.com",
+      "icon": "🛠️",
+      "description": "Adaptive System Life Cycle Development (ASLCD) toolkit — 28 slash-command prompts giving AI coding assistants a repeatable workflow from requirements through release.",
+      "host": "markhazleton.github.io",
+      "hostType": "github",
+      "tag": "GitHub Pages",
+      "active": true
+    },
+    {
+      "id": "git-spark",
+      "name": "Git Spark",
+      "subdomain": "git-spark",
+      "url": "https://git-spark.makeboldspark.com",
+      "icon": "🔥",
+      "description": "Git repository analytics and reporting tool. Analyzes commit history to generate interactive HTML reports with contributor statistics, code change patterns, and file analysis.",
+      "host": "markhazleton.github.io",
+      "hostType": "github",
+      "tag": "GitHub Pages",
+      "active": true
+    },
+    {
+      "id": "httpclientutility",
+      "name": "HttpClient Utility",
+      "subdomain": "httpclientutility",
+      "url": "https://httpclientutility.makeboldspark.com",
+      "icon": "🔧",
+      "description": "Drop-in HttpClient wrapper for .NET 8–10 with Polly resilience, response caching, OpenTelemetry tracing, and batch execution orchestration. One-line setup eliminates boilerplate.",
+      "host": "markhazleton.github.io",
+      "hostType": "github",
+      "tag": "GitHub Pages",
+      "active": true
+    },
+    {
+      "id": "simpleblog",
+      "name": "Simple Blog",
+      "subdomain": "simpleblog",
+      "url": "https://simpleblog.makeboldspark.com",
+      "icon": "📝",
+      "description": "Mark's Dev Notebook — a simple developer blog on GitHub Pages with Jekyll covering Azure, .NET, and whatever looks interesting this week.",
+      "host": "markhazleton.github.io",
+      "hostType": "github",
+      "tag": "GitHub Pages",
+      "active": true
+    },
+    {
+      "id": "slurper-demo",
+      "name": "Slurper Demo",
+      "subdomain": "slurper-demo",
+      "url": "https://slurper-demo.makeboldspark.com",
+      "icon": "🕵️",
+      "description": "Interactive demo for the WebSpark.Slurper data extraction library — explore XML, JSON, CSV, and HTML parsing through gamified detective case files.",
+      "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
+      "hostType": "azure",
+      "tag": "Azure",
+      "active": true
+    },
+    {
+      "id": "slurper",
+      "name": "Slurper Spark",
+      "subdomain": "slurper",
+      "url": "https://slurper.makeboldspark.com",
+      "icon": "🎯",
+      "description": "WebSpark.Slurper NuGet package site — a .NET data extractor for XML, JSON, CSV, and HTML using dynamic objects. Zero configuration, no model classes required.",
+      "host": "markhazleton.github.io",
+      "hostType": "github",
+      "tag": "GitHub Pages",
+      "active": true
+    },
+    {
+      "id": "support",
+      "name": "Support Spark",
+      "subdomain": "support",
+      "url": "https://support.makeboldspark.com",
+      "icon": "💙",
+      "description": "SupportSpark — a safe, distraction-free space to share your journey through difficult times with the people who matter most. Private, secure, and ad-free.",
+      "host": "markhazleton.github.io",
+      "hostType": "github",
+      "tag": "GitHub Pages",
       "active": true
     }
   ]
