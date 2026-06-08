@@ -51,8 +51,6 @@
         --cyan: #22d3ee;
         --cyan-dim: #0891b2;
         --blue: #3b82f6;
-        --green: #22c55e;
-        --amber: #f59e0b;
         --text: #f1f5f9;
         --muted: #a6b3c5;
         --soft: #dbeafe;
@@ -212,8 +210,7 @@
         margin-bottom: 1.5rem;
       }
 
-      h1 em,
-      .highlight {
+      h1 em {
         font-style: normal;
         background: linear-gradient(135deg, var(--cyan) 0%, var(--blue) 100%);
         -webkit-background-clip: text;
@@ -366,8 +363,7 @@
         align-items: start;
       }
 
-      .pill-list,
-      .flow-list {
+      .pill-list {
         display: grid;
         gap: 0.85rem;
       }
@@ -396,9 +392,7 @@
       }
 
       .card,
-      .project-card,
-      .api-card,
-      .connection-card {
+      .api-card {
         background: var(--panel-strong);
         border: 1px solid var(--border);
         border-radius: var(--radius);
@@ -408,8 +402,7 @@
         padding: 1.5rem;
       }
 
-      .card p,
-      .connection-card p {
+      .card p {
         color: var(--muted);
       }
 
@@ -435,122 +428,12 @@
         color: var(--cyan);
       }
 
-      .projects-shell {
-        display: grid;
-        gap: 2rem;
-        margin-top: 2.5rem;
-      }
-
-      .project-category {
-        display: grid;
-        gap: 1rem;
-      }
-
-      .category-heading {
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        gap: 1rem;
-        border-bottom: 1px solid var(--border);
-        padding-bottom: 0.7rem;
-      }
-
-      .category-heading h3 {
-        font-size: 1.15rem;
-        letter-spacing: 0;
-      }
-
-      .category-heading p {
-        color: var(--muted);
-        font-size: 0.85rem;
-      }
-
-      .projects-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
-        gap: 1rem;
-      }
-
-      .project-card {
-        color: var(--text);
-        display: flex;
-        flex-direction: column;
-        gap: 0.65rem;
-        min-height: 16rem;
-        overflow: hidden;
-        padding: 1.4rem;
-        position: relative;
-        text-decoration: none;
-        transition:
-          transform 0.2s,
-          border-color 0.2s,
-          background 0.2s;
-      }
-
-      .project-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 2px;
-        background: linear-gradient(90deg, var(--cyan), var(--blue));
-        opacity: 0;
-        transition: opacity 0.2s;
-      }
-
-      .project-card:hover {
-        background: var(--panel-hover);
-        border-color: var(--border-glow);
-        transform: translateY(-3px);
-      }
-
-      .project-card:hover::before {
-        opacity: 1;
-      }
-
-      .project-icon {
-        align-items: center;
-        background: rgba(34, 211, 238, 0.12);
-        border-radius: var(--radius);
-        display: flex;
-        font-size: 1.15rem;
-        height: 2.5rem;
-        justify-content: center;
-        width: 2.5rem;
-      }
-
-      .project-name {
-        font-size: 1rem;
-        font-weight: 800;
-      }
-
-      .project-host {
-        color: var(--cyan);
-        font-family: ui-monospace, "Cascadia Code", monospace;
-        font-size: 0.72rem;
-        opacity: 0.85;
-      }
-
-      .project-pattern {
-        color: var(--soft);
-        font-family: ui-monospace, "Cascadia Code", monospace;
-        font-size: 0.72rem;
-        line-height: 1.45;
-      }
-
-      .project-desc,
       .api-desc {
         color: var(--muted);
         font-size: 0.875rem;
         line-height: 1.55;
       }
 
-      .project-desc {
-        flex: 1;
-      }
-
-      .project-tag,
       .badge {
         align-items: center;
         border-radius: 999px;
@@ -562,31 +445,14 @@
         width: fit-content;
       }
 
-      .tag-azure {
-        background: rgba(59, 130, 246, 0.15);
-        color: #93c5fd;
-      }
-
-      .tag-github {
-        background: rgba(148, 163, 184, 0.12);
-        color: #cbd5e1;
-      }
-
-      .tag-static {
-        background: rgba(34, 211, 238, 0.12);
-        color: var(--cyan);
-      }
-
-      .api-grid,
-      .connections-grid {
+      .api-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
         gap: 1rem;
         margin-top: 2rem;
       }
 
-      .api-card,
-      .connection-card {
+      .api-card {
         padding: 1.35rem;
       }
 
@@ -601,8 +467,7 @@
         padding: 0.2rem 0.55rem;
       }
 
-      .api-name,
-      .connection-card h3 {
+      .api-name {
         font-size: 1rem;
         font-weight: 800;
         margin-bottom: 0.45rem;
@@ -618,12 +483,6 @@
         background: rgba(245, 158, 11, 0.15);
         color: #fcd34d;
         margin-top: 0.8rem;
-      }
-
-      .connection-card code {
-        color: var(--cyan);
-        font-family: ui-monospace, "Cascadia Code", monospace;
-        font-size: 0.8rem;
       }
 
       footer {
@@ -715,12 +574,12 @@
     <nav>
       <a class="nav-logo" href="/">Make<span>Bold</span>Spark</a>
       <ul class="nav-links">
-        <li><a href="#vision">Vision</a></li>
-        <li><a href="#devspark">DevSpark</a></li>
-        <li><a href="#ecosystem">Ecosystem</a></li>
-        <li><a href="#api-context">API Context</a></li>
-        <li><a href="/ecosystem.html">Inventory</a></li>
-        <li><a href="/vision.html">About</a></li>
+        <li><a href="/">Home</a></li>
+        <li><a href="/vision.html">Vision</a></li>
+        <li><a href="/ecosystem.html">Ecosystem</a></li>
+        <li><a href="/#devspark">DevSpark</a></li>
+        <li><a href="/#api-context">ApiTestSpark</a></li>
+        <li><a href="/ecosystem.html#git-stats-reporting">Git Utilities</a></li>
       </ul>
     </nav>
 
@@ -820,7 +679,7 @@
           <a class="btn btn-primary" href="https://dev.makeboldspark.com"
             >Open DevSpark</a
           >
-          <a class="btn btn-outline" href="#connections">See How It Connects</a>
+          <a class="btn btn-outline" href="/ecosystem.html">See the Ecosystem</a>
         </div>
       </div>
     </section>
@@ -830,19 +689,20 @@
         <p class="section-label">Ecosystem Inventory</p>
         <h2 class="section-title">The MakeBoldSpark Ecosystem</h2>
         <p class="section-desc">
-          Each Spark initiative explores a different aspect of building better
-          software through better context, specifications, workflows, contracts,
-          and AI-assisted development. Together they form a practical collection
-          of reference implementations demonstrating real-world software
-          delivery patterns.
+          The full inventory lives on a dedicated ecosystem page so the
+          homepage can stay focused on the core story: MakeBoldSpark is the
+          vision, DevSpark leads the workflow, and ApiTestSpark grounds API
+          implementation with real contract context.
         </p>
         <div class="action-row" style="justify-content: flex-start; margin-top: 1.5rem">
           <a class="btn btn-primary" href="/ecosystem.html"
             >Open Full Ecosystem Inventory</a
           >
-        </div>
-        <div class="projects-shell" id="projects-shell">
-          <div style="padding: 2rem; color: var(--muted)">Loading initiatives...</div>
+          <a
+            class="btn btn-outline"
+            href="/ecosystem.html#git-stats-reporting"
+            >Explore Git Utilities</a
+          >
         </div>
       </section>
     </div>
@@ -906,40 +766,6 @@
         >
       </div>
     </section>
-
-    <div class="band" id="connections">
-      <section class="band-inner">
-        <p class="section-label">How the Initiatives Connect</p>
-        <h2 class="section-title">Raw Information &rarr; Curated Context &rarr; Better Implementation</h2>
-        <p class="section-desc">
-          The initiatives share a common pattern: convert scattered information
-          into structured context that developers and coding agents can apply
-          with less ambiguity.
-        </p>
-        <div class="connections-grid">
-          <div class="connection-card">
-            <h3>DevSpark defines what to build</h3>
-            <p><code>Requirements &rarr; Specifications &rarr; Tasks</code></p>
-          </div>
-          <div class="connection-card">
-            <h3>ApiTestSpark explains API consumption</h3>
-            <p>
-              <code>OpenAPI Contracts &rarr; Feature Stories &rarr; Client Implementation</code>
-            </p>
-          </div>
-          <div class="connection-card">
-            <h3>PromptSpark manages reusable context</h3>
-            <p><code>Conversations &rarr; Prompts &rarr; Reusable Context</code></p>
-          </div>
-          <div class="connection-card">
-            <h3>BootstrapSpark demonstrates patterns</h3>
-            <p>
-              <code>Architecture Patterns &rarr; Reference Applications &rarr; Delivery Accelerators</code>
-            </p>
-          </div>
-        </div>
-      </section>
-    </div>
 
     <section class="section" id="platform">
       <p class="section-label">ApiSpark Platform</p>
@@ -1012,92 +838,16 @@
     </footer>
 
     <script>
-      const TAG_CLASSES = {
-        azure: { cls: "tag-azure", label: "Azure" },
-        github: { cls: "tag-github", label: "GitHub Pages" },
-        static: { cls: "tag-static", label: "Static Web App" },
-      };
-
-      function projectCard(site, domain) {
-        const tag = TAG_CLASSES[site.hostType] || {
-          cls: "tag-azure",
-          label: site.hostType,
-        };
-        const role = site.makeBoldSparkRole || site.description;
-        const status = site.status
-          ? `<span class="project-tag ${tag.cls}">${site.status}</span>`
-          : `<span class="project-tag ${tag.cls}">${site.tag || tag.label}</span>`;
-        const pattern = site.deliveryPattern
-          ? `<div class="project-pattern">${site.deliveryPattern}</div>`
-          : "";
-
-        return `
-          <a class="project-card" href="${site.url}" target="_blank" rel="noopener">
-            <div class="project-icon">${site.icon}</div>
-            <div class="project-name">${site.displayName || site.name}</div>
-            <div class="project-pattern">${site.tagline || ""}</div>
-            <div class="project-host">${site.subdomain}.${domain}</div>
-            ${pattern}
-            <div class="project-desc">${role}</div>
-            ${status}
-          </a>`;
-      }
-
-      function getCategories(data, sites) {
-        const categories = data.taxonomy?.categories;
-
-        if (Array.isArray(categories) && categories.length > 0) {
-          return [...categories].sort(
-            (a, b) => (a.sortOrder ?? 999) - (b.sortOrder ?? 999),
-          );
-        }
-
-        return [
-          ...new Set(sites.map((site) => site.strategicCategory || "reference-implementations")),
-        ].map((categoryId) => ({
-          id: categoryId,
-          name: categoryId.replaceAll("-", " "),
-          description: "MakeBoldSpark reference implementations.",
-          sortOrder: 999,
-        }));
-      }
-
       async function loadProjects() {
-        const shell = document.getElementById("projects-shell");
         const countEl = document.getElementById("active-count");
 
         try {
           const res = await fetch("/subsites.json");
           if (!res.ok) throw new Error("Failed to load subsites.json");
           const data = await res.json();
-          const sites = data.subsites
-            .filter((s) => s.active !== false)
-            .sort((a, b) => (a.sortOrder ?? 999) - (b.sortOrder ?? 999));
-          const categories = getCategories(data, sites);
-
+          const sites = data.subsites.filter((s) => s.active !== false);
           if (countEl) countEl.textContent = sites.length;
-
-          shell.innerHTML = categories.map((category) => {
-            const categorySites = sites.filter(
-              (site) => site.strategicCategory === category.id,
-            );
-            if (!categorySites.length) return "";
-
-            return `
-              <section class="project-category">
-                <div class="category-heading">
-                  <h3>${category.name}</h3>
-                  <p>${category.description}</p>
-                </div>
-                <div class="projects-grid">
-                  ${categorySites.map((site) => projectCard(site, data.meta.domain)).join("")}
-                </div>
-              </section>`;
-          }).join("");
         } catch (err) {
-          shell.innerHTML = `<div style="padding:2rem;color:var(--muted)">
-            Could not load initiatives. <a href="/subsites.json" style="color:var(--cyan)">View subsites.json</a>
-          </div>`;
           console.error("Project load error:", err);
         }
       }

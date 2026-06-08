@@ -254,13 +254,6 @@
         margin-top: 1rem;
       }
 
-      .featured-grid {
-        display: grid;
-        gap: 1rem;
-        grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
-        margin-top: 2rem;
-      }
-
       .card {
         background: var(--panel-strong);
         border: 1px solid var(--border);
@@ -282,11 +275,6 @@
         background: var(--panel-hover);
         border-color: var(--border-glow);
         transform: translateY(-2px);
-      }
-
-      .card-featured {
-        min-height: 21rem;
-        padding: 1.65rem;
       }
 
       .card-top {
@@ -395,8 +383,10 @@
       <ul class="nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/vision.html">Vision</a></li>
-        <li><a href="#featured">Featured</a></li>
-        <li><a href="#inventory">Inventory</a></li>
+        <li><a href="/ecosystem.html">Ecosystem</a></li>
+        <li><a href="/#devspark">DevSpark</a></li>
+        <li><a href="/#api-context">ApiTestSpark</a></li>
+        <li><a href="/ecosystem.html#git-stats-reporting">Git Utilities</a></li>
       </ul>
     </nav>
 
@@ -421,17 +411,6 @@
         <div class="diagram" id="relationship-diagram"></div>
       </section>
     </div>
-
-    <section class="section" id="featured">
-      <p class="section-label">Featured Initiatives</p>
-      <h2 class="section-title">DevSpark and ApiTestSpark lead the ecosystem</h2>
-      <p class="section-desc">
-        DevSpark defines what to build. ApiTestSpark explains how APIs are
-        consumed. Together they make the case for better context as the
-        foundation of practical AI-assisted development.
-      </p>
-      <div class="featured-grid" id="featured-grid"></div>
-    </section>
 
     <div class="band" id="inventory">
       <section class="band-inner">
@@ -470,7 +449,7 @@
         return output.join("");
       }
 
-      function card(site, data, featured = false) {
+      function card(site, data) {
         const related = Array.isArray(site.relatedInitiatives)
           ? site.relatedInitiatives
               .map((id) => data.subsites.find((item) => item.id === id))
@@ -484,7 +463,7 @@
           : "";
 
         return `
-          <article class="card ${featured ? "card-featured" : ""}">
+          <article class="card">
             <div class="card-top">
               <div class="icon">${site.icon}</div>
               <div>
@@ -526,13 +505,6 @@
           <div class="diagram-row"><span>Primary</span>${(relationship.primaryInitiatives || []).join(" + ")}</div>
           <div class="diagram-row"><span>Supporting</span>${(relationship.supportingInitiatives || []).join(" + ")}</div>`;
 
-        const featured = sites
-          .filter((site) => Number.isFinite(site.featuredRank))
-          .sort((a, b) => a.featuredRank - b.featuredRank);
-        document.getElementById("featured-grid").innerHTML = featured
-          .map((site) => card(site, data, true))
-          .join("");
-
         document.getElementById("inventory-shell").innerHTML = categories
           .map((category) => {
             const categorySites = sites.filter(
@@ -541,7 +513,7 @@
             if (!categorySites.length) return "";
 
             return `
-              <section class="category">
+              <section class="category" id="${category.id}">
                 <div class="category-header">
                   <h3>${category.name}</h3>
                   <p>${category.description}</p>
