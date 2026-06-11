@@ -90,6 +90,7 @@ public static class DatabaseSetup
                 }
                 else
                 {
+                    await PreMarkAppliedIfTablesExistAsync(webSparkDb, logger, cancellationToken);
                     await webSparkDb.Database.MigrateAsync(cancellationToken);
                     await webSparkDb.Database.ExecuteSqlRawAsync("PRAGMA journal_mode=WAL;", cancellationToken);
                     logger.LogInformation("WebSpark database migrations applied");
@@ -163,8 +164,8 @@ public static class DatabaseSetup
         // Tables exist from a prior system — mark all pending migrations as already applied
         foreach (var migrationId in pending)
         {
-            await db.Database.ExecuteSqlRawAsync(
-                $"INSERT OR IGNORE INTO \"__EFMigrationsHistory\" (\"MigrationId\", \"ProductVersion\") VALUES ('{migrationId}', '10.0.0')",
+            await db.Database.ExecuteSqlAsync(
+                $"INSERT OR IGNORE INTO \"__EFMigrationsHistory\" (\"MigrationId\", \"ProductVersion\") VALUES ({migrationId}, '10.0.0')",
                 cancellationToken);
         }
         logger.LogInformation("Database: {Count} pending migration(s) pre-marked as applied (tables already existed)", pending.Count);

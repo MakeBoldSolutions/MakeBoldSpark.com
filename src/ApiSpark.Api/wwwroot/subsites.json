@@ -1,15 +1,15 @@
 {
   "meta": {
     "domain": "makeboldspark.com",
-    "description": "MakeBoldSpark ecosystem inventory of initiatives, reference implementations, tools, and demonstrations",
+    "description": "Make Bold Spark ecosystem inventory of initiatives, reference implementations, tools, and demonstrations",
     "lastUpdated": "2026-06-08",
-    "positioning": "MakeBoldSpark explores practical ways to improve software delivery through better context, specifications, and AI-assisted development.",
+    "positioning": "Make Bold Spark explores practical ways to improve software delivery through better context, specifications, and AI-assisted development.",
     "tagline": "Spec-Driven Systems. Real Applications. Practical AI.",
     "supportingPhrase": "Better Context. Better Software. Faster Delivery.",
     "inventoryPurpose": "Show how each Spark initiative supports practical specification-driven and AI-assisted software delivery.",
-    "inventorySource": "Generated from active MakeBoldSpark subdomain metadata maintained in this file.",
+    "inventorySource": "Generated from active Make Bold Spark subdomain metadata maintained in this file.",
     "organization": "Make Bold Solutions LLC",
-    "ecosystemTitle": "The MakeBoldSpark Ecosystem",
+    "ecosystemTitle": "The Make Bold Spark Ecosystem",
     "ecosystemIntroduction": "Each Spark initiative explores a different aspect of building better software through better context, specifications, workflows, contracts, and AI-assisted development. Together they form a practical collection of reference implementations demonstrating real-world software delivery patterns."
   },
   "taxonomy": {
@@ -17,8 +17,8 @@
       {
         "id": "flagship-initiatives",
         "name": "Flagship Initiatives",
-        "description": "Primary MakeBoldSpark initiatives that define the platform vision and most directly express the ecosystem message.",
-        "messageRole": "Establishes MakeBoldSpark as the organizing vision for specification-driven, agent-ready software delivery.",
+        "description": "Primary Make Bold Spark initiatives that define the platform vision and most directly express the ecosystem message.",
+        "messageRole": "Establishes Make Bold Spark as the organizing vision for specification-driven, agent-ready software delivery.",
         "sortOrder": 10
       },
       {
@@ -87,7 +87,7 @@
     ],
     "relationshipDiagram": {
       "root": "Make Bold Solutions LLC",
-      "ecosystem": "MakeBoldSpark",
+      "ecosystem": "Make Bold Spark",
       "primaryInitiatives": [
         "DevSpark",
         "ApiTestSpark"
@@ -100,7 +100,7 @@
         "GitSpark",
         "GitHub Stats Spark"
       ],
-      "note": "MakeBoldSpark serves as the public-facing innovation ecosystem of Make Bold Solutions LLC. Each initiative explores practical ways to improve software delivery through better context, specifications, workflows, contracts, Git/GitHub reporting, and AI-assisted development."
+      "note": "Make Bold Spark serves as the public-facing innovation ecosystem of Make Bold Solutions LLC. Each initiative explores practical ways to improve software delivery through better context, specifications, workflows, contracts, Git/GitHub reporting, and AI-assisted development."
     },
     "inventoryCardFields": [
       "name",
@@ -127,7 +127,7 @@
       "sortOrder": 10,
       "strategicCategory": "flagship-initiatives",
       "initiativeType": "flagship-initiative",
-      "makeBoldSparkRole": "Defines the core MakeBoldSpark workflow for moving from business intent to implementation-ready context.",
+      "makeBoldSparkRole": "Defines the core Make Bold Spark workflow for moving from business intent to implementation-ready context.",
       "contextContribution": "Transforms requirements into specifications, plans, tasks, and coding-agent guidance.",
       "deliveryPattern": "Requirements -> Specifications -> Plans -> Tasks -> Implementation",
       "audience": [
@@ -292,7 +292,7 @@
       "sortOrder": 50,
       "strategicCategory": "context-ai",
       "initiativeType": "supporting-initiative",
-      "makeBoldSparkRole": "Publishes practical delivery insights that support the broader MakeBoldSpark message.",
+      "makeBoldSparkRole": "Publishes practical delivery insights that support the broader Make Bold Spark message.",
       "contextContribution": "Captures reusable technical notes, examples, and decision context.",
       "deliveryPattern": "Experience -> Insight -> Reusable Guidance",
       "audience": [
@@ -592,7 +592,7 @@
       "subdomain": "ui",
       "url": "https://ui.makeboldspark.com",
       "icon": "🖥️",
-      "description": "Reusable UI component library and design system used across MakeBoldSpark systems.",
+      "description": "Reusable UI component library and design system used across Make Bold Spark systems.",
       "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
       "hostType": "azure",
       "tag": "Azure",
@@ -631,7 +631,7 @@
       "subdomain": "web",
       "url": "https://web.makeboldspark.com",
       "icon": "🌐",
-      "description": "WebSpark platform — the publishing engine powering content-driven MakeBoldSpark systems.",
+      "description": "WebSpark platform — the publishing engine powering content-driven Make Bold Spark systems.",
       "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
       "hostType": "azure",
       "tag": "Azure",
@@ -640,7 +640,7 @@
       "sortOrder": 250,
       "strategicCategory": "application-frameworks",
       "initiativeType": "platform-component",
-      "makeBoldSparkRole": "Provides the publishing and content platform pattern behind several MakeBoldSpark systems.",
+      "makeBoldSparkRole": "Provides the publishing and content platform pattern behind several Make Bold Spark systems.",
       "contextContribution": "Turns content structure and site configuration into deployable web experiences.",
       "deliveryPattern": "Content Model -> Publishing Platform -> Static-first Experience",
       "audience": [
@@ -754,7 +754,7 @@
       "sortOrder": 320,
       "strategicCategory": "learning-demonstration",
       "initiativeType": "learning-system",
-      "makeBoldSparkRole": "Supports the MakeBoldSpark goal of explaining practical software delivery through structured learning.",
+      "makeBoldSparkRole": "Supports the Make Bold Spark goal of explaining practical software delivery through structured learning.",
       "contextContribution": "Organizes technical concepts into teachable examples and learning flows.",
       "deliveryPattern": "Concept -> Lesson Context -> Practical Understanding",
       "audience": [

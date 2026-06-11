@@ -230,6 +230,14 @@ app.MapApiTestSpark(options =>
     options.AuthScheme  = "Bearer";
     options.Environments = ["Development", "Production", "Release", "Test"];
     options.EnableDemoIntegrations = false;
+    options.RemoteApiProfiles.Add(new RemoteApiProfile
+    {
+        Id = "ui-makeboldspark",
+        Name = "UI Make Bold Spark",
+        Description = "UI Sample Spark API hosted at ui.makeboldspark.com.",
+        RemoteBaseUrl = "https://ui.makeboldspark.com",
+        RemoteOpenApiUrl = "https://ui.makeboldspark.com/swagger/v1/swagger.json",
+    });
 });
 
 

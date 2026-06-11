@@ -18,561 +18,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="MakeBoldSpark showcases practical reference implementations for specification-driven and AI-assisted software development, focused on better context, better software, and faster delivery."
+      content="Make Bold Spark by Make Bold Solutions is a practical innovation ecosystem for specification-driven and AI-assisted software delivery."
     />
     <meta
       name="keywords"
-      content="AI-assisted development, specification-driven development, software architecture, developer experience, API contracts, reference implementations"
+      content="Make Bold Spark, Make Bold Solutions, AI-assisted development, specification-driven development, software architecture, developer experience, API contracts"
     />
-    <title>
-      MakeBoldSpark - Spec-Driven Systems, Real Applications, Practical AI
-    </title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-
-      :root {
-        --ink: #0a0f1e;
-        --ink-soft: #0d1528;
-        --panel: #111c35;
-        --panel-strong: #131f3a;
-        --panel-hover: #172244;
-        --cyan: #22d3ee;
-        --cyan-dim: #0891b2;
-        --blue: #3b82f6;
-        --text: #f1f5f9;
-        --muted: #a6b3c5;
-        --soft: #dbeafe;
-        --border: rgba(255, 255, 255, 0.08);
-        --border-glow: rgba(34, 211, 238, 0.28);
-        --radius: 0.5rem;
-        --font: "Inter", system-ui, sans-serif;
-      }
-
-      html {
-        scroll-behavior: smooth;
-      }
-
-      body {
-        font-family: var(--font);
-        background: var(--ink);
-        color: var(--text);
-        line-height: 1.6;
-        min-height: 100vh;
-        overflow-x: hidden;
-      }
-
-      a {
-        color: inherit;
-      }
-
-      nav {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 100;
-        padding: 1rem 2rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background: rgba(10, 15, 30, 0.86);
-        backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--border);
-      }
-
-      .nav-logo,
-      .footer-logo {
-        font-weight: 800;
-        color: var(--text);
-        letter-spacing: 0;
-        text-decoration: none;
-      }
-
-      .nav-logo {
-        font-size: 1.1rem;
-      }
-
-      .nav-logo span,
-      .footer-logo span {
-        color: var(--cyan);
-      }
-
-      .nav-links {
-        display: flex;
-        gap: 1.5rem;
-        list-style: none;
-      }
-
-      .nav-links a {
-        color: var(--muted);
-        text-decoration: none;
-        font-size: 0.875rem;
-        font-weight: 600;
-        transition: color 0.2s;
-      }
-
-      .nav-links a:hover {
-        color: var(--cyan);
-      }
-
-      .hero {
-        min-height: 92vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 8rem 1.5rem 5rem;
-        position: relative;
-        overflow: hidden;
-      }
-
-      .hero::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background:
-          radial-gradient(
-            ellipse 80% 60% at 50% 0%,
-            rgba(34, 211, 238, 0.12) 0%,
-            transparent 65%
-          ),
-          linear-gradient(180deg, transparent 0%, rgba(17, 28, 53, 0.5) 100%);
-        pointer-events: none;
-      }
-
-      .hero-grid {
-        position: absolute;
-        inset: 0;
-        background-image:
-          linear-gradient(rgba(34, 211, 238, 0.04) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(34, 211, 238, 0.04) 1px, transparent 1px);
-        background-size: 60px 60px;
-        mask-image: radial-gradient(
-          ellipse 80% 80% at 50% 50%,
-          black 20%,
-          transparent 100%
-        );
-        pointer-events: none;
-      }
-
-      .hero > *:not(.hero-grid) {
-        position: relative;
-        z-index: 1;
-      }
-
-      .eyebrow,
-      .section-label {
-        color: var(--cyan);
-        font-size: 0.78rem;
-        font-weight: 800;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-      }
-
-      .eyebrow {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        background: rgba(34, 211, 238, 0.1);
-        border: 1px solid rgba(34, 211, 238, 0.25);
-        padding: 0.35rem 1rem;
-        border-radius: 999px;
-        margin-bottom: 1.75rem;
-      }
-
-      .eyebrow::before {
-        content: "";
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: var(--cyan);
-      }
-
-      h1 {
-        font-size: clamp(2.45rem, 6vw, 5.1rem);
-        font-weight: 900;
-        letter-spacing: 0;
-        line-height: 1.05;
-        max-width: 14ch;
-        margin-bottom: 1.5rem;
-      }
-
-      h1 em {
-        font-style: normal;
-        background: linear-gradient(135deg, var(--cyan) 0%, var(--blue) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-
-      .hero-sub {
-        font-size: clamp(1rem, 2.2vw, 1.24rem);
-        color: var(--muted);
-        max-width: 62ch;
-        margin-bottom: 2.2rem;
-        line-height: 1.75;
-      }
-
-      .hero-tagline {
-        color: var(--soft);
-        font-size: 1rem;
-        font-weight: 700;
-        margin-bottom: 2rem;
-      }
-
-      .hero-actions,
-      .action-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-        justify-content: center;
-      }
-
-      .hero-actions {
-        margin-bottom: 3rem;
-      }
-
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        min-height: 2.75rem;
-        padding: 0.75rem 1.35rem;
-        border-radius: var(--radius);
-        font-size: 0.95rem;
-        font-weight: 700;
-        text-decoration: none;
-        transition:
-          transform 0.2s,
-          box-shadow 0.2s,
-          border-color 0.2s,
-          background 0.2s;
-      }
-
-      .btn-primary {
-        background: linear-gradient(135deg, var(--cyan-dim), var(--blue));
-        color: #fff;
-        box-shadow: 0 0 24px rgba(34, 211, 238, 0.28);
-      }
-
-      .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 0 34px rgba(34, 211, 238, 0.42);
-      }
-
-      .btn-outline {
-        background: transparent;
-        color: var(--text);
-        border: 1px solid var(--border-glow);
-      }
-
-      .btn-outline:hover {
-        background: rgba(34, 211, 238, 0.08);
-        border-color: var(--cyan);
-        color: var(--cyan);
-      }
-
-      .stats-bar {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        width: 100%;
-        max-width: 62rem;
-        border-top: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
-      }
-
-      .stat {
-        flex: 1;
-        min-width: 150px;
-        padding: 1.4rem 1.25rem;
-        border-right: 1px solid var(--border);
-        text-align: center;
-      }
-
-      .stat:last-child {
-        border-right: none;
-      }
-
-      .stat-value {
-        display: block;
-        color: var(--cyan);
-        font-size: 1.7rem;
-        font-weight: 900;
-      }
-
-      .stat-label {
-        color: var(--muted);
-        font-size: 0.76rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .section {
-        max-width: 72rem;
-        margin: 0 auto;
-        padding: 6rem 1.5rem;
-      }
-
-      .band {
-        background: var(--panel);
-        border-top: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
-      }
-
-      .band-inner {
-        max-width: 72rem;
-        margin: 0 auto;
-        padding: 6rem 1.5rem;
-      }
-
-      .section-title {
-        font-size: clamp(1.75rem, 4vw, 2.75rem);
-        font-weight: 850;
-        letter-spacing: 0;
-        line-height: 1.15;
-        margin: 0.75rem 0 1rem;
-      }
-
-      .section-desc {
-        color: var(--muted);
-        font-size: 1.05rem;
-        max-width: 64ch;
-        line-height: 1.75;
-      }
-
-      .split {
-        display: grid;
-        grid-template-columns: 0.95fr 1.05fr;
-        gap: 3rem;
-        align-items: start;
-      }
-
-      .pill-list {
-        display: grid;
-        gap: 0.85rem;
-      }
-
-      .pill {
-        background: rgba(255, 255, 255, 0.035);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        color: var(--soft);
-        font-weight: 650;
-        padding: 0.85rem 1rem;
-      }
-
-      .flagship {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2rem;
-        align-items: center;
-      }
-
-      .statement {
-        color: var(--text);
-        font-size: clamp(1.5rem, 3vw, 2.2rem);
-        font-weight: 850;
-        line-height: 1.25;
-      }
-
-      .card,
-      .api-card {
-        background: var(--panel-strong);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-      }
-
-      .card {
-        padding: 1.5rem;
-      }
-
-      .card p {
-        color: var(--muted);
-      }
-
-      .flow {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.55rem;
-        align-items: center;
-        margin: 1.25rem 0;
-      }
-
-      .flow span {
-        background: rgba(34, 211, 238, 0.1);
-        border: 1px solid rgba(34, 211, 238, 0.24);
-        border-radius: var(--radius);
-        color: var(--soft);
-        font-size: 0.88rem;
-        font-weight: 700;
-        padding: 0.45rem 0.65rem;
-      }
-
-      .flow b {
-        color: var(--cyan);
-      }
-
-      .api-desc {
-        color: var(--muted);
-        font-size: 0.875rem;
-        line-height: 1.55;
-      }
-
-      .badge {
-        align-items: center;
-        border-radius: 999px;
-        display: inline-flex;
-        font-size: 0.7rem;
-        font-weight: 700;
-        gap: 0.3rem;
-        padding: 0.2rem 0.6rem;
-        width: fit-content;
-      }
-
-      .api-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
-        gap: 1rem;
-        margin-top: 2rem;
-      }
-
-      .api-card {
-        padding: 1.35rem;
-      }
-
-      .api-route {
-        background: rgba(34, 211, 238, 0.1);
-        border-radius: 0.3rem;
-        color: var(--cyan);
-        display: inline-block;
-        font-family: ui-monospace, "Cascadia Code", monospace;
-        font-size: 0.78rem;
-        margin-bottom: 0.75rem;
-        padding: 0.2rem 0.55rem;
-      }
-
-      .api-name {
-        font-size: 1rem;
-        font-weight: 800;
-        margin-bottom: 0.45rem;
-      }
-
-      .badge-open {
-        background: rgba(34, 197, 94, 0.15);
-        color: #86efac;
-        margin-top: 0.8rem;
-      }
-
-      .badge-auth {
-        background: rgba(245, 158, 11, 0.15);
-        color: #fcd34d;
-        margin-top: 0.8rem;
-      }
-
-      footer {
-        background: var(--ink-soft);
-        border-top: 1px solid var(--border);
-        padding: 3rem 1.5rem;
-        text-align: center;
-      }
-
-      .footer-logo {
-        font-size: 1.25rem;
-        margin-bottom: 0.5rem;
-      }
-
-      footer p {
-        color: var(--muted);
-        font-size: 0.85rem;
-        margin-bottom: 0.4rem;
-      }
-
-      footer a {
-        color: var(--cyan);
-        text-decoration: none;
-      }
-
-      footer a:hover {
-        text-decoration: underline;
-      }
-
-      .footer-links {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1.5rem;
-        justify-content: center;
-        list-style: none;
-        margin: 1.25rem 0 0;
-      }
-
-      .footer-links a {
-        color: var(--muted);
-        font-size: 0.85rem;
-      }
-
-      .footer-links a:hover {
-        color: var(--cyan);
-      }
-
-      @media (max-width: 860px) {
-        .nav-links {
-          display: none;
-        }
-
-        .split,
-        .flagship {
-          grid-template-columns: 1fr;
-        }
-
-        .stat {
-          min-width: 50%;
-        }
-      }
-
-      @media (max-width: 520px) {
-        nav {
-          padding: 0.85rem 1rem;
-        }
-
-        .hero {
-          padding-top: 7rem;
-        }
-
-        .hero-actions,
-        .action-row {
-          width: 100%;
-        }
-
-        .btn {
-          width: 100%;
-        }
-
-        .stat {
-          border-right: none;
-          min-width: 100%;
-        }
-      }
-    </style>
+    <title>Make Bold Spark by Make Bold Solutions</title>
+    <link rel="stylesheet" href="/assets/makebold/brand.css" />
   </head>
   <body>
-    <nav>
-      <a class="nav-logo" href="/">Make<span>Bold</span>Spark</a>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a class="brand-link" href="/">
+        <img
+          class="brand-logo"
+          src="/assets/makebold/logos/make-bold-solutions-logo.svg"
+          alt="Make Bold Solutions"
+        />
+        <span class="brand-text">
+          <span class="brand-name">Make Bold Spark</span>
+          <span class="brand-byline">By Make Bold Solutions</span>
+        </span>
+      </a>
       <ul class="nav-links">
         <li><a href="/">Home</a></li>
         <li><a href="/vision.html">Vision</a></li>
@@ -583,68 +50,77 @@
       </ul>
     </nav>
 
-    <section class="hero">
-      <div class="hero-grid"></div>
-      <div class="eyebrow">Practical Software Innovation Lab</div>
-      <h1>
-        Building Better Software Through <em>Context, Specifications, and AI</em>
-      </h1>
-      <p class="hero-sub">
-        MakeBoldSpark is a practical software innovation lab showcasing real
-        tools, reference implementations, and delivery patterns that help humans
-        and AI coding assistants build better software faster.
-      </p>
-      <p class="hero-tagline">
-        Spec-Driven Systems. Real Applications. Practical AI.
-      </p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#devspark">Explore DevSpark</a>
-        <a class="btn btn-outline" href="#ecosystem"
-          >View Reference Implementations</a
-        >
-        <a class="btn btn-outline" href="https://markhazleton.com"
-          >Read the Insights</a
-        >
+    <header class="hero">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">Make Bold Solutions Innovation Lab</p>
+          <h1>Make Bold <em>Spark</em></h1>
+          <p class="hero-sub">
+            Make Bold Spark is the Make Bold Solutions ecosystem for building
+            better software through clearer specifications, stronger context,
+            useful API contracts, and practical AI-assisted delivery patterns.
+          </p>
+          <p class="hero-tagline">
+            Spec-driven systems. Real applications. Practical AI.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#devspark">Explore DevSpark</a>
+            <a class="btn btn-outline" href="/ecosystem.html"
+              >View the Ecosystem</a
+            >
+            <a class="btn btn-outline" href="https://markhazleton.com"
+              >Read the Insights</a
+            >
+          </div>
+        </div>
+        <div class="hero-mark" aria-label="Make Bold Solutions brand mark">
+          <img
+            src="/assets/makebold/logos/make-bold-solutions-vertical.png"
+            alt="Make Bold Solutions logo"
+          />
+        </div>
       </div>
-      <div class="stats-bar">
+      <div class="stats-bar" aria-label="Make Bold Spark highlights">
         <div class="stat">
           <span class="stat-value" id="active-count">--</span>
-          <span class="stat-label">Active Systems</span>
+          <span class="stat-label">Active Spark Systems</span>
         </div>
         <div class="stat">
           <span class="stat-value">DevSpark</span>
-          <span class="stat-label">Flagship Initiative</span>
+          <span class="stat-label">Flagship Workflow</span>
         </div>
         <div class="stat">
           <span class="stat-value">OpenAPI</span>
           <span class="stat-label">Contract Context</span>
         </div>
         <div class="stat">
-          <span class="stat-value">Today</span>
-          <span class="stat-label">Practical Delivery</span>
+          <span class="stat-value">MBS</span>
+          <span class="stat-label">Make Bold Solutions</span>
         </div>
       </div>
-    </section>
+    </header>
 
     <div class="band" id="vision">
       <section class="band-inner split">
         <div>
           <p class="section-label">The Vision</p>
-          <h2 class="section-title">Better Context. Better Software. Faster Delivery.</h2>
+          <h2 class="section-title">
+            Better context. Better software. Faster delivery.
+          </h2>
           <p class="section-desc">
-            The software industry is focused on AI code generation.
-            MakeBoldSpark is focused on context generation: the specifications,
-            examples, contracts, workflows, and implementation guidance that
-            make AI-assisted development useful in real software delivery.
+            Make Bold Solutions created Make Bold Spark to explore how teams can
+            move from business intent to implementation-ready guidance. The
+            focus is not only code generation. The focus is the context that
+            makes human and AI collaboration more accurate, reviewable, and
+            useful.
           </p>
         </div>
         <div class="pill-list">
-          <div class="pill">Clear specifications</div>
-          <div class="pill">Focused implementation context</div>
-          <div class="pill">Realistic examples</div>
-          <div class="pill">Useful API contracts</div>
-          <div class="pill">Guided workflows</div>
-          <div class="pill">Business-aligned feature stories</div>
+          <div class="pill">Clear specifications and feature stories</div>
+          <div class="pill">Agent-ready implementation context</div>
+          <div class="pill">OpenAPI contracts and real examples</div>
+          <div class="pill">Reference systems that can be inspected</div>
+          <div class="pill">Delivery workflows grounded in practice</div>
         </div>
       </section>
     </div>
@@ -654,17 +130,17 @@
         <p class="section-label">Flagship Initiative</p>
         <h2 class="section-title">DevSpark</h2>
         <p class="statement">
-          The flagship MakeBoldSpark initiative for specification-driven and
-          AI-assisted software development.
+          The Make Bold Spark workflow for turning requirements into plans,
+          tasks, and implementation guidance.
         </p>
       </div>
-      <div class="card">
+      <div class="brand-panel">
         <p>
-          DevSpark helps teams transform requirements into the focused context
-          coding agents need to generate better software with fewer review
-          cycles.
+          DevSpark helps software teams shape fuzzy requirements into precise
+          specifications and the focused context coding agents need to generate
+          better software with fewer review cycles.
         </p>
-        <div class="flow" aria-label="DevSpark delivery flow">
+        <div class="flow-inline" aria-label="DevSpark delivery flow">
           <span>Requirements</span>
           <b>&rarr;</b>
           <span>Specifications</span>
@@ -675,32 +151,30 @@
           <b>&rarr;</b>
           <span>Implementation</span>
         </div>
-        <div class="action-row" style="justify-content: flex-start">
+        <div class="action-row">
           <a class="btn btn-primary" href="https://dev.makeboldspark.com"
             >Open DevSpark</a
           >
-          <a class="btn btn-outline" href="/ecosystem.html">See the Ecosystem</a>
+          <a class="btn btn-outline" href="/vision.html">Read the Vision</a>
         </div>
       </div>
     </section>
 
     <div class="band" id="ecosystem">
       <section class="band-inner">
-        <p class="section-label">Ecosystem Inventory</p>
-        <h2 class="section-title">The MakeBoldSpark Ecosystem</h2>
+        <p class="section-label">Spark Ecosystem</p>
+        <h2 class="section-title">A family of practical software labs</h2>
         <p class="section-desc">
-          The full inventory lives on a dedicated ecosystem page so the
-          homepage can stay focused on the core story: MakeBoldSpark is the
-          vision, DevSpark leads the workflow, and ApiTestSpark grounds API
-          implementation with real contract context.
+          Each Spark initiative tests a different part of the delivery loop:
+          requirements, prompts, APIs, Git history, reusable web patterns,
+          publishing systems, and learning applications. Together they show how
+          Make Bold Solutions turns ideas into working software patterns.
         </p>
-        <div class="action-row" style="justify-content: flex-start; margin-top: 1.5rem">
+        <div class="action-row" style="margin-top: 1.5rem">
           <a class="btn btn-primary" href="/ecosystem.html"
             >Open Full Ecosystem Inventory</a
           >
-          <a
-            class="btn btn-outline"
-            href="/ecosystem.html#git-stats-reporting"
+          <a class="btn btn-outline" href="/ecosystem.html#git-stats-reporting"
             >Explore Git Utilities</a
           >
         </div>
@@ -709,51 +183,51 @@
 
     <section class="section" id="api-context">
       <p class="section-label">ApiTestSpark</p>
-      <h2 class="section-title">From API Contracts to Feature Stories</h2>
+      <h2 class="section-title">From API contracts to feature stories</h2>
       <p class="section-desc">
-        ApiTestSpark supports the MakeBoldSpark vision by turning OpenAPI
-        contracts, real API responses, workflows, and examples into better
-        testing, documentation, and implementation context.
+        ApiTestSpark supports the Make Bold Spark vision by turning OpenAPI
+        contracts, live service behavior, request workflows, and examples into
+        better testing, documentation, and implementation context.
       </p>
       <div class="api-grid">
-        <div class="api-card">
+        <article class="api-card">
           <div class="api-route">Remote APIs</div>
-          <div class="api-name">Explore live services</div>
-          <div class="api-desc">
+          <h3 class="api-name">Explore live services</h3>
+          <p class="api-desc">
             Work with reachable APIs instead of relying only on static contract
             text or guessed behavior.
-          </div>
-          <span class="badge badge-open">Supported</span>
-        </div>
-        <div class="api-card">
+          </p>
+          <span class="badge">Supported</span>
+        </article>
+        <article class="api-card">
           <div class="api-route">OpenAPI</div>
-          <div class="api-name">Contract-powered exploration</div>
-          <div class="api-desc">
+          <h3 class="api-name">Contract-powered exploration</h3>
+          <p class="api-desc">
             Use OpenAPI metadata as the starting point for endpoints,
             parameters, payloads, and expected behavior.
-          </div>
-          <span class="badge badge-open">Agent-ready</span>
-        </div>
-        <div class="api-card">
+          </p>
+          <span class="badge">Agent-ready</span>
+        </article>
+        <article class="api-card">
           <div class="api-route">Examples</div>
-          <div class="api-name">Real request and response context</div>
-          <div class="api-desc">
+          <h3 class="api-name">Real request and response context</h3>
+          <p class="api-desc">
             Replace guesses with concrete examples that improve tests,
             documentation, and client implementation.
-          </div>
-          <span class="badge badge-open">Grounded</span>
-        </div>
-        <div class="api-card">
+          </p>
+          <span class="badge">Grounded</span>
+        </article>
+        <article class="api-card">
           <div class="api-route">Workflows</div>
-          <div class="api-name">Understand how APIs are consumed</div>
-          <div class="api-desc">
+          <h3 class="api-name">Understand how APIs are consumed</h3>
+          <p class="api-desc">
             Capture sequences and usage patterns so API behavior becomes
             implementation-ready context.
-          </div>
-          <span class="badge badge-open">Practical</span>
-        </div>
+          </p>
+          <span class="badge">Practical</span>
+        </article>
       </div>
-      <div class="action-row" style="justify-content: flex-start; margin-top: 2rem">
+      <div class="action-row" style="margin-top: 2rem">
         <a class="btn btn-primary" href="https://apitest.makeboldspark.com"
           >Open ApiTestSpark</a
         >
@@ -769,71 +243,77 @@
 
     <section class="section" id="platform">
       <p class="section-label">ApiSpark Platform</p>
-      <h2 class="section-title">The API foundation behind MakeBoldSpark</h2>
+      <h2 class="section-title">The API foundation behind Make Bold Spark</h2>
       <p class="section-desc">
         ApiSpark consolidates public content, recipe, WebSpark, health, admin,
         and publishing endpoints into a single ASP.NET Core API. It keeps the
-        public systems static-first while centralizing the backend services that
-        need runtime behavior.
+        public Spark systems static-first while centralizing backend services
+        that need runtime behavior.
       </p>
       <div class="api-grid">
-        <div class="api-card">
+        <article class="api-card">
           <div class="api-route">/api/public</div>
-          <div class="api-name">Public Content</div>
-          <div class="api-desc">
-            Read-only content endpoints for static sites and SPAs.
-          </div>
-          <span class="badge badge-open">Open</span>
-        </div>
-        <div class="api-card">
+          <h3 class="api-name">Public Content</h3>
+          <p class="api-desc">Read-only content endpoints for static sites.</p>
+          <span class="badge">Open</span>
+        </article>
+        <article class="api-card">
           <div class="api-route">/api/public/recipes</div>
-          <div class="api-name">Recipe API</div>
-          <div class="api-desc">
-            Structured recipe data served as clean JSON.
-          </div>
-          <span class="badge badge-open">Open</span>
-        </div>
-        <div class="api-card">
+          <h3 class="api-name">Recipe API</h3>
+          <p class="api-desc">Structured recipe data served as clean JSON.</p>
+          <span class="badge">Open</span>
+        </article>
+        <article class="api-card">
           <div class="api-route">/api/public/webspark</div>
-          <div class="api-name">WebSpark API</div>
-          <div class="api-desc">
+          <h3 class="api-name">WebSpark API</h3>
+          <p class="api-desc">
             Content and configuration data for WebSpark-powered sites.
-          </div>
-          <span class="badge badge-open">Open</span>
-        </div>
-        <div class="api-card">
+          </p>
+          <span class="badge">Open</span>
+        </article>
+        <article class="api-card">
           <div class="api-route">/api/admin</div>
-          <div class="api-name">Admin API</div>
-          <div class="api-desc">
-            Authenticated CMS and administration endpoints.
-          </div>
-          <span class="badge badge-auth">Auth Required</span>
-        </div>
+          <h3 class="api-name">Admin API</h3>
+          <p class="api-desc">Authenticated CMS and administration endpoints.</p>
+          <span class="badge">Auth Required</span>
+        </article>
       </div>
     </section>
 
     <footer>
-      <div class="footer-logo">Make<span>Bold</span>Spark</div>
-      <p>
-        Practical reference implementations for better context, better
-        software, and faster delivery.
-      </p>
-      <ul class="footer-links">
-        <li><a href="/vision.html">Vision</a></li>
-        <li><a href="/ecosystem.html">Ecosystem</a></li>
-        <li><a href="#ecosystem">Reference Implementations</a></li>
-        <li>
-          <a href="https://github.com/MarkHazleton/ApiSpark">GitHub</a>
-        </li>
-        <li>
-          <a href="/scalar/v1" data-api-docs-link style="display: none"
-            >API Docs</a
-          >
-        </li>
-        <li><a href="/api/health">Health</a></li>
-      </ul>
-      <p style="margin-top: 1.5rem; font-size: 0.75rem; opacity: 0.55">
-        &copy; 2026 Make Bold Solutions - makeboldspark.com
+      <div class="footer-inner">
+        <div>
+          <a class="footer-brand" href="/">
+            <img
+              class="brand-logo"
+              src="/assets/makebold/logos/make-bold-solutions-logo.svg"
+              alt="Make Bold Solutions"
+            />
+            <span class="brand-text">
+              <span class="brand-name">Make Bold Spark</span>
+              <span class="brand-byline">By Make Bold Solutions</span>
+            </span>
+          </a>
+          <p>
+            Practical reference implementations for better context, better
+            software, and faster delivery.
+          </p>
+        </div>
+        <ul class="footer-links">
+          <li><a href="/vision.html">Vision</a></li>
+          <li><a href="/ecosystem.html">Ecosystem</a></li>
+          <li><a href="https://github.com/MarkHazleton/ApiSpark">GitHub</a></li>
+          <li>
+            <a href="/scalar/v1" data-api-docs-link style="display: none"
+              >API Docs</a
+            >
+          </li>
+          <li><a href="/api/health">Health</a></li>
+        </ul>
+      </div>
+      <p class="copyright">
+        &copy; 2026 Make Bold Solutions LLC. Make Bold Spark is a Make Bold
+        Solutions initiative.
       </p>
     </footer>
 
