@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Make Bold Spark avatar</title>
+  <desc id="desc">Square Make Bold Spark social avatar.</desc>
+  <rect width="512" height="512" rx="64" fill="#040605"/>
+  <path fill="#982407" d="M64 320 256 112l58 208H64Z"/>
+  <path fill="#E94B1B" d="m312 54 31 118 101-43-74 98 91 43-115 12-34 111-37-111-114-12 91-43-74-98 101 43 33-118Z"/>
+  <path fill="#F7F4EF" d="M132 370h248v34H132zM172 430h168v24H172z"/>
+</svg>
+

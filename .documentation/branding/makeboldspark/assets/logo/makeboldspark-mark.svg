@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Make Bold Spark mark</title>
+  <desc id="desc">An angular black wedge with a red spark and forward point.</desc>
+  <rect width="256" height="256" rx="28" fill="#F7F4EF"/>
+  <path fill="#040605" d="M32 158 168 36l31 122H32Z"/>
+  <path fill="#982407" d="M32 158 128 78l25 80H32Z"/>
+  <path fill="#E94B1B" d="m168 36 13 50 43-18-31 40 39 18-49 5-15 47-16-47-49-5 39-18-31-40 43 18 14-50Z"/>
+  <path fill="#040605" d="M62 183h132v17H62zM82 211h92v13H82z"/>
+</svg>
+

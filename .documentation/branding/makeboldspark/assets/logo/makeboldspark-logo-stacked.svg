@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 460" role="img" aria-labelledby="title desc">
+  <title id="title">Make Bold Spark stacked logo</title>
+  <desc id="desc">The Make Bold Spark mark above a stacked wordmark.</desc>
+  <g transform="translate(96 22)">
+    <rect width="228" height="228" rx="26" fill="#F7F4EF"/>
+    <path fill="#040605" d="M29 141 150 32l28 109H29Z"/>
+    <path fill="#982407" d="M29 141 114 69l22 72H29Z"/>
+    <path fill="#E94B1B" d="m150 32 12 45 38-16-27 36 35 16-44 5-14 43-14-43-44-5 35-16-27-36 38 16 12-45Z"/>
+    <path fill="#040605" d="M56 164h118v15H56zM74 191h82v11H74z"/>
+  </g>
+  <g fill="#040605" font-family="Inter Tight, Arial Narrow, Arial, sans-serif" font-weight="900" text-anchor="middle">
+    <text x="210" y="330" font-size="60" letter-spacing="0">Make Bold</text>
+    <text x="210" y="397" font-size="76" letter-spacing="0">Spark</text>
+  </g>
+  <path fill="#E94B1B" d="M130 418h160l-18 20H112l18-20Z"/>
+</svg>
+

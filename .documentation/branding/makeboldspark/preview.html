@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Make Bold Spark Brand Preview</title>
+  <link rel="icon" href="assets/favicon/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/makeboldspark-brand.css">
+  <style>
+    body {
+      margin: 0;
+    }
+
+    main {
+      margin: 0 auto;
+      max-width: 72rem;
+      padding: clamp(1.25rem, 4vw, 3rem);
+    }
+
+    .hero {
+      align-items: center;
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: minmax(0, 1fr) minmax(14rem, 22rem);
+      min-height: 78vh;
+    }
+
+    .hero-mark {
+      background: var(--mbs-white);
+      border: 1px solid var(--mbs-line);
+      border-radius: var(--mbs-radius);
+      padding: 2rem;
+    }
+
+    .hero-mark img {
+      display: block;
+      width: 100%;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+      margin: 2rem 0;
+    }
+
+    .swatch {
+      border: 1px solid var(--mbs-line);
+      border-radius: var(--mbs-radius);
+      overflow: hidden;
+    }
+
+    .swatch div {
+      min-height: 5rem;
+    }
+
+    .swatch p {
+      background: var(--mbs-white);
+      margin: 0;
+      padding: 0.8rem;
+    }
+
+    @media (max-width: 760px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <div>
+        <span class="mbs-badge">Brand Preview</span>
+        <h1 class="mbs-display">Make Bold Spark</h1>
+        <p class="mbs-lead">Practical software sparks, built boldly. A reusable identity kit for APIs, AI workflows, product demos, and production web projects.</p>
+        <div class="actions">
+          <a class="mbs-button mbs-button-primary" href="brand-guide.md">Brand guide</a>
+          <a class="mbs-button mbs-button-secondary" href="assets/logo/makeboldspark-logo-horizontal.svg">Logo source</a>
+        </div>
+      </div>
+      <div class="hero-mark">
+        <img src="assets/logo/makeboldspark-logo-stacked.svg" alt="Make Bold Spark stacked logo">
+      </div>
+    </section>
+
+    <hr class="mbs-divider">
+
+    <section>
+      <p class="mbs-eyebrow">Palette</p>
+      <div class="grid">
+        <article class="swatch"><div style="background:#040605"></div><p><strong>Ink</strong><br>#040605</p></article>
+        <article class="swatch"><div style="background:#E94B1B"></div><p><strong>Spark</strong><br>#E94B1B</p></article>
+        <article class="swatch"><div style="background:#982407"></div><p><strong>Ember</strong><br>#982407</p></article>
+        <article class="swatch"><div style="background:#F7F4EF"></div><p><strong>Paper</strong><br>#F7F4EF</p></article>
+        <article class="swatch"><div style="background:#3FBFA8"></div><p><strong>Mint</strong><br>#3FBFA8</p></article>
+        <article class="swatch"><div style="background:#F2B84B"></div><p><strong>Gold</strong><br>#F2B84B</p></article>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="mbs-card">
+        <h3>Builder-first</h3>
+        <p>Use clear language, practical diagrams, and product evidence over generic marketing language.</p>
+      </article>
+      <article class="mbs-card">
+        <h3>Production-minded</h3>
+        <p>Carry the identity into documentation, API portals, prototypes, and shipped applications.</p>
+      </article>
+      <article class="mbs-card">
+        <h3>Compact system</h3>
+        <p>Use the mark, color tokens, and CSS utilities as a starting point for every MakeBoldSpark project.</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "Make Bold Spark",
+  "short_name": "MakeBoldSpark",
+  "description": "Practical software sparks, built boldly.",
+  "icons": [
+    {
+      "src": "/assets/favicon/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/favicon/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#040605",
+  "background_color": "#F7F4EF",
+  "display": "standalone"
+}
+
