@@ -3,7 +3,7 @@
     "name": "Make Bold Spark",
     "tagline": "Spec-Driven Systems. Real Applications. Practical AI.",
     "description": "Make Bold Spark is an ecosystem of open-source tools, reference implementations, and practical development patterns for building better software with AI-assisted workflows.",
-    "githubUrl": "https://github.com/MarkHazleton/ApiSpark"
+    "githubUrl": "https://github.com/MakeBoldSolutions/MakeBoldSpark.com"
   },
   "systems": [
     {
@@ -70,24 +70,24 @@
       "whyItExists": "It exists to keep reusable web patterns grounded in working software."
     },
     {
-      "id": "apispark",
-      "name": "ApiSpark",
+      "id": "makeboldspark",
+      "name": "MakeBoldSpark",
       "status": "active",
       "category": "reference implementation",
       "role": "Working reference system",
       "purpose": "Provide focused API examples, integration patterns, and reusable service implementations.",
       "summary": "An API-focused reference system for small focused APIs, integration patterns, public content endpoints, and service examples.",
-      "valueProposition": "ApiSpark demonstrates focused API design patterns that can be inspected, tested, and reused.",
-      "githubUrl": "https://github.com/MarkHazleton/ApiSpark",
-      "docsUrl": "/systems/apispark/",
+      "valueProposition": "MakeBoldSpark demonstrates focused API design patterns that can be inspected, tested, and reused.",
+      "githubUrl": "https://github.com/MakeBoldSolutions/MakeBoldSpark.com",
+      "docsUrl": "/systems/makeboldspark/",
       "capabilities": [
         "ASP.NET Core Minimal API examples",
-        "OpenAPI metadata and Scalar documentation",
+        "OpenAPI metadata and ApiTestSpark-driven documentation",
         "Public content and recipe endpoints",
         "Health, auth, and async workflow examples"
       ],
-      "philosophy": "ApiSpark keeps API examples small enough to understand while still being real enough to validate architecture, testing, and integration choices.",
-      "whatItIs": "ApiSpark is the API-focused reference implementation for the Make Bold Spark ecosystem.",
+      "philosophy": "MakeBoldSpark keeps API examples small enough to understand while still being real enough to validate architecture, testing, and integration choices.",
+      "whatItIs": "MakeBoldSpark is the API-focused reference implementation for the Make Bold Spark ecosystem.",
       "whyItExists": "It exists to make API architecture and integration patterns concrete."
     }
   ],
