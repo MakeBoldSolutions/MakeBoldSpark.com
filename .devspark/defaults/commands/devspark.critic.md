@@ -1,4 +1,4 @@
-﻿---
+---
 description: Perform adversarial, archetype-aware risk analysis across spec.md, plan.md, and tasks.md — identifying flaws, hazards, and failure modes that will derail delivery in production.
 handoffs:
   - label: Fix Spec Showstoppers
@@ -13,9 +13,6 @@ handoffs:
     agent: devspark.tasks
     prompt: Regenerate tasks with missing operational items
     send: true
-scripts:
-  sh: .devspark/scripts/bash/check-prerequisites.sh --json --include-tasks
-  ps: .devspark/scripts/powershell/check-prerequisites.ps1 -Json -IncludeTasks
 ---
 
 ## User Input
@@ -62,9 +59,9 @@ Read YAML frontmatter from `spec.md`. Treat `classification`, `risk_level`, `ris
 
 ### 1. Initialize Analysis Context
 
-> **Script Resolution**: Before running `{SCRIPT}`, apply 2-tier override — if `.documentation/scripts/{powershell,bash}/<filename>` exists, run it instead. Team overrides in `.documentation/scripts/` take priority over `.devspark/scripts/`.
+> **Script Resolution**: Before running `.devspark/scripts/powershell/check-prerequisites.ps1 -Json -IncludeTasks`, apply 2-tier override — if `.documentation/scripts/{powershell,bash}/<filename>` exists, run it instead. Team overrides in `.documentation/scripts/` take priority over `.devspark/scripts/`.
 
-Run `{SCRIPT}` once from repo root, parse JSON for FEATURE_DIR and AVAILABLE_DOCS. Derive:
+Run `.devspark/scripts/powershell/check-prerequisites.ps1 -Json -IncludeTasks` once from repo root, parse JSON for FEATURE_DIR and AVAILABLE_DOCS. Derive:
 
 - SPEC = FEATURE_DIR/spec.md
 - PLAN = FEATURE_DIR/plan.md (optional)
@@ -419,7 +416,7 @@ If spec.md lacks `archetype`, `risk_profile`, or `change_type` frontmatter, the 
 
 ## Context
 
-{ARGS}
+$ARGUMENTS
 
 ## Shared Review Resolution Contract
 

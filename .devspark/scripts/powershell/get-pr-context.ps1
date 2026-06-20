@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env pwsh
+#!/usr/bin/env pwsh
 #requires -Version 7.0
 # Extract PR context for review
 #

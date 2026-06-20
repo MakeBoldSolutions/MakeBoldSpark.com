@@ -1,12 +1,9 @@
-﻿---
+---
 description: Draft or update a spec-aware pull request with task, checklist, and gate visibility before review.
 handoffs:
   - label: Review Pull Request
     agent: devspark.pr-review
     prompt: Review the pull request for constitution compliance
-scripts:
-  sh: .devspark/scripts/bash/create-pr.sh --mode preflight --json $ARGUMENTS
-  ps: .devspark/scripts/powershell/create-pr.ps1 -Mode Preflight -Json $ARGUMENTS
 ---
 
 ## User Input
@@ -37,9 +34,9 @@ This command is advisory. Dirty trees, missing specs, incomplete tasks, unresolv
 
 ### 1. Run Preflight Context
 
-> **Script Resolution**: Before running `{SCRIPT}`, apply the 2-tier override check — if `.documentation/scripts/powershell/<filename>` (PowerShell) or `.documentation/scripts/bash/<filename>` (Bash) exists on disk, run that file instead, preserving all arguments. Team overrides in `.documentation/scripts/` always take priority over `.devspark/scripts/`.
+> **Script Resolution**: Before running `.devspark/scripts/powershell/create-pr.ps1 -Mode Preflight -Json $ARGUMENTS`, apply the 2-tier override check — if `.documentation/scripts/powershell/<filename>` (PowerShell) or `.documentation/scripts/bash/<filename>` (Bash) exists on disk, run that file instead, preserving all arguments. Team overrides in `.documentation/scripts/` always take priority over `.devspark/scripts/`.
 
-Run `{SCRIPT}` once from the repository root and parse the returned JSON.
+Run `.devspark/scripts/powershell/create-pr.ps1 -Mode Preflight -Json $ARGUMENTS` once from the repository root and parse the returned JSON.
 
 Use the script output as the source of truth for:
 

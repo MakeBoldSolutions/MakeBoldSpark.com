@@ -1,7 +1,11 @@
 ---
-name: "devspark.address-pr-review"
-description: "Run devspark.address-pr-review"
+description: Address open PR review findings with enforced commit isolation between code fixes and review-file updates
+handoffs:
+  - label: Re-Review Updated PR
+    agent: devspark.pr-review
+    prompt: Run /devspark.pr-review UPDATE for this PR after fixes are committed
 ---
+
 ## Prompt Resolution
 
 Determine the current git user by running `git config user.name`.
@@ -12,8 +16,12 @@ Read and execute the instructions from the **first file that exists**:
 2. `.documentation/commands/devspark.address-pr-review.md` (team customization)
 3. `.devspark/defaults/commands/devspark.address-pr-review.md` (stock default)
 
+Where `{git-user}` is the normalized slug from step above.
+
 ## User Input
 
-{{input}}
+```text
+$ARGUMENTS
+```
 
 Pass the user input above to the resolved prompt.

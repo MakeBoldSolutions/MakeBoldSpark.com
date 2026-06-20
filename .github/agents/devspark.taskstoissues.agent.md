@@ -1,7 +1,7 @@
 ---
-name: "devspark.taskstoissues"
-description: "Run devspark.taskstoissues"
+description: Convert existing tasks into actionable, dependency-ordered GitHub issues for the feature based on available design artifacts.
 ---
+
 ## Prompt Resolution
 
 Determine the current git user by running `git config user.name`.
@@ -12,8 +12,12 @@ Read and execute the instructions from the **first file that exists**:
 2. `.documentation/commands/devspark.taskstoissues.md` (team customization)
 3. `.devspark/defaults/commands/devspark.taskstoissues.md` (stock default)
 
+Where `{git-user}` is the normalized slug from step above.
+
 ## User Input
 
-{{input}}
+```text
+$ARGUMENTS
+```
 
 Pass the user input above to the resolved prompt.

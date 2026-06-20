@@ -1,7 +1,11 @@
 ---
-name: "devspark.constitution"
-description: "Run devspark.constitution"
+description: Create or update the project constitution from interactive or provided principle inputs, ensuring all dependent templates stay in sync.
+handoffs:
+  - label: Build Specification
+    agent: devspark.specify
+    prompt: Implement the feature specification based on the updated constitution. I want to build...
 ---
+
 ## Prompt Resolution
 
 Determine the current git user by running `git config user.name`.
@@ -12,8 +16,12 @@ Read and execute the instructions from the **first file that exists**:
 2. `.documentation/commands/devspark.constitution.md` (team customization)
 3. `.devspark/defaults/commands/devspark.constitution.md` (stock default)
 
+Where `{git-user}` is the normalized slug from step above.
+
 ## User Input
 
-{{input}}
+```text
+$ARGUMENTS
+```
 
 Pass the user input above to the resolved prompt.
