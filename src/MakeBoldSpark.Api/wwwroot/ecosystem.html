@@ -110,7 +110,13 @@
           <li><a href="/systems/">Systems</a></li>
           <li><a href="/insights/">Insights</a></li>
           <li><a href="/vision.html">Vision</a></li>
-          <li><a href="https://github.com/MarkHazleton/MakeBoldSpark">GitHub</a></li>
+          <li><a href="https://github.com/MakeBoldSolutions/MakeBoldSpark.com">GitHub</a></li>
+          <li>
+            <a href="/api-test-spark/" data-api-docs-link style="display: none"
+              >API Docs</a
+            >
+          </li>
+          <li><a href="/api/health">Health</a></li>
         </ul>
       </div>
       <p class="copyright">
@@ -224,6 +230,28 @@
           `<p class="section-desc">Could not load the ecosystem inventory.</p>`;
         console.error(error);
       });
+
+      async function updateApiDocsLinks() {
+        const links = document.querySelectorAll("[data-api-docs-link]");
+
+        try {
+          const response = await fetch("/openapi/v1.json", {
+            cache: "no-store",
+            headers: { Accept: "application/json" },
+          });
+
+          const isApiDocsEnabled = response.ok;
+          links.forEach((link) => {
+            link.style.display = isApiDocsEnabled ? "" : "none";
+          });
+        } catch {
+          links.forEach((link) => {
+            link.style.display = "none";
+          });
+        }
+      }
+
+      updateApiDocsLinks();
     </script>
   </body>
 </html>
