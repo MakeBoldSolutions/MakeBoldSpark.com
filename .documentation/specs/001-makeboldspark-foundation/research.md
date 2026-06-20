@@ -1,7 +1,7 @@
-# Research: ApiSpark Platform Foundation
+# Research: MakeBoldSpark Platform Foundation
 
 **Phase**: 0 — Outline & Research
-**Branch**: `001-apispark-foundation`
+**Branch**: `001-makeboldspark-foundation`
 **Date**: 2026-05-07
 **Status**: Complete — all NEEDS CLARIFICATION resolved
 
@@ -23,7 +23,7 @@ The technical context for this feature is well-defined by the Jumpstart Guide an
 
 ```csharp
 using var scope = app.Services.CreateScope();
-var db = scope.ServiceProvider.GetRequiredService<ApiSparkDbContext>();
+var db = scope.ServiceProvider.GetRequiredService<MakeBoldSparkDbContext>();
 if (builder.Configuration.GetValue<bool>("Database:ApplyMigrationsOnStartup"))
 {
     db.Database.Migrate();
@@ -57,7 +57,7 @@ builder.Services.AddAuthorization(options => {
     options.AddPolicy("AdminOnly", p => p.RequireAuthenticatedUser().RequireRole("Admin"));
     options.AddPolicy("Publisher", p => p.RequireAuthenticatedUser().RequireRole("Admin","Publisher"));
     options.AddPolicy("ServiceOrAdmin", p => p.RequireAssertion(ctx =>
-        ctx.User.IsInRole("Admin") || ctx.User.HasClaim("scope","apispark.publish")));
+        ctx.User.IsInRole("Admin") || ctx.User.HasClaim("scope","makeboldspark.publish")));
 });
 // In middleware pipeline — order matters:
 app.UseAuthentication();  // Must come before UseAuthorization
@@ -98,7 +98,7 @@ app.UseAuthorization();
 
 ### 4. CORS Configuration
 
-**Decision**: Configure CORS with named policy `"ApiSparkPolicy"` allowing only explicitly listed origins. Origins are loaded from `AllowedOrigins` configuration array (not hardcoded). In local development, `http://localhost:xxxx` entries are added via `appsettings.Development.json`.
+**Decision**: Configure CORS with named policy `"MakeBoldSparkPolicy"` allowing only explicitly listed origins. Origins are loaded from `AllowedOrigins` configuration array (not hardcoded). In local development, `http://localhost:xxxx` entries are added via `appsettings.Development.json`.
 
 **Rationale**: Wildcard CORS (`AllowAnyOrigin`) is forbidden for authenticated routes (constitution Principle IV, spec FR-008). Making origins configuration-driven allows Azure App Service settings to control production origins without code changes.
 
@@ -131,8 +131,8 @@ AllowedOrigins__1=https://promptspark.markhazleton.com
 ### 5. SQLite Database Path Strategy and WAL Mode
 
 **Decision**: Use two separate default paths with WAL (Write-Ahead Logging) journal mode enabled:
-- **Local development**: `./data/apispark.local.db` (relative to project output, created automatically)
-- **Production (Azure App Service Linux)**: `/home/data/apispark.db` (persistent storage, survives redeployments)
+- **Local development**: `./data/makeboldspark.local.db` (relative to project output, created automatically)
+- **Production (Azure App Service Linux)**: `/home/data/makeboldspark.db` (persistent storage, survives redeployments)
 
 `./data/` directory is added to `.gitignore` to prevent accidental commit of local DB files.
 
@@ -144,21 +144,21 @@ AllowedOrigins__1=https://promptspark.markhazleton.com
 // appsettings.json (production default)
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Data Source=/home/data/apispark.db;Journal Mode=WAL;Cache=Shared;"
+    "DefaultConnection": "Data Source=/home/data/makeboldspark.db;Journal Mode=WAL;Cache=Shared;"
   }
 }
 
 // appsettings.Development.json (local override)
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Data Source=./data/apispark.local.db;Journal Mode=WAL;Cache=Shared;"
+    "DefaultConnection": "Data Source=./data/makeboldspark.local.db;Journal Mode=WAL;Cache=Shared;"
   }
 }
 ```
 
 **Alternatives considered**:
 - Single path with environment-specific override only in Azure: Rejected — local developers shouldn't need to create `/home/data/`; the Development config override is cleaner.
-- Using `Path.Combine(AppContext.BaseDirectory, "apispark.db")`: Rejected — less obvious; `./data/` directory makes the local DB easy to find and easy to `.gitignore`.
+- Using `Path.Combine(AppContext.BaseDirectory, "makeboldspark.db")`: Rejected — less obvious; `./data/` directory makes the local DB easy to find and easy to `.gitignore`.
 
 ---
 
@@ -170,6 +170,6 @@ AllowedOrigins__1=https://promptspark.markhazleton.com
 | Auth for Phase 0 | Register `AddJwtBearer()` as default scheme + 3 named policies; `UseAuthentication()` then `UseAuthorization()` in pipeline; no external IdP yet | ✅ (corrected from original) |
 | Structured logging | Custom `RequestLoggingMiddleware` using built-in `ILogger<T>` | ✅ |
 | CORS | Named policy; origins from config array; no wildcard | ✅ |
-| SQLite paths + WAL | `./data/apispark.local.db;Journal Mode=WAL;Cache=Shared;` (dev) / `/home/data/apispark.db;Journal Mode=WAL;Cache=Shared;` (prod) via config | ✅ (WAL mode added) |
+| SQLite paths + WAL | `./data/makeboldspark.local.db;Journal Mode=WAL;Cache=Shared;` (dev) / `/home/data/makeboldspark.db;Journal Mode=WAL;Cache=Shared;` (prod) via config | ✅ (WAL mode added) |
 
 All NEEDS CLARIFICATION items are resolved. Proceed to Phase 1: Design & Contracts.

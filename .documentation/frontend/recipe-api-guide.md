@@ -1,7 +1,7 @@
 # Recipe API — Frontend Developer Guide
 
 **Base path**: `/api/public/recipes` (anonymous) · `/api/publish/recipes` (Publisher role)  
-**Data source**: `WebSpark.Recipe` domain library → SQLite via EF Core  
+**Data source**: `MakeBoldSpark.Recipe` domain library → SQLite via EF Core  
 **Spec file**: `../specs/002-recipe-api/contracts/recipe.yaml`
 
 ---
@@ -29,7 +29,7 @@
 
 ## Mental Model
 
-The Recipe API wraps the `WebSpark.Recipe` domain library. The key concepts:
+The Recipe API wraps the `MakeBoldSpark.Recipe` domain library. The key concepts:
 
 - **RecipeModel** — a recipe with ingredients, instructions, author info, images, ratings, and a category
 - **RecipeCategoryModel** — a named grouping; categories contain a `recipes` array (be aware of payload size)
@@ -666,7 +666,7 @@ function getPrimaryImage(recipe: Recipe): { src: string; alt: string } | null {
 
 ### `domainID` scoping
 
-Recipes are scoped to a `domainID` (a site/tenant identifier from the WebSpark.Core library).
+Recipes are scoped to a `domainID` (a site/tenant identifier from the MakeBoldSpark.Core library).
 The default (`INT_MOM_DomainId`) is set by the domain library constant. If your site runs
 multiple domains sharing the same database, you may need to filter by `domainID` client-side.
 

@@ -38,8 +38,8 @@ Every Spark Project name follows a two-part pattern:
 
 Examples:
 
-- `ApiSpark` — API exploration and backend platform.
-- `WebSpark` — Web component and template library.
+- `MakeBoldSpark` — API exploration and backend platform.
+- `MakeBoldSpark` — Web component and template library.
 - `DocSpark` — Documentation tooling.
 - `DataSpark` — Data pipeline utilities.
 
@@ -74,8 +74,8 @@ MakeBoldSpark.[ProjectName].[Module]
 
 Examples:
 
-- `MakeBoldSpark.WebSpark.Core`
-- `MakeBoldSpark.ApiSpark`
+- `MakeBoldSpark.MakeBoldSpark.Core`
+- `MakeBoldSpark.MakeBoldSpark`
 
 #### npm packages
 
@@ -88,8 +88,8 @@ Use scoped packages under the `@makeboldspark` scope:
 
 Examples:
 
-- `@makeboldspark/webspark`
-- `@makeboldspark/apispark-client`
+- `@makeboldspark/makeboldspark`
+- `@makeboldspark/makeboldspark-client`
 
 ---
 
@@ -137,8 +137,8 @@ Format: one sentence, present tense, builder-focused, no buzzwords.
 
 Examples:
 
-- "ApiSpark consolidates portfolio APIs into a single observable backend."
-- "WebSpark provides reusable C# and Razor components for ASP.NET Core projects."
+- "MakeBoldSpark consolidates portfolio APIs into a single observable backend."
+- "MakeBoldSpark provides reusable C# and Razor components for ASP.NET Core projects."
 
 ---
 
@@ -699,10 +699,10 @@ Example `.csproj` excerpt:
 
 ```xml
 <PropertyGroup>
-  <PackageId>MakeBoldSpark.WebSpark.Core</PackageId>
-  <Description>Core components and service abstractions for WebSpark ASP.NET Core projects.</Description>
-  <PackageTags>makeboldspark spark webspark aspnetcore</PackageTags>
-  <PackageProjectUrl>https://webspark.makeboldspark.com</PackageProjectUrl>
+  <PackageId>MakeBoldSpark.MakeBoldSpark.Core</PackageId>
+  <Description>Core components and service abstractions for MakeBoldSpark ASP.NET Core projects.</Description>
+  <PackageTags>makeboldspark spark makeboldspark aspnetcore</PackageTags>
+  <PackageProjectUrl>https://makeboldspark.makeboldspark.com</PackageProjectUrl>
   <Authors>Make Bold Spark</Authors>
   <PackageIcon>icon.png</PackageIcon>
 </PropertyGroup>
@@ -723,10 +723,10 @@ Example `package.json` excerpt:
 
 ```json
 {
-  "name": "@makeboldspark/webspark",
-  "description": "Reusable components for WebSpark web projects.",
-  "homepage": "https://webspark.makeboldspark.com",
-  "keywords": ["makeboldspark", "spark", "webspark"],
+  "name": "@makeboldspark/makeboldspark",
+  "description": "Reusable components for MakeBoldSpark web projects.",
+  "homepage": "https://makeboldspark.makeboldspark.com",
+  "keywords": ["makeboldspark", "spark", "makeboldspark"],
   "author": "Make Bold Spark"
 }
 ```

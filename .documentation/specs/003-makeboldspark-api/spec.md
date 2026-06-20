@@ -7,7 +7,7 @@ recommended_next_step: pr-review
 required_gates: none
 ---
 
-# Feature Specification: WebSpark API
+# Feature Specification: MakeBoldSpark API
 
 **Status**: Complete <!-- Valid: Draft | In Progress | Complete -->
 **Branch**: main (retroactive — implemented before spec)
@@ -17,7 +17,7 @@ required_gates: none
 
 ## Problem Statement
 
-ApiSpark needs to expose content management data from the existing `WebSpark.Core` domain
+MakeBoldSpark needs to expose content management data from the existing `MakeBoldSpark.Core` domain
 library so that static client sites can consume CMS content anonymously, and authenticated
 administrators can manage all CMS entities (domains, blogs, authors, posts, categories,
 menus, keywords, content-parts, subscribers, newsletters, mail-settings) through a unified
@@ -38,22 +38,22 @@ API without requiring a separate CMS backend.
 
 | ID | Requirement |
 |----|------------|
-| FR-001 | `GET /api/public/webspark/domains` — list all domains |
-| FR-002 | `GET /api/public/webspark/domains/{id}` — get domain by id or 404 |
-| FR-003 | `GET /api/public/webspark/blogs` — list all blogs |
-| FR-004 | `GET /api/public/webspark/blogs/{id}` — get blog by id or 404 |
-| FR-005 | `GET /api/public/webspark/authors` — list all authors |
-| FR-006 | `GET /api/public/webspark/authors/{id}` — get author by id or 404 |
-| FR-007 | `GET /api/public/webspark/posts[?blogId=N]` — list posts, optional blog filter |
-| FR-008 | `GET /api/public/webspark/posts/{id}` — get post by id or 404 |
-| FR-009 | `GET /api/public/webspark/categories` — list all categories |
-| FR-010 | `GET /api/public/webspark/categories/{id}` — get category by id or 404 |
-| FR-011 | `GET /api/public/webspark/menus[?domainId=N]` — list menus, optional domain filter |
-| FR-012 | `GET /api/public/webspark/menus/{id}` — get menu by id or 404 |
-| FR-013 | `GET /api/public/webspark/keywords` — list all keywords |
-| FR-014 | `GET /api/public/webspark/keywords/{id}` — get keyword by id or 404 |
-| FR-015 | `GET /api/public/webspark/content-parts` — list all content parts |
-| FR-016 | `GET /api/public/webspark/content-parts/{id}` — get content part by id or 404 |
+| FR-001 | `GET /api/public/makeboldspark/domains` — list all domains |
+| FR-002 | `GET /api/public/makeboldspark/domains/{id}` — get domain by id or 404 |
+| FR-003 | `GET /api/public/makeboldspark/blogs` — list all blogs |
+| FR-004 | `GET /api/public/makeboldspark/blogs/{id}` — get blog by id or 404 |
+| FR-005 | `GET /api/public/makeboldspark/authors` — list all authors |
+| FR-006 | `GET /api/public/makeboldspark/authors/{id}` — get author by id or 404 |
+| FR-007 | `GET /api/public/makeboldspark/posts[?blogId=N]` — list posts, optional blog filter |
+| FR-008 | `GET /api/public/makeboldspark/posts/{id}` — get post by id or 404 |
+| FR-009 | `GET /api/public/makeboldspark/categories` — list all categories |
+| FR-010 | `GET /api/public/makeboldspark/categories/{id}` — get category by id or 404 |
+| FR-011 | `GET /api/public/makeboldspark/menus[?domainId=N]` — list menus, optional domain filter |
+| FR-012 | `GET /api/public/makeboldspark/menus/{id}` — get menu by id or 404 |
+| FR-013 | `GET /api/public/makeboldspark/keywords` — list all keywords |
+| FR-014 | `GET /api/public/makeboldspark/keywords/{id}` — get keyword by id or 404 |
+| FR-015 | `GET /api/public/makeboldspark/content-parts` — list all content parts |
+| FR-016 | `GET /api/public/makeboldspark/content-parts/{id}` — get content part by id or 404 |
 
 ### Admin (Authenticated) Endpoints
 
@@ -67,8 +67,8 @@ API without requiring a separate CMS backend.
 
 ## Non-Functional Requirements
 
-- Data source: `WebSpark.Core` domain library via `WebSparkDbContext` (EF Core + SQLite)
-- Persistence: `WebSparkConnection` SQLite database (follows Principle IX)
+- Data source: `MakeBoldSpark.Core` domain library via `MakeBoldSparkCoreDbContext` (EF Core + SQLite)
+- Persistence: `MakeBoldSparkConnection` SQLite database (follows Principle IX)
 - Authorization: inherits from `/api/admin` and `/api/public` route group policies (Principle VIII)
 - No hardcoded credentials or connection strings (Principle X)
 
@@ -76,8 +76,8 @@ API without requiring a separate CMS backend.
 
 | Route Prefix | Policy | Constitution Category |
 |---|---|---|
-| `/api/public/webspark/*` | Anonymous | Public read-only |
-| `/api/admin/webspark/*` | AdminOnly | Authenticated admin only |
+| `/api/public/makeboldspark/*` | Anonymous | Public read-only |
+| `/api/admin/makeboldspark/*` | AdminOnly | Authenticated admin only |
 
 ## Out of Scope
 
@@ -87,8 +87,8 @@ API without requiring a separate CMS backend.
 
 ## Implementation Notes
 
-- `WebSparkService` injects `WebSparkDbContext` directly (acceptable — admin-only mutation surface is explicit)
-- Route group `MapPublicWebSparkApi` mounted on `/api/public/webspark`
-- Route group `MapAdminWebSparkApi` mounted on `/api/admin/webspark` (inherits AdminOnly policy)
-- Feature folder: `src/ApiSpark.Api/Features/WebSpark/`
-- `PendingModelChangesWarning` suppressed — WebSpark.Core schema managed by its own migrations
+- `MakeBoldSparkService` injects `MakeBoldSparkCoreDbContext` directly (acceptable — admin-only mutation surface is explicit)
+- Route group `MapPublicMakeBoldSparkApi` mounted on `/api/public/makeboldspark`
+- Route group `MapAdminMakeBoldSparkApi` mounted on `/api/admin/makeboldspark` (inherits AdminOnly policy)
+- Feature folder: `src/MakeBoldSpark.Api/Features/MakeBoldSpark/`
+- `PendingModelChangesWarning` suppressed — MakeBoldSpark.Core schema managed by its own migrations

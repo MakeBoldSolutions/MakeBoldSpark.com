@@ -1,7 +1,7 @@
-# ApiSpark Frontend Developer Guides
+# MakeBoldSpark Frontend Developer Guides
 
 This folder contains integration guides for frontend developers (and AI coding agents) building
-clients that consume the ApiSpark backend.
+clients that consume the MakeBoldSpark backend.
 
 These guides go beyond the raw OpenAPI spec. They document real JSON shapes, gotchas, auth
 patterns, TypeScript types, and working `fetch` examples derived directly from the production
@@ -13,7 +13,7 @@ source code.
 |---|---|
 | Production | `https://api.markhazleton.com` |
 | Local dev | `http://localhost:5000` (or whatever port `launchSettings.json` assigns) |
-| API explorer | `https://api.markhazleton.com/scalar/v1` (dev only) |
+| API explorer | `https://api.markhazleton.com/api-test-spark/` (all environments) |
 
 ## CORS
 
@@ -38,7 +38,7 @@ Authorization: Bearer <your-jwt-token>
 | `/api/public/*` | Anonymous | None |
 | `/api/admin/*` | AdminOnly | `Admin` role |
 | `/api/publish/*` | Publisher | `Admin` OR `Publisher` role |
-| `/api/integrations/*` | ServiceOrAdmin | `Admin` role OR `scope: apispark.publish` claim |
+| `/api/integrations/*` | ServiceOrAdmin | `Admin` role OR `scope: makeboldspark.publish` claim |
 
 **401** — missing or invalid token.  
 **403** — valid token but wrong role.
@@ -48,11 +48,11 @@ Authorization: Bearer <your-jwt-token>
 | Guide | APIs covered |
 |---|---|
 | [recipe-api-guide.md](recipe-api-guide.md) | `/api/public/recipes`, `/api/publish/recipes` |
-| [webspark-api-guide.md](webspark-api-guide.md) | `/api/public/webspark/*`, `/api/admin/webspark/*` |
+| [makeboldspark-api-guide.md](makeboldspark-api-guide.md) | `/api/public/makeboldspark/*`, `/api/admin/makeboldspark/*` |
 
 ## Static-First Client Pattern
 
-ApiSpark is designed for static-site consumption. For high-traffic read paths, prefer
+MakeBoldSpark is designed for static-site consumption. For high-traffic read paths, prefer
 pre-generating JSON artifacts (`/data/{collection}.v{version}.json`) served from Azure Static
 Web Apps with long cache TTLs. Use live API calls only for:
 

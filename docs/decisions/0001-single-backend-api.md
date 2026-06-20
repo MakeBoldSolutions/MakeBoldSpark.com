@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-ApiSpark hosts several very small personal/project APIs. The workloads are low-volume and share common concerns such as authentication, logging, data access, content publishing, and deployment.
+MakeBoldSpark hosts several very small personal/project APIs. The workloads are low-volume and share common concerns such as authentication, logging, data access, content publishing, and deployment.
 
 ## Decision
 Use one modular ASP.NET Core backend API rather than separate services or repositories for each API.

@@ -1,7 +1,7 @@
-# Implementation Plan: ApiSpark Platform Foundation
+# Implementation Plan: MakeBoldSpark Platform Foundation
 
-**Branch**: `001-apispark-foundation` | **Date**: 2026-05-07 | **Spec**: [spec.md](spec.md)
-**Input**: Feature specification from `.documentation/specs/001-apispark-foundation/spec.md`
+**Branch**: `001-makeboldspark-foundation` | **Date**: 2026-05-07 | **Spec**: [spec.md](spec.md)
+**Input**: Feature specification from `.documentation/specs/001-makeboldspark-foundation/spec.md`
 
 ## Rationale Summary
 
@@ -21,20 +21,20 @@ Build one modular ASP.NET Core (.NET 10 LTS) backend API as the shared foundatio
 
 ### Source Inputs
 
-- ApiSpark Jumpstart Guide (`.documentation/ApiSpark-Jumpstart-Guide.md`) — Sections 5, 7–11, 14–16, 24
-- ApiSpark Constitution v1.1.0 (`.documentation/memory/constitution.md`) — Principles I–X
-- Feature Spec (`.documentation/specs/001-apispark-foundation/spec.md`) — User Stories 1–6, FR-001 through FR-027
+- MakeBoldSpark Jumpstart Guide (`.documentation/MakeBoldSpark-Jumpstart-Guide.md`) — Sections 5, 7–11, 14–16, 24
+- MakeBoldSpark Constitution v1.1.0 (`.documentation/memory/constitution.md`) — Principles I–X
+- Feature Spec (`.documentation/specs/001-makeboldspark-foundation/spec.md`) — User Stories 1–6, FR-001 through FR-027
 
 ### Tradeoffs Considered
 
 - Option A: Implement all nine phases in a single spec — rejected; overbuilds before foundation is validated
 - Option B: Minimal single-file API with no structure — rejected; creates technical debt before the first feature
 - Option C: Multi-project layout (Api/Domain/Data/Export) from day one — deferred; warranted later but premature at foundation stage
-- Selected: Simplified two-project layout (ApiSpark.Api + ApiSpark.Api.Tests) with feature folders — cleanest start, easy to split later per Jumpstart §5 guidance
+- Selected: Simplified two-project layout (MakeBoldSpark.Api + MakeBoldSpark.Api.Tests) with feature folders — cleanest start, easy to split later per Jumpstart §5 guidance
 
 ### Architectural Impact
 
-- Introduces the single-backend modular API pattern that all future ApiSpark features must follow
+- Introduces the single-backend modular API pattern that all future MakeBoldSpark features must follow
 - Establishes the SQLite persistence model as the authoritative data store (no Cosmos dependency)
 - Sets the authorization boundary contract (public = anonymous, admin/publish/integrations = authenticated)
 - GitHub Actions build/test/deploy pipeline becomes the CI/CD baseline for all future work
@@ -55,7 +55,7 @@ Greenfield .NET 10 ASP.NET Core API project. No solution files, project files, o
 
 **Language/Version**: C# / .NET 10 LTS
 **Primary Dependencies**: ASP.NET Core (Minimal APIs), EF Core 10, Microsoft.EntityFrameworkCore.Sqlite, Microsoft.AspNetCore.OpenApi / Swashbuckle.AspNetCore
-**Storage**: SQLite via EF Core; local at `./data/apispark.local.db`; production at `/home/data/apispark.db`
+**Storage**: SQLite via EF Core; local at `./data/makeboldspark.local.db`; production at `/home/data/makeboldspark.db`
 **Testing**: xUnit + WebApplicationFactory (integration tests); EF Core in-memory or temp SQLite for repository tests
 **Target Platform**: Azure App Service Linux B1 (production); developer workstation (local)
 **Project Type**: Web API service
@@ -79,7 +79,7 @@ Greenfield .NET 10 ASP.NET Core API project. No solution files, project files, o
 | VI. Ownership Boundary | Plan and artifacts are in `.documentation/specs/`; `.devspark/` is untouched by this feature work | ✅ PASS |
 | VII. Single Backend Platform | One ASP.NET Core project; no microservice split; features use route groups inside the single app | ✅ PASS |
 | VIII. Clear Authorization Boundaries | Route groups map exactly to the constitution table: `/api/public/*` anonymous, `/api/admin/*` AdminOnly, `/api/publish/*` Publisher, `/api/integrations/*` ServiceOrAdmin, `/api/health` anonymous | ✅ PASS |
-| IX. Relational-First Data Strategy | EF Core + SQLite is the only persistence model; Cosmos DB is not referenced; production db path is `/home/data/apispark.db` | ✅ PASS |
+| IX. Relational-First Data Strategy | EF Core + SQLite is the only persistence model; Cosmos DB is not referenced; production db path is `/home/data/makeboldspark.db` | ✅ PASS |
 | X. Zero Secrets in Source Control | No connection strings with credentials; no API keys; SQLite path is configuration-only; deploy secrets via GitHub Actions secrets | ✅ PASS |
 
 **Post-Phase-1 Re-check**: All principles continue to hold after design; no violations introduced by data model or contract decisions.
@@ -91,7 +91,7 @@ Greenfield .NET 10 ASP.NET Core API project. No solution files, project files, o
 ### Documentation (this feature)
 
 ```text
-.documentation/specs/001-apispark-foundation/
+.documentation/specs/001-makeboldspark-foundation/
 ├── plan.md              # This file (/devspark.plan command output)
 ├── research.md          # Phase 0 output
 ├── data-model.md        # Phase 1 output
@@ -106,14 +106,14 @@ Greenfield .NET 10 ASP.NET Core API project. No solution files, project files, o
 ### Source Code (repository root)
 
 ```text
-ApiSpark/
-  ApiSpark.sln
+MakeBoldSpark/
+  MakeBoldSpark.sln
   README.md
   .gitignore
 
   src/
-    ApiSpark.Api/
-      ApiSpark.Api.csproj            (.NET 10 web project)
+    MakeBoldSpark.Api/
+      MakeBoldSpark.Api.csproj            (.NET 10 web project)
       Program.cs
       appsettings.json
       appsettings.Development.json
@@ -130,7 +130,7 @@ ApiSpark/
         Auth/
           AuthorizationSetup.cs      (policy registration: AdminOnly, Publisher, ServiceOrAdmin)
         Data/
-          ApiSparkDbContext.cs
+          MakeBoldSparkDbContext.cs
           DatabaseSetup.cs           (migration + seed on startup logic)
           Repositories/
             IContentRepository.cs
@@ -145,8 +145,8 @@ ApiSpark/
       Migrations/                    (EF Core generated)
 
   tests/
-    ApiSpark.Api.Tests/
-      ApiSpark.Api.Tests.csproj
+    MakeBoldSpark.Api.Tests/
+      MakeBoldSpark.Api.Tests.csproj
       Features/
         Health/
           HealthEndpointTests.cs
@@ -175,7 +175,7 @@ ApiSpark/
     seed/                            (JSON seed files, not DB files)
 ```
 
-**Structure Decision**: Simplified two-project layout (Api + Tests) per Jumpstart §5 "Initial Simplification Option". Domain and Data are in-project folders rather than separate assemblies. Split into `ApiSpark.Domain` and `ApiSpark.Data` projects only when the codebase size or test isolation justifies it. Feature folders follow the constitution §Feature Structure pattern exactly.
+**Structure Decision**: Simplified two-project layout (Api + Tests) per Jumpstart §5 "Initial Simplification Option". Domain and Data are in-project folders rather than separate assemblies. Split into `MakeBoldSpark.Domain` and `MakeBoldSpark.Data` projects only when the codebase size or test isolation justifies it. Feature folders follow the constitution §Feature Structure pattern exactly.
 
 ---
 

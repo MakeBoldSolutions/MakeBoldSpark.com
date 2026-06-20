@@ -1,9 +1,9 @@
 openapi: "3.0.3"
 info:
-  title: ApiSpark – WebSpark CMS API
+  title: MakeBoldSpark – MakeBoldSpark CMS API
   version: "1.0.0"
   description: |
-    Public read-only and admin CRUD endpoints for the WebSpark.Core CMS domain.
+    Public read-only and admin CRUD endpoints for the MakeBoldSpark.Core CMS domain.
     Public routes are anonymous. Admin routes require the AdminOnly policy (JWT Bearer, Admin role).
 
 servers:
@@ -11,27 +11,27 @@ servers:
     description: Production
 
 tags:
-  - name: WebSpark-Domains
-  - name: WebSpark-Blogs
-  - name: WebSpark-Authors
-  - name: WebSpark-Posts
-  - name: WebSpark-Categories
-  - name: WebSpark-Menu
-  - name: WebSpark-Keywords
-  - name: WebSpark-ContentParts
-  - name: WebSpark-Subscribers
-  - name: WebSpark-Newsletters
-  - name: WebSpark-MailSettings
+  - name: MakeBoldSpark-Domains
+  - name: MakeBoldSpark-Blogs
+  - name: MakeBoldSpark-Authors
+  - name: MakeBoldSpark-Posts
+  - name: MakeBoldSpark-Categories
+  - name: MakeBoldSpark-Menu
+  - name: MakeBoldSpark-Keywords
+  - name: MakeBoldSpark-ContentParts
+  - name: MakeBoldSpark-Subscribers
+  - name: MakeBoldSpark-Newsletters
+  - name: MakeBoldSpark-MailSettings
 
 paths:
 
   # ── Domains ──────────────────────────────────────────────────────────────────
 
-  /api/public/webspark/domains:
+  /api/public/makeboldspark/domains:
     get:
       operationId: GetDomains
       summary: List all domains
-      tags: [WebSpark-Domains]
+      tags: [MakeBoldSpark-Domains]
       security: []
       responses:
         "200":
@@ -43,11 +43,11 @@ paths:
                 items:
                   $ref: '#/components/schemas/WebSite'
 
-  /api/public/webspark/domains/{id}:
+  /api/public/makeboldspark/domains/{id}:
     get:
       operationId: GetDomain
       summary: Get a domain by ID
-      tags: [WebSpark-Domains]
+      tags: [MakeBoldSpark-Domains]
       security: []
       parameters:
         - $ref: '#/components/parameters/IdParam'
@@ -61,11 +61,11 @@ paths:
         "404":
           description: Not found
 
-  /api/admin/webspark/domains:
+  /api/admin/makeboldspark/domains:
     post:
       operationId: CreateDomain
       summary: Create a domain
-      tags: [WebSpark-Domains]
+      tags: [MakeBoldSpark-Domains]
       security:
         - adminAuth: []
       requestBody:
@@ -86,11 +86,11 @@ paths:
         "403":
           description: Forbidden
 
-  /api/admin/webspark/domains/{id}:
+  /api/admin/makeboldspark/domains/{id}:
     put:
       operationId: UpdateDomain
       summary: Update a domain
-      tags: [WebSpark-Domains]
+      tags: [MakeBoldSpark-Domains]
       security:
         - adminAuth: []
       parameters:
@@ -117,7 +117,7 @@ paths:
     delete:
       operationId: DeleteDomain
       summary: Delete a domain
-      tags: [WebSpark-Domains]
+      tags: [MakeBoldSpark-Domains]
       security:
         - adminAuth: []
       parameters:
@@ -134,11 +134,11 @@ paths:
 
   # ── Blogs ─────────────────────────────────────────────────────────────────────
 
-  /api/public/webspark/blogs:
+  /api/public/makeboldspark/blogs:
     get:
       operationId: GetBlogs
       summary: List all blogs
-      tags: [WebSpark-Blogs]
+      tags: [MakeBoldSpark-Blogs]
       security: []
       responses:
         "200":
@@ -150,11 +150,11 @@ paths:
                 items:
                   type: object
 
-  /api/public/webspark/blogs/{id}:
+  /api/public/makeboldspark/blogs/{id}:
     get:
       operationId: GetBlog
       summary: Get a blog by ID
-      tags: [WebSpark-Blogs]
+      tags: [MakeBoldSpark-Blogs]
       security: []
       parameters:
         - $ref: '#/components/parameters/IdParam'
@@ -168,11 +168,11 @@ paths:
         "404":
           description: Not found
 
-  /api/admin/webspark/blogs:
+  /api/admin/makeboldspark/blogs:
     post:
       operationId: CreateBlog
       summary: Create a blog
-      tags: [WebSpark-Blogs]
+      tags: [MakeBoldSpark-Blogs]
       security:
         - adminAuth: []
       requestBody:
@@ -189,11 +189,11 @@ paths:
         "403":
           description: Forbidden
 
-  /api/admin/webspark/blogs/{id}:
+  /api/admin/makeboldspark/blogs/{id}:
     put:
       operationId: UpdateBlog
       summary: Update a blog
-      tags: [WebSpark-Blogs]
+      tags: [MakeBoldSpark-Blogs]
       security:
         - adminAuth: []
       parameters:
@@ -216,7 +216,7 @@ paths:
     delete:
       operationId: DeleteBlog
       summary: Delete a blog
-      tags: [WebSpark-Blogs]
+      tags: [MakeBoldSpark-Blogs]
       security:
         - adminAuth: []
       parameters:
@@ -233,11 +233,11 @@ paths:
 
   # ── Authors ──────────────────────────────────────────────────────────────────
 
-  /api/public/webspark/authors:
+  /api/public/makeboldspark/authors:
     get:
       operationId: GetAuthors
       summary: List all authors
-      tags: [WebSpark-Authors]
+      tags: [MakeBoldSpark-Authors]
       security: []
       responses:
         "200":
@@ -249,11 +249,11 @@ paths:
                 items:
                   type: object
 
-  /api/public/webspark/authors/{id}:
+  /api/public/makeboldspark/authors/{id}:
     get:
       operationId: GetAuthor
       summary: Get author by ID
-      tags: [WebSpark-Authors]
+      tags: [MakeBoldSpark-Authors]
       security: []
       parameters:
         - $ref: '#/components/parameters/IdParam'
@@ -263,11 +263,11 @@ paths:
         "404":
           description: Not found
 
-  /api/admin/webspark/authors:
+  /api/admin/makeboldspark/authors:
     post:
       operationId: CreateAuthor
       summary: Create an author
-      tags: [WebSpark-Authors]
+      tags: [MakeBoldSpark-Authors]
       security:
         - adminAuth: []
       requestBody:
@@ -284,11 +284,11 @@ paths:
         "403":
           description: Forbidden
 
-  /api/admin/webspark/authors/{id}:
+  /api/admin/makeboldspark/authors/{id}:
     put:
       operationId: UpdateAuthor
       summary: Update an author
-      tags: [WebSpark-Authors]
+      tags: [MakeBoldSpark-Authors]
       security:
         - adminAuth: []
       parameters:
@@ -311,7 +311,7 @@ paths:
     delete:
       operationId: DeleteAuthor
       summary: Delete an author
-      tags: [WebSpark-Authors]
+      tags: [MakeBoldSpark-Authors]
       security:
         - adminAuth: []
       parameters:
@@ -328,11 +328,11 @@ paths:
 
   # ── Posts ─────────────────────────────────────────────────────────────────────
 
-  /api/public/webspark/posts:
+  /api/public/makeboldspark/posts:
     get:
       operationId: GetPosts
       summary: List posts, optionally filtered by blogId
-      tags: [WebSpark-Posts]
+      tags: [MakeBoldSpark-Posts]
       security: []
       parameters:
         - name: blogId
@@ -350,11 +350,11 @@ paths:
                 items:
                   type: object
 
-  /api/public/webspark/posts/{id}:
+  /api/public/makeboldspark/posts/{id}:
     get:
       operationId: GetPost
       summary: Get post by ID
-      tags: [WebSpark-Posts]
+      tags: [MakeBoldSpark-Posts]
       security: []
       parameters:
         - $ref: '#/components/parameters/IdParam'
@@ -364,11 +364,11 @@ paths:
         "404":
           description: Not found
 
-  /api/admin/webspark/posts:
+  /api/admin/makeboldspark/posts:
     post:
       operationId: CreatePost
       summary: Create a post
-      tags: [WebSpark-Posts]
+      tags: [MakeBoldSpark-Posts]
       security:
         - adminAuth: []
       requestBody:
@@ -385,11 +385,11 @@ paths:
         "403":
           description: Forbidden
 
-  /api/admin/webspark/posts/{id}:
+  /api/admin/makeboldspark/posts/{id}:
     put:
       operationId: UpdatePost
       summary: Update a post
-      tags: [WebSpark-Posts]
+      tags: [MakeBoldSpark-Posts]
       security:
         - adminAuth: []
       parameters:
@@ -412,7 +412,7 @@ paths:
     delete:
       operationId: DeletePost
       summary: Delete a post
-      tags: [WebSpark-Posts]
+      tags: [MakeBoldSpark-Posts]
       security:
         - adminAuth: []
       parameters:
@@ -430,21 +430,21 @@ paths:
   # ── Categories, Menus, Keywords, ContentParts ─────────────────────────────────
   # (abbreviated — same GET public / CRUD admin pattern)
 
-  /api/public/webspark/categories:
+  /api/public/makeboldspark/categories:
     get:
       operationId: GetCategories
       summary: List all categories
-      tags: [WebSpark-Categories]
+      tags: [MakeBoldSpark-Categories]
       security: []
       responses:
         "200":
           description: Array of categories
 
-  /api/public/webspark/categories/{id}:
+  /api/public/makeboldspark/categories/{id}:
     get:
       operationId: GetCategory
       summary: Get category by ID
-      tags: [WebSpark-Categories]
+      tags: [MakeBoldSpark-Categories]
       security: []
       parameters:
         - $ref: '#/components/parameters/IdParam'
@@ -454,11 +454,11 @@ paths:
         "404":
           description: Not found
 
-  /api/admin/webspark/categories:
+  /api/admin/makeboldspark/categories:
     post:
       operationId: CreateCategory
       summary: Create a category
-      tags: [WebSpark-Categories]
+      tags: [MakeBoldSpark-Categories]
       security:
         - adminAuth: []
       requestBody:
@@ -475,11 +475,11 @@ paths:
         "403":
           description: Forbidden
 
-  /api/admin/webspark/categories/{id}:
+  /api/admin/makeboldspark/categories/{id}:
     put:
       operationId: UpdateCategory
       summary: Update a category
-      tags: [WebSpark-Categories]
+      tags: [MakeBoldSpark-Categories]
       security:
         - adminAuth: []
       parameters:
@@ -500,7 +500,7 @@ paths:
     delete:
       operationId: DeleteCategory
       summary: Delete a category
-      tags: [WebSpark-Categories]
+      tags: [MakeBoldSpark-Categories]
       security:
         - adminAuth: []
       parameters:
@@ -513,11 +513,11 @@ paths:
         "403":
           description: Forbidden
 
-  /api/public/webspark/menus:
+  /api/public/makeboldspark/menus:
     get:
       operationId: GetMenus
       summary: List menus, optionally filtered by domainId
-      tags: [WebSpark-Menu]
+      tags: [MakeBoldSpark-Menu]
       security: []
       parameters:
         - name: domainId
@@ -529,11 +529,11 @@ paths:
         "200":
           description: Array of menus
 
-  /api/public/webspark/menus/{id}:
+  /api/public/makeboldspark/menus/{id}:
     get:
       operationId: GetMenu
       summary: Get menu by ID
-      tags: [WebSpark-Menu]
+      tags: [MakeBoldSpark-Menu]
       security: []
       parameters:
         - $ref: '#/components/parameters/IdParam'
@@ -543,11 +543,11 @@ paths:
         "404":
           description: Not found
 
-  /api/admin/webspark/menus:
+  /api/admin/makeboldspark/menus:
     post:
       operationId: CreateMenu
       summary: Create a menu
-      tags: [WebSpark-Menu]
+      tags: [MakeBoldSpark-Menu]
       security:
         - adminAuth: []
       requestBody:
@@ -564,11 +564,11 @@ paths:
         "403":
           description: Forbidden
 
-  /api/admin/webspark/menus/{id}:
+  /api/admin/makeboldspark/menus/{id}:
     put:
       operationId: UpdateMenu
       summary: Update a menu
-      tags: [WebSpark-Menu]
+      tags: [MakeBoldSpark-Menu]
       security:
         - adminAuth: []
       parameters:
@@ -589,7 +589,7 @@ paths:
     delete:
       operationId: DeleteMenu
       summary: Delete a menu
-      tags: [WebSpark-Menu]
+      tags: [MakeBoldSpark-Menu]
       security:
         - adminAuth: []
       parameters:
@@ -602,21 +602,21 @@ paths:
         "403":
           description: Forbidden
 
-  /api/public/webspark/keywords:
+  /api/public/makeboldspark/keywords:
     get:
       operationId: GetKeywords
       summary: List all keywords
-      tags: [WebSpark-Keywords]
+      tags: [MakeBoldSpark-Keywords]
       security: []
       responses:
         "200":
           description: Array of keywords
 
-  /api/public/webspark/keywords/{id}:
+  /api/public/makeboldspark/keywords/{id}:
     get:
       operationId: GetKeyword
       summary: Get keyword by ID
-      tags: [WebSpark-Keywords]
+      tags: [MakeBoldSpark-Keywords]
       security: []
       parameters:
         - $ref: '#/components/parameters/IdParam'
@@ -626,11 +626,11 @@ paths:
         "404":
           description: Not found
 
-  /api/admin/webspark/keywords:
+  /api/admin/makeboldspark/keywords:
     post:
       operationId: CreateKeyword
       summary: Create a keyword
-      tags: [WebSpark-Keywords]
+      tags: [MakeBoldSpark-Keywords]
       security:
         - adminAuth: []
       requestBody:
@@ -647,11 +647,11 @@ paths:
         "403":
           description: Forbidden
 
-  /api/admin/webspark/keywords/{id}:
+  /api/admin/makeboldspark/keywords/{id}:
     put:
       operationId: UpdateKeyword
       summary: Update a keyword
-      tags: [WebSpark-Keywords]
+      tags: [MakeBoldSpark-Keywords]
       security:
         - adminAuth: []
       parameters:
@@ -672,7 +672,7 @@ paths:
     delete:
       operationId: DeleteKeyword
       summary: Delete a keyword
-      tags: [WebSpark-Keywords]
+      tags: [MakeBoldSpark-Keywords]
       security:
         - adminAuth: []
       parameters:
@@ -685,21 +685,21 @@ paths:
         "403":
           description: Forbidden
 
-  /api/public/webspark/content-parts:
+  /api/public/makeboldspark/content-parts:
     get:
       operationId: GetContentParts
       summary: List all content parts
-      tags: [WebSpark-ContentParts]
+      tags: [MakeBoldSpark-ContentParts]
       security: []
       responses:
         "200":
           description: Array of content parts
 
-  /api/public/webspark/content-parts/{id}:
+  /api/public/makeboldspark/content-parts/{id}:
     get:
       operationId: GetContentPart
       summary: Get content part by ID
-      tags: [WebSpark-ContentParts]
+      tags: [MakeBoldSpark-ContentParts]
       security: []
       parameters:
         - $ref: '#/components/parameters/IdParam'
@@ -709,11 +709,11 @@ paths:
         "404":
           description: Not found
 
-  /api/admin/webspark/content-parts:
+  /api/admin/makeboldspark/content-parts:
     post:
       operationId: CreateContentPart
       summary: Create a content part
-      tags: [WebSpark-ContentParts]
+      tags: [MakeBoldSpark-ContentParts]
       security:
         - adminAuth: []
       requestBody:
@@ -730,11 +730,11 @@ paths:
         "403":
           description: Forbidden
 
-  /api/admin/webspark/content-parts/{id}:
+  /api/admin/makeboldspark/content-parts/{id}:
     put:
       operationId: UpdateContentPart
       summary: Update a content part
-      tags: [WebSpark-ContentParts]
+      tags: [MakeBoldSpark-ContentParts]
       security:
         - adminAuth: []
       parameters:
@@ -755,7 +755,7 @@ paths:
     delete:
       operationId: DeleteContentPart
       summary: Delete a content part
-      tags: [WebSpark-ContentParts]
+      tags: [MakeBoldSpark-ContentParts]
       security:
         - adminAuth: []
       parameters:
@@ -770,11 +770,11 @@ paths:
 
   # ── Subscribers ──────────────────────────────────────────────────────────────
 
-  /api/admin/webspark/subscribers:
+  /api/admin/makeboldspark/subscribers:
     get:
       operationId: GetSubscribers
       summary: List all subscribers
-      tags: [WebSpark-Subscribers]
+      tags: [MakeBoldSpark-Subscribers]
       security:
         - adminAuth: []
       responses:
@@ -787,7 +787,7 @@ paths:
     post:
       operationId: CreateSubscriber
       summary: Create a subscriber
-      tags: [WebSpark-Subscribers]
+      tags: [MakeBoldSpark-Subscribers]
       security:
         - adminAuth: []
       requestBody:
@@ -804,11 +804,11 @@ paths:
         "403":
           description: Forbidden
 
-  /api/admin/webspark/subscribers/{id}:
+  /api/admin/makeboldspark/subscribers/{id}:
     get:
       operationId: GetSubscriber
       summary: Get subscriber by ID
-      tags: [WebSpark-Subscribers]
+      tags: [MakeBoldSpark-Subscribers]
       security:
         - adminAuth: []
       parameters:
@@ -825,7 +825,7 @@ paths:
     put:
       operationId: UpdateSubscriber
       summary: Update a subscriber
-      tags: [WebSpark-Subscribers]
+      tags: [MakeBoldSpark-Subscribers]
       security:
         - adminAuth: []
       parameters:
@@ -846,7 +846,7 @@ paths:
     delete:
       operationId: DeleteSubscriber
       summary: Delete a subscriber
-      tags: [WebSpark-Subscribers]
+      tags: [MakeBoldSpark-Subscribers]
       security:
         - adminAuth: []
       parameters:
@@ -861,11 +861,11 @@ paths:
 
   # ── Newsletters ──────────────────────────────────────────────────────────────
 
-  /api/admin/webspark/newsletters:
+  /api/admin/makeboldspark/newsletters:
     get:
       operationId: GetNewsletters
       summary: List all newsletters
-      tags: [WebSpark-Newsletters]
+      tags: [MakeBoldSpark-Newsletters]
       security:
         - adminAuth: []
       responses:
@@ -878,7 +878,7 @@ paths:
     post:
       operationId: CreateNewsletter
       summary: Create a newsletter
-      tags: [WebSpark-Newsletters]
+      tags: [MakeBoldSpark-Newsletters]
       security:
         - adminAuth: []
       requestBody:
@@ -895,11 +895,11 @@ paths:
         "403":
           description: Forbidden
 
-  /api/admin/webspark/newsletters/{id}:
+  /api/admin/makeboldspark/newsletters/{id}:
     get:
       operationId: GetNewsletter
       summary: Get newsletter by ID
-      tags: [WebSpark-Newsletters]
+      tags: [MakeBoldSpark-Newsletters]
       security:
         - adminAuth: []
       parameters:
@@ -916,7 +916,7 @@ paths:
     delete:
       operationId: DeleteNewsletter
       summary: Delete a newsletter
-      tags: [WebSpark-Newsletters]
+      tags: [MakeBoldSpark-Newsletters]
       security:
         - adminAuth: []
       parameters:
@@ -931,11 +931,11 @@ paths:
 
   # ── MailSettings ─────────────────────────────────────────────────────────────
 
-  /api/admin/webspark/mail-settings:
+  /api/admin/makeboldspark/mail-settings:
     get:
       operationId: GetMailSettings
       summary: List all mail settings
-      tags: [WebSpark-MailSettings]
+      tags: [MakeBoldSpark-MailSettings]
       security:
         - adminAuth: []
       responses:
@@ -948,7 +948,7 @@ paths:
     post:
       operationId: CreateMailSetting
       summary: Create a mail setting
-      tags: [WebSpark-MailSettings]
+      tags: [MakeBoldSpark-MailSettings]
       security:
         - adminAuth: []
       requestBody:
@@ -965,11 +965,11 @@ paths:
         "403":
           description: Forbidden
 
-  /api/admin/webspark/mail-settings/{id}:
+  /api/admin/makeboldspark/mail-settings/{id}:
     get:
       operationId: GetMailSetting
       summary: Get mail setting by ID
-      tags: [WebSpark-MailSettings]
+      tags: [MakeBoldSpark-MailSettings]
       security:
         - adminAuth: []
       parameters:
@@ -986,7 +986,7 @@ paths:
     put:
       operationId: UpdateMailSetting
       summary: Update a mail setting
-      tags: [WebSpark-MailSettings]
+      tags: [MakeBoldSpark-MailSettings]
       security:
         - adminAuth: []
       parameters:
@@ -1007,7 +1007,7 @@ paths:
     delete:
       operationId: DeleteMailSetting
       summary: Delete a mail setting
-      tags: [WebSpark-MailSettings]
+      tags: [MakeBoldSpark-MailSettings]
       security:
         - adminAuth: []
       parameters:

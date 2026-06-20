@@ -1,4 +1,4 @@
-# ApiSpark Jumpstart Guide
+# MakeBoldSpark Jumpstart Guide
 
 **Version:** 0.1  
 **Target Runtime:** .NET 10 LTS  
@@ -11,13 +11,13 @@
 
 ## 1. Executive Summary
 
-**ApiSpark** is a consolidated backend API platform for small, low-volume personal and portfolio APIs. It is intended to replace scattered API hosting, Windows/IIS dependency, and fragmented project structures with a single modular ASP.NET Core backend deployed to Azure App Service Linux.
+**MakeBoldSpark** is a consolidated backend API platform for small, low-volume personal and portfolio APIs. It is intended to replace scattered API hosting, Windows/IIS dependency, and fragmented project structures with a single modular ASP.NET Core backend deployed to Azure App Service Linux.
 
 The core strategy is simple:
 
 > Use one backend API as the shared platform for content, CMS/admin functions, publishing workflows, integrations, and reusable data services. Use Azure Static Web Apps for public-facing clients that consume static JSON or public read-only API endpoints.
 
-ApiSpark is not a microservices platform. It is a practical, low-cost, modular backend designed for personal systems, portfolio projects, content websites, prompt catalogs, publishing workflows, and lightweight integrations.
+MakeBoldSpark is not a microservices platform. It is a practical, low-cost, modular backend designed for personal systems, portfolio projects, content websites, prompt catalogs, publishing workflows, and lightweight integrations.
 
 ---
 
@@ -69,7 +69,7 @@ Azure Static Web Apps
           ▼
 Azure App Service Linux B1
   api.markhazleton.com
-  └── ApiSpark ASP.NET Core API
+  └── MakeBoldSpark ASP.NET Core API
         ├── /api/public/*
         ├── /api/admin/*
         ├── /api/publish/*
@@ -77,7 +77,7 @@ Azure App Service Linux B1
         └── /api/health
               │
               ├── EF Core + SQLite
-              │     └── /home/data/apispark.db
+              │     └── /home/data/makeboldspark.db
               │
               ├── Optional Cosmos DB features
               │
@@ -93,7 +93,7 @@ Azure App Service Linux B1
 | Component | Responsibility |
 |---|---|
 | Azure Static Web Apps | Public websites, static clients, generated content consumption, static assets, custom domains |
-| ApiSpark Backend API | Shared API platform, CMS/admin, integrations, publishing, content export, dynamic endpoints |
+| MakeBoldSpark Backend API | Shared API platform, CMS/admin, integrations, publishing, content export, dynamic endpoints |
 | SQLite | Low-cost relational data store for CMS/content/API data |
 | Cosmos DB | Selective document-oriented features and portfolio examples |
 | Blob Storage | Backups, exported artifacts, media, recovery copies |
@@ -104,12 +104,12 @@ Azure App Service Linux B1
 ## 5. Recommended Repository Structure
 
 ```text
-ApiSpark/
+MakeBoldSpark/
   README.md
-  ApiSpark.sln
+  MakeBoldSpark.sln
 
   src/
-    ApiSpark.Api/
+    MakeBoldSpark.Api/
       Program.cs
       appsettings.json
       appsettings.Development.json
@@ -139,7 +139,7 @@ ApiSpark/
         Extensions/
         Middleware/
 
-    ApiSpark.Domain/
+    MakeBoldSpark.Domain/
       Content/
       Prompts/
       Systems/
@@ -148,7 +148,7 @@ ApiSpark/
       Publishing/
       Shared/
 
-    ApiSpark.Data/
+    MakeBoldSpark.Data/
       PlatformDbContext.cs
       Sqlite/
       Cosmos/
@@ -156,16 +156,16 @@ ApiSpark/
       Migrations/
       Seed/
 
-    ApiSpark.Export/
+    MakeBoldSpark.Export/
       StaticJson/
       SearchIndex/
       GitHubPublishing/
 
   tests/
-    ApiSpark.Api.Tests/
-    ApiSpark.Domain.Tests/
-    ApiSpark.Data.Tests/
-    ApiSpark.Export.Tests/
+    MakeBoldSpark.Api.Tests/
+    MakeBoldSpark.Domain.Tests/
+    MakeBoldSpark.Data.Tests/
+    MakeBoldSpark.Export.Tests/
 
   docs/
     architecture/
@@ -201,14 +201,14 @@ ApiSpark/
 If the first implementation should stay smaller, start with:
 
 ```text
-ApiSpark/
+MakeBoldSpark/
   src/
-    ApiSpark.Api/
+    MakeBoldSpark.Api/
       Features/
       Infrastructure/
       Data/
   tests/
-    ApiSpark.Api.Tests/
+    MakeBoldSpark.Api.Tests/
   docs/
   .github/workflows/
 ```
@@ -345,13 +345,13 @@ SQLite is the default store for:
 Production database path:
 
 ```text
-/home/data/apispark.db
+/home/data/makeboldspark.db
 ```
 
 Local development path:
 
 ```text
-./data/apispark.local.db
+./data/makeboldspark.local.db
 ```
 
 Use configuration to control the connection string:
@@ -359,7 +359,7 @@ Use configuration to control the connection string:
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Data Source=./data/apispark.local.db"
+    "DefaultConnection": "Data Source=./data/makeboldspark.local.db"
   }
 }
 ```
@@ -367,7 +367,7 @@ Use configuration to control the connection string:
 Azure App Service setting:
 
 ```text
-ConnectionStrings__DefaultConnection=Data Source=/home/data/apispark.db
+ConnectionStrings__DefaultConnection=Data Source=/home/data/makeboldspark.db
 ```
 
 ### 8.2 Optional: Multiple SQLite Databases
@@ -380,7 +380,7 @@ Possible future split:
 /home/data/content.db
 /home/data/prompts.db
 /home/data/systems.db
-/home/data/apispark-admin.db
+/home/data/makeboldspark-admin.db
 ```
 
 Use separate databases only when backup/restore or domain isolation justifies it.
@@ -435,7 +435,7 @@ GitHub deployments update `/home/site/wwwroot`. They should not overwrite `/home
 
 On first startup:
 
-1. Check whether `/home/data/apispark.db` exists.
+1. Check whether `/home/data/makeboldspark.db` exists.
 2. If missing, create database.
 3. Apply EF Core migrations.
 4. Seed initial data if configured.
@@ -444,7 +444,7 @@ Controlled startup migration example:
 
 ```csharp
 using var scope = app.Services.CreateScope();
-var db = scope.ServiceProvider.GetRequiredService<ApiSparkDbContext>();
+var db = scope.ServiceProvider.GetRequiredService<MakeBoldSparkDbContext>();
 
 if (builder.Configuration.GetValue<bool>("Database:ApplyMigrationsOnStartup"))
 {
@@ -498,8 +498,8 @@ Backups should support:
 ### 10.2 Recommended Backup Flow
 
 ```text
-ApiSpark App Service
-  /home/data/apispark.db
+MakeBoldSpark App Service
+  /home/data/makeboldspark.db
 
 Backup action
   1. Create consistent SQLite backup copy
@@ -511,8 +511,8 @@ Backup action
 Backup filename convention:
 
 ```text
-apispark-YYYY-MM-DD-HHmm.db
-apispark-YYYY-MM-DD-HHmm.db.zip
+makeboldspark-YYYY-MM-DD-HHmm.db
+makeboldspark-YYYY-MM-DD-HHmm.db.zip
 ```
 
 ### 10.3 SQLite Backup API
@@ -522,8 +522,8 @@ Do not rely only on copying the live `.db` file during active writes. Use SQLite
 Conceptual .NET example:
 
 ```csharp
-using var source = new SqliteConnection("Data Source=/home/data/apispark.db");
-using var destination = new SqliteConnection("Data Source=/home/backups/apispark-backup.db");
+using var source = new SqliteConnection("Data Source=/home/data/makeboldspark.db");
+using var destination = new SqliteConnection("Data Source=/home/backups/makeboldspark-backup.db");
 
 source.Open();
 destination.Open();
@@ -593,7 +593,7 @@ builder.Services.AddAuthorization(options =>
     {
         policy.RequireAssertion(context =>
             context.User.IsInRole("Admin") ||
-            context.User.HasClaim("scope", "apispark.publish"));
+            context.User.HasClaim("scope", "makeboldspark.publish"));
     });
 });
 ```
@@ -607,7 +607,7 @@ Do not use API keys in browser clients.
 Recommended header:
 
 ```text
-X-ApiSpark-Key: <secret>
+X-MakeBoldSpark-Key: <secret>
 ```
 
 Limit service-token access to narrow routes.
@@ -788,7 +788,7 @@ jobs:
 ### 14.2 Deploy Workflow
 
 ```yaml
-name: Deploy ApiSpark
+name: Deploy MakeBoldSpark
 
 on:
   push:
@@ -816,12 +816,12 @@ jobs:
         run: dotnet test --configuration Release --no-build
 
       - name: Publish
-        run: dotnet publish src/ApiSpark.Api/ApiSpark.Api.csproj --configuration Release --output ./publish
+        run: dotnet publish src/MakeBoldSpark.Api/MakeBoldSpark.Api.csproj --configuration Release --output ./publish
 
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v3
         with:
-          app-name: apispark
+          app-name: makeboldspark
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ./publish
 ```
@@ -846,7 +846,7 @@ jobs:
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Data Source=./data/apispark.local.db"
+    "DefaultConnection": "Data Source=./data/makeboldspark.local.db"
   },
   "Database": {
     "ApplyMigrationsOnStartup": true,
@@ -864,7 +864,7 @@ App settings:
 
 ```text
 ASPNETCORE_ENVIRONMENT=Production
-ConnectionStrings__DefaultConnection=Data Source=/home/data/apispark.db
+ConnectionStrings__DefaultConnection=Data Source=/home/data/makeboldspark.db
 Database__ApplyMigrationsOnStartup=true
 Database__SeedOnStartup=false
 Cosmos__Enabled=false
@@ -922,7 +922,7 @@ Returns:
 ```json
 {
   "status": "Healthy",
-  "service": "ApiSpark",
+  "service": "MakeBoldSpark",
   "version": "0.1.0"
 }
 ```
@@ -983,7 +983,7 @@ Acceptance criteria:
 
 - `dotnet build` succeeds
 - `dotnet test` succeeds
-- README clearly explains ApiSpark purpose
+- README clearly explains MakeBoldSpark purpose
 - GitHub Action validates pull requests
 
 ---
@@ -1017,7 +1017,7 @@ Acceptance criteria:
 
 Deliverables:
 
-- `ApiSparkDbContext`
+- `MakeBoldSparkDbContext`
 - SQLite connection string configuration
 - initial migration
 - local database creation
@@ -1139,7 +1139,7 @@ Acceptance criteria:
 
 ## Phase 7: Azure Deployment
 
-**Goal:** Deploy ApiSpark to Azure App Service Linux.
+**Goal:** Deploy MakeBoldSpark to Azure App Service Linux.
 
 Deliverables:
 
@@ -1187,7 +1187,7 @@ Acceptance criteria:
 
 ## Phase 9: Static Client Integration
 
-**Goal:** Connect one Azure Static Web App client to ApiSpark output.
+**Goal:** Connect one Azure Static Web App client to MakeBoldSpark output.
 
 Deliverables:
 
@@ -1207,7 +1207,7 @@ Acceptance criteria:
 
 ## 18. AI Coding Agent Guide
 
-This section is written specifically for AI coding agents working in the ApiSpark repo.
+This section is written specifically for AI coding agents working in the MakeBoldSpark repo.
 
 ### 18.1 Agent Operating Rules
 
@@ -1322,19 +1322,19 @@ Update:
 
 ## 19. Initial Agent Prompt
 
-Use this prompt with GitHub Copilot, Codex, or another AI coding agent when starting ApiSpark.
+Use this prompt with GitHub Copilot, Codex, or another AI coding agent when starting MakeBoldSpark.
 
 ```markdown
-You are working in the ApiSpark repository.
+You are working in the MakeBoldSpark repository.
 
-ApiSpark is a modular ASP.NET Core / .NET 10 LTS backend API platform for very small personal and portfolio APIs. It will be hosted on Azure App Service Linux B1 and consumed by Azure Static Web App clients.
+MakeBoldSpark is a modular ASP.NET Core / .NET 10 LTS backend API platform for very small personal and portfolio APIs. It will be hosted on Azure App Service Linux B1 and consumed by Azure Static Web App clients.
 
 Core architectural direction:
 
 - Single backend API application
 - Multiple feature-based route groups
 - EF Core + SQLite as the default data model
-- SQLite database stored in persistent App Service storage under `/home/data/apispark.db`
+- SQLite database stored in persistent App Service storage under `/home/data/makeboldspark.db`
 - Cosmos DB used only selectively for document-shaped demo/features
 - Public static clients consume `/api/public/*` endpoints or generated static JSON
 - Admin/CMS/publishing routes require authorization
@@ -1378,9 +1378,9 @@ Constraints:
 ## 20. README Starter Text
 
 ```markdown
-# ApiSpark
+# MakeBoldSpark
 
-ApiSpark is a modular ASP.NET Core backend API platform for small personal and portfolio APIs. It is designed to consolidate low-volume APIs into a single Azure-hosted backend while keeping public websites static-first and inexpensive.
+MakeBoldSpark is a modular ASP.NET Core backend API platform for small personal and portfolio APIs. It is designed to consolidate low-volume APIs into a single Azure-hosted backend while keeping public websites static-first and inexpensive.
 
 ## Goals
 
@@ -1421,7 +1421,7 @@ ApiSpark is a modular ASP.NET Core backend API platform for small personal and p
 Accepted
 
 ## Context
-ApiSpark hosts several very small personal/project APIs. The workloads are low-volume and share common concerns such as authentication, logging, data access, content publishing, and deployment.
+MakeBoldSpark hosts several very small personal/project APIs. The workloads are low-volume and share common concerns such as authentication, logging, data access, content publishing, and deployment.
 
 ## Decision
 Use one modular ASP.NET Core backend API rather than separate services or repositories for each API.
@@ -1475,7 +1475,7 @@ Public sites remain fast, inexpensive, and resilient. The backend API becomes th
 Accepted
 
 ## Context
-ApiSpark should use a stable long-term support framework suitable for production and portfolio use.
+MakeBoldSpark should use a stable long-term support framework suitable for production and portfolio use.
 
 ## Decision
 Target .NET 10 LTS for all projects.
@@ -1611,4 +1611,4 @@ This milestone proves the architecture without overbuilding the CMS, Cosmos inte
 
 ## 25. Final Architecture Statement
 
-ApiSpark is a pragmatic backend platform for consolidating small APIs under one low-cost Azure-hosted ASP.NET Core application. It favors relational simplicity with EF Core and SQLite, supports selective Cosmos DB examples, protects admin and publishing workflows, and enables many Azure Static Web App clients to remain static-first, cache-heavy, inexpensive, and resilient.
+MakeBoldSpark is a pragmatic backend platform for consolidating small APIs under one low-cost Azure-hosted ASP.NET Core application. It favors relational simplicity with EF Core and SQLite, supports selective Cosmos DB examples, protects admin and publishing workflows, and enables many Azure Static Web App clients to remain static-first, cache-heavy, inexpensive, and resilient.

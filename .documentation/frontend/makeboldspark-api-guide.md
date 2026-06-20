@@ -1,8 +1,8 @@
-# WebSpark CMS API — Frontend Developer Guide
+# MakeBoldSpark CMS API — Frontend Developer Guide
 
-**Base path**: `/api/public/webspark/*` (anonymous) · `/api/admin/webspark/*` (Admin role)  
-**Data source**: `WebSpark.Core` domain library → SQLite via EF Core  
-**Spec file**: `../specs/003-webspark-api/contracts/webspark.yaml`
+**Base path**: `/api/public/makeboldspark/*` (anonymous) · `/api/admin/makeboldspark/*` (Admin role)  
+**Data source**: `MakeBoldSpark.Core` domain library → SQLite via EF Core  
+**Spec file**: `../specs/003-makeboldspark-api/contracts/makeboldspark.yaml`
 
 ---
 
@@ -33,7 +33,7 @@
 
 ## Mental Model
 
-The WebSpark CMS API exposes the `WebSpark.Core` publishing platform data — the same data
+The MakeBoldSpark CMS API exposes the `MakeBoldSpark.Core` publishing platform data — the same data
 that powers [markhazleton.com](https://markhazleton.com). Think of it as a headless CMS:
 
 - **Domain (WebSite)** — top-level tenant / site config
@@ -236,24 +236,24 @@ function authedFetch<T>(token: string, path: string, options: RequestInit = {}) 
 
 ## Public Endpoints
 
-All `GET /api/public/webspark/*` routes are **anonymous** — no token required.
+All `GET /api/public/makeboldspark/*` routes are **anonymous** — no token required.
 
 ---
 
 ### Domains
 
-**`GET /api/public/webspark/domains`** — returns all domains ordered by `name`.
+**`GET /api/public/makeboldspark/domains`** — returns all domains ordered by `name`.
 
 ```typescript
 export const getDomains = () =>
-  apiFetch<WebSite[]>('/api/public/webspark/domains');
+  apiFetch<WebSite[]>('/api/public/makeboldspark/domains');
 ```
 
-**`GET /api/public/webspark/domains/{id}`** — single domain or 404.
+**`GET /api/public/makeboldspark/domains/{id}`** — single domain or 404.
 
 ```typescript
 export const getDomain = (id: number) =>
-  apiFetch<WebSite>(`/api/public/webspark/domains/${id}`);
+  apiFetch<WebSite>(`/api/public/makeboldspark/domains/${id}`);
 ```
 
 **Example response** (single domain):
@@ -282,18 +282,18 @@ export const getDomain = (id: number) =>
 
 ### Blogs
 
-**`GET /api/public/webspark/blogs`** — all blogs ordered by `title`.
+**`GET /api/public/makeboldspark/blogs`** — all blogs ordered by `title`.
 
 ```typescript
 export const getBlogs = () =>
-  apiFetch<Blog[]>('/api/public/webspark/blogs');
+  apiFetch<Blog[]>('/api/public/makeboldspark/blogs');
 ```
 
-**`GET /api/public/webspark/blogs/{id}`** — single blog or 404.
+**`GET /api/public/makeboldspark/blogs/{id}`** — single blog or 404.
 
 ```typescript
 export const getBlog = (id: number) =>
-  apiFetch<Blog>(`/api/public/webspark/blogs/${id}`);
+  apiFetch<Blog>(`/api/public/makeboldspark/blogs/${id}`);
 ```
 
 **Example response**:
@@ -323,18 +323,18 @@ export const getBlog = (id: number) =>
 
 ### Authors
 
-**`GET /api/public/webspark/authors`** — all authors ordered by `displayName`.
+**`GET /api/public/makeboldspark/authors`** — all authors ordered by `displayName`.
 
 ```typescript
 export const getAuthors = () =>
-  apiFetch<Author[]>('/api/public/webspark/authors');
+  apiFetch<Author[]>('/api/public/makeboldspark/authors');
 ```
 
-**`GET /api/public/webspark/authors/{id}`** — single author or 404.
+**`GET /api/public/makeboldspark/authors/{id}`** — single author or 404.
 
 ```typescript
 export const getAuthor = (id: number) =>
-  apiFetch<Author>(`/api/public/webspark/authors/${id}`);
+  apiFetch<Author>(`/api/public/makeboldspark/authors/${id}`);
 ```
 
 **Example response**:
@@ -363,23 +363,23 @@ export const getAuthor = (id: number) =>
 
 ### Posts
 
-**`GET /api/public/webspark/posts`** — all posts ordered by `published` descending (newest
+**`GET /api/public/makeboldspark/posts`** — all posts ordered by `published` descending (newest
 first). Accepts an optional `blogId` query parameter to filter by blog.
 
 ```typescript
 export const getPosts = (blogId?: number) =>
   apiFetch<Post[]>(
     blogId != null
-      ? `/api/public/webspark/posts?blogId=${blogId}`
-      : '/api/public/webspark/posts'
+      ? `/api/public/makeboldspark/posts?blogId=${blogId}`
+      : '/api/public/makeboldspark/posts'
   );
 ```
 
-**`GET /api/public/webspark/posts/{id}`** — single post or 404.
+**`GET /api/public/makeboldspark/posts/{id}`** — single post or 404.
 
 ```typescript
 export const getPost = (id: number) =>
-  apiFetch<Post>(`/api/public/webspark/posts/${id}`);
+  apiFetch<Post>(`/api/public/makeboldspark/posts/${id}`);
 ```
 
 **Example response** (one post):
@@ -435,19 +435,19 @@ function PostContent({ html }: { html: string }) {
 
 ### Categories
 
-**`GET /api/public/webspark/categories`** — all categories ordered by `content` (the
+**`GET /api/public/makeboldspark/categories`** — all categories ordered by `content` (the
 category name field — see Gotchas). 
 
 ```typescript
 export const getCategories = () =>
-  apiFetch<Category[]>('/api/public/webspark/categories');
+  apiFetch<Category[]>('/api/public/makeboldspark/categories');
 ```
 
-**`GET /api/public/webspark/categories/{id}`** — single category or 404.
+**`GET /api/public/makeboldspark/categories/{id}`** — single category or 404.
 
 ```typescript
 export const getCategory = (id: number) =>
-  apiFetch<Category>(`/api/public/webspark/categories/${id}`);
+  apiFetch<Category>(`/api/public/makeboldspark/categories/${id}`);
 ```
 
 **Example response**:
@@ -476,25 +476,25 @@ export const getCategory = (id: number) =>
 ```
 
 > **⚠️ The category "name" field is called `content`** — not `name`, not `title`. This is a
-> quirk of the WebSpark.Core entity design. When rendering category labels, use `category.content`.
+> quirk of the MakeBoldSpark.Core entity design. When rendering category labels, use `category.content`.
 
 ---
 
 ### Menus
 
-**`GET /api/public/webspark/menus`** — all menu items ordered by `displayOrder` then `title`.
+**`GET /api/public/makeboldspark/menus`** — all menu items ordered by `displayOrder` then `title`.
 Accepts an optional `domainId` query parameter to filter by site domain.
 
 ```typescript
 export const getMenus = (domainId?: number) =>
   apiFetch<Menu[]>(
     domainId != null
-      ? `/api/public/webspark/menus?domainId=${domainId}`
-      : '/api/public/webspark/menus'
+      ? `/api/public/makeboldspark/menus?domainId=${domainId}`
+      : '/api/public/makeboldspark/menus'
   );
 ```
 
-**`GET /api/public/webspark/menus/{id}`** — single menu item or 404.
+**`GET /api/public/makeboldspark/menus/{id}`** — single menu item or 404.
 
 **Example response** (selected items showing hierarchy):
 
@@ -589,14 +589,14 @@ const tree = buildMenuTree(allMenus);
 
 ### Keywords
 
-**`GET /api/public/webspark/keywords`** — all keywords ordered by `name`.
+**`GET /api/public/makeboldspark/keywords`** — all keywords ordered by `name`.
 
 ```typescript
 export const getKeywords = () =>
-  apiFetch<Keyword[]>('/api/public/webspark/keywords');
+  apiFetch<Keyword[]>('/api/public/makeboldspark/keywords');
 
 export const getKeyword = (id: number) =>
-  apiFetch<Keyword>(`/api/public/webspark/keywords/${id}`);
+  apiFetch<Keyword>(`/api/public/makeboldspark/keywords/${id}`);
 ```
 
 **Example response**:
@@ -628,14 +628,14 @@ export const getKeyword = (id: number) =>
 
 ### Content Parts
 
-**`GET /api/public/webspark/content-parts`** — all content parts ordered by `title`.
+**`GET /api/public/makeboldspark/content-parts`** — all content parts ordered by `title`.
 
 ```typescript
 export const getContentParts = () =>
-  apiFetch<ContentPart[]>('/api/public/webspark/content-parts');
+  apiFetch<ContentPart[]>('/api/public/makeboldspark/content-parts');
 
 export const getContentPart = (id: number) =>
-  apiFetch<ContentPart>(`/api/public/webspark/content-parts/${id}`);
+  apiFetch<ContentPart>(`/api/public/makeboldspark/content-parts/${id}`);
 ```
 
 **Example response**:
@@ -670,8 +670,8 @@ const aboutMe = await getContentPartByTitle('About Me');
 
 ## Admin Endpoints
 
-All `POST`, `PUT`, `DELETE` routes under `/api/admin/webspark/*` and all
-`GET /api/admin/webspark/subscribers`, `newsletters`, `mail-settings` require:
+All `POST`, `PUT`, `DELETE` routes under `/api/admin/makeboldspark/*` and all
+`GET /api/admin/makeboldspark/subscribers`, `newsletters`, `mail-settings` require:
 
 ```
 Authorization: Bearer <token>   (Admin role)
@@ -684,29 +684,29 @@ Authorization: Bearer <token>   (Admin role)
 
 ### Subscribers
 
-**`GET /api/admin/webspark/subscribers`** — all subscribers ordered by `email` (Admin only).
+**`GET /api/admin/makeboldspark/subscribers`** — all subscribers ordered by `email` (Admin only).
 
 ```typescript
 export const getSubscribers = (token: string) =>
-  authedFetch<Subscriber[]>(token, '/api/admin/webspark/subscribers');
+  authedFetch<Subscriber[]>(token, '/api/admin/makeboldspark/subscribers');
 ```
 
-**`POST /api/admin/webspark/subscribers`** — add a subscriber:
+**`POST /api/admin/makeboldspark/subscribers`** — add a subscriber:
 
 ```typescript
 export async function createSubscriber(
   token: string,
   data: { email: string; blogId: number; country?: string; region?: string; ip?: string }
 ): Promise<Subscriber> {
-  return authedFetch<Subscriber>(token, '/api/admin/webspark/subscribers', {
+  return authedFetch<Subscriber>(token, '/api/admin/makeboldspark/subscribers', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 ```
 
-**`PUT /api/admin/webspark/subscribers/{id}`** — update a subscriber.  
-**`DELETE /api/admin/webspark/subscribers/{id}`** — delete a subscriber.
+**`PUT /api/admin/makeboldspark/subscribers/{id}`** — update a subscriber.  
+**`DELETE /api/admin/makeboldspark/subscribers/{id}`** — delete a subscriber.
 
 ---
 
@@ -714,29 +714,29 @@ export async function createSubscriber(
 
 Newsletters record that a post was sent as a newsletter email.
 
-**`GET /api/admin/webspark/newsletters`** — all newsletters ordered by `createdDate`
+**`GET /api/admin/makeboldspark/newsletters`** — all newsletters ordered by `createdDate`
 descending (newest first).
 
 ```typescript
 export const getNewsletters = (token: string) =>
-  authedFetch<Newsletter[]>(token, '/api/admin/webspark/newsletters');
+  authedFetch<Newsletter[]>(token, '/api/admin/makeboldspark/newsletters');
 ```
 
-**`POST /api/admin/webspark/newsletters`** — record a sent newsletter:
+**`POST /api/admin/makeboldspark/newsletters`** — record a sent newsletter:
 
 ```typescript
 export async function createNewsletter(
   token: string,
   data: { postId: number; success: boolean }
 ): Promise<Newsletter> {
-  return authedFetch<Newsletter>(token, '/api/admin/webspark/newsletters', {
+  return authedFetch<Newsletter>(token, '/api/admin/makeboldspark/newsletters', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 ```
 
-**`DELETE /api/admin/webspark/newsletters/{id}`** — delete a newsletter record (no PUT — newsletters are append-only by design).
+**`DELETE /api/admin/makeboldspark/newsletters/{id}`** — delete a newsletter record (no PUT — newsletters are append-only by design).
 
 ---
 
@@ -746,14 +746,14 @@ export async function createNewsletter(
 > endpoint is Admin-only for this reason. Never expose mail settings responses to non-admin
 > users or log them.
 
-**`GET /api/admin/webspark/mail-settings`** — all mail settings ordered by `fromEmail`.
+**`GET /api/admin/makeboldspark/mail-settings`** — all mail settings ordered by `fromEmail`.
 
 ```typescript
 export const getMailSettings = (token: string) =>
-  authedFetch<MailSetting[]>(token, '/api/admin/webspark/mail-settings');
+  authedFetch<MailSetting[]>(token, '/api/admin/makeboldspark/mail-settings');
 ```
 
-**`POST /api/admin/webspark/mail-settings`** — create a mail setting:
+**`POST /api/admin/makeboldspark/mail-settings`** — create a mail setting:
 
 ```typescript
 export async function createMailSetting(
@@ -770,15 +770,15 @@ export async function createMailSetting(
     blogId: number;
   }
 ): Promise<MailSetting> {
-  return authedFetch<MailSetting>(token, '/api/admin/webspark/mail-settings', {
+  return authedFetch<MailSetting>(token, '/api/admin/makeboldspark/mail-settings', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 ```
 
-**`PUT /api/admin/webspark/mail-settings/{id}`** — full replace (same field set as POST).  
-**`DELETE /api/admin/webspark/mail-settings/{id}`** — delete.
+**`PUT /api/admin/makeboldspark/mail-settings/{id}`** — full replace (same field set as POST).  
+**`DELETE /api/admin/makeboldspark/mail-settings/{id}`** — delete.
 
 ---
 
@@ -791,7 +791,7 @@ All inherit the `AdminOnly` policy from the `/api/admin` route group.
 ```typescript
 // Generic admin CRUD factory
 function adminCrud<T extends BaseEntity>(resource: string) {
-  const base = `/api/admin/webspark/${resource}`;
+  const base = `/api/admin/makeboldspark/${resource}`;
   return {
     create: (token: string, data: Omit<T, keyof BaseEntity>) =>
       authedFetch<T>(token, base, { method: 'POST', body: JSON.stringify(data) }),
@@ -885,7 +885,7 @@ return result.data;
 ### `Category.content` is the display name
 
 The blog `Category` entity uses a field named `content` for what is conceptually the
-category name. This is a naming quirk from the original WebSpark.Core data model:
+category name. This is a naming quirk from the original MakeBoldSpark.Core data model:
 
 ```typescript
 // ❌ Wrong
@@ -932,7 +932,7 @@ import DOMPurify from 'dompurify';
 
 ### Menus are a flat list — build the tree yourself
 
-`GET /api/public/webspark/menus` returns a flat array. The hierarchy is encoded via
+`GET /api/public/makeboldspark/menus` returns a flat array. The hierarchy is encoded via
 `parentId`. Use `buildMenuTree()` (shown in the [Menus section](#menus)) to assemble
 a nested structure for rendering navigation.
 

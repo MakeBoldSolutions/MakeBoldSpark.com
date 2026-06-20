@@ -1,6 +1,6 @@
 openapi: "3.1.0"
 info:
-  title: ApiSpark Health API
+  title: MakeBoldSpark Health API
   version: "1.0.0"
   description: |
     Public health check endpoint. Anonymous, read-only.
@@ -18,7 +18,7 @@ paths:
       operationId: GetHealth
       summary: Shallow health check
       description: |
-        Returns the operational status of the ApiSpark API.
+        Returns the operational status of the MakeBoldSpark API.
         Accessible without authentication. Suitable for uptime monitors and static client startup checks.
       tags:
         - Health
@@ -32,7 +32,7 @@ paths:
                 $ref: "#/components/schemas/HealthResponse"
               example:
                 status: "Healthy"
-                service: "ApiSpark"
+                service: "MakeBoldSpark"
                 version: "0.1.0"
 
 components:
@@ -55,7 +55,7 @@ components:
         service:
           type: string
           description: Name of the service
-          example: "ApiSpark"
+          example: "MakeBoldSpark"
         version:
           type: string
           description: Running version of the service (non-empty)

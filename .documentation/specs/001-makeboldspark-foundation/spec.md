@@ -7,12 +7,12 @@ recommended_next_step: plan
 required_gates: checklist, analyze, critic
 ---
 
-# Feature Specification: ApiSpark Platform Foundation
+# Feature Specification: MakeBoldSpark Platform Foundation
 
-**Feature Branch**: `001-apispark-foundation`
+**Feature Branch**: `001-makeboldspark-foundation`
 **Created**: 2026-05-07
 **Status**: Complete <!-- Valid: Draft | In Progress | Complete -->
-**Input**: ApiSpark Jumpstart Guide — `.documentation/ApiSpark-Jumpstart-Guide.md`
+**Input**: MakeBoldSpark Jumpstart Guide — `.documentation/MakeBoldSpark-Jumpstart-Guide.md`
 
 ## Rationale Summary
 
@@ -32,8 +32,8 @@ Build one modular ASP.NET Core (.NET 10 LTS) backend API as the shared foundatio
 
 ### Source Inputs
 
-- ApiSpark Jumpstart Guide (`.documentation/ApiSpark-Jumpstart-Guide.md`) — Section 24 "First Milestone Recommendation"
-- ApiSpark Constitution v1.1.0 (`.documentation/memory/constitution.md`) — Principles I–X
+- MakeBoldSpark Jumpstart Guide (`.documentation/MakeBoldSpark-Jumpstart-Guide.md`) — Section 24 "First Milestone Recommendation"
+- MakeBoldSpark Constitution v1.1.0 (`.documentation/memory/constitution.md`) — Principles I–X
 - Jumpstart Guide Phases 0–2 and Section 19 "Initial Agent Prompt"
 
 ### Tradeoffs Considered
@@ -44,7 +44,7 @@ Build one modular ASP.NET Core (.NET 10 LTS) backend API as the shared foundatio
 
 ### Architectural Impact
 
-- Introduces the single-backend modular API pattern that all future ApiSpark features must follow
+- Introduces the single-backend modular API pattern that all future MakeBoldSpark features must follow
 - Establishes the SQLite persistence model as the authoritative data store (no Cosmos dependency)
 - Sets the authorization boundary contract (public = anonymous, admin/publish/integrations = authenticated)
 - GitHub Actions build/test/deploy pipeline becomes the CI/CD baseline for all future work
@@ -59,7 +59,7 @@ Reviewers should verify: route group structure matches the constitution authoriz
 
 ### User Story 1 — Platform Health Verification (Priority: P1)
 
-Any caller — monitoring service, developer, or static web app — needs to confirm the ApiSpark backend is running and reachable. A simple, anonymous health endpoint satisfies this without exposing internal state.
+Any caller — monitoring service, developer, or static web app — needs to confirm the MakeBoldSpark backend is running and reachable. A simple, anonymous health endpoint satisfies this without exposing internal state.
 
 **Why this priority**: Every other scenario depends on the platform being available. This is the minimum viable proof that the deployment works.
 
@@ -67,8 +67,8 @@ Any caller — monitoring service, developer, or static web app — needs to con
 
 **Acceptance Scenarios**:
 
-1. **Given** the ApiSpark API is deployed and running, **When** an anonymous caller sends `GET /api/health`, **Then** the response is `200 OK` with a JSON body containing `status: "Healthy"`, `service: "ApiSpark"`, and a non-empty version string.
-2. **Given** the ApiSpark API is running, **When** the health endpoint is called repeatedly, **Then** it consistently returns `200 OK` without requiring any credentials.
+1. **Given** the MakeBoldSpark API is deployed and running, **When** an anonymous caller sends `GET /api/health`, **Then** the response is `200 OK` with a JSON body containing `status: "Healthy"`, `service: "MakeBoldSpark"`, and a non-empty version string.
+2. **Given** the MakeBoldSpark API is running, **When** the health endpoint is called repeatedly, **Then** it consistently returns `200 OK` without requiring any credentials.
 
 ---
 
@@ -110,7 +110,7 @@ An authenticated admin needs to be able to reach admin-area routes. Unauthentica
 
 ### User Story 4 — API Documentation Discovery (Priority: P4)
 
-A developer evaluating or consuming the ApiSpark API needs to explore available endpoints through interactive documentation — but only in development. Production must not expose the Swagger UI.
+A developer evaluating or consuming the MakeBoldSpark API needs to explore available endpoints through interactive documentation — but only in development. Production must not expose the Swagger UI.
 
 **Why this priority**: Reduces onboarding friction for future developers; required by the constitution's API-first principle to demonstrate OpenAPI contracts are in place before implementation.
 
@@ -188,7 +188,7 @@ A new developer (or AI coding agent) who clones the repository needs to get the 
 
 - **FR-010**: Platform MUST use EF Core + SQLite as the default persistence model.
 - **FR-011**: The SQLite connection string MUST be configurable via application settings (not hardcoded).
-- **FR-012**: In production, the SQLite database MUST reside at `/home/data/apispark.db` (Azure App Service persistent storage).
+- **FR-012**: In production, the SQLite database MUST reside at `/home/data/makeboldspark.db` (Azure App Service persistent storage).
 - **FR-013**: In local development, the SQLite database MUST default to a path under the project output directory (not under `/home/data`).
 - **FR-014**: Platform MUST apply EF Core migrations on startup when the `Database:ApplyMigrationsOnStartup` setting is `true`.
 - **FR-015**: Seed data MUST only be applied when the target table (Articles) is empty — never on every startup.

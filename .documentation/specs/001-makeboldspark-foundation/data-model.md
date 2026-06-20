@@ -1,7 +1,7 @@
-# Data Model: ApiSpark Platform Foundation
+# Data Model: MakeBoldSpark Platform Foundation
 
 **Phase**: 1 — Design & Contracts
-**Branch**: `001-apispark-foundation`
+**Branch**: `001-makeboldspark-foundation`
 **Date**: 2026-05-07
 **Prerequisite**: research.md complete ✅
 
@@ -84,10 +84,10 @@ public enum ArticleStatus
 
 ### DbContext
 
-`ApiSparkDbContext` inherits `DbContext`. Registered as scoped service.
+`MakeBoldSparkDbContext` inherits `DbContext`. Registered as scoped service.
 
 ```csharp
-public class ApiSparkDbContext : DbContext
+public class MakeBoldSparkDbContext : DbContext
 {
     public DbSet<Article> Articles => Set<Article>();
     public DbSet<Tag> Tags => Set<Tag>();
@@ -167,7 +167,7 @@ Seed data is applied at startup only when the Articles table is empty (guard log
 | Slug | Title | Status | Tags |
 |------|-------|--------|------|
 | `hello-world` | Hello World | Published | `general`, `intro` |
-| `getting-started-with-apispark` | Getting Started with ApiSpark | Published | `apispark`, `tutorial` |
+| `getting-started-with-makeboldspark` | Getting Started with MakeBoldSpark | Published | `makeboldspark`, `tutorial` |
 | `draft-article` | Draft Article | Draft | `general` |
 
 The draft article must not appear in public endpoint responses, verifying the status filter works.

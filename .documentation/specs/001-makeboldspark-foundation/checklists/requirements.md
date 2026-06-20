@@ -1,4 +1,4 @@
-# Specification Quality Checklist: ApiSpark Platform Foundation
+# Specification Quality Checklist: MakeBoldSpark Platform Foundation
 
 **Purpose**: Validate specification completeness and quality before proceeding to planning
 **Created**: 2026-05-07

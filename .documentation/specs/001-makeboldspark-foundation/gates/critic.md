@@ -6,7 +6,7 @@ severity: warning
 summary: "9 risks identified; all 9 resolved in tasks.md and research.md (2026-05-07). Both showstoppers fixed: auth scheme (T010) and partial class (T017). All critical and high risks addressed. Ready for implementation."
 ---
 
-# Technical Risk Assessment: ApiSpark Platform Foundation
+# Technical Risk Assessment: MakeBoldSpark Platform Foundation
 
 **Analysis Date**: 2026-05-07
 **Risk Posture**: 🟡 YELLOW — showstoppers present but both are low-effort fixes
@@ -25,7 +25,7 @@ The plan is architecturally sound and the constitution is fully aligned. However
 | ID | Category | Location | Risk Description | Likely Impact | Mitigation Required |
 |----|----------|----------|------------------|---------------|---------------------|
 | SS-1 | Auth/Security | research.md §2; tasks.md T010, T017 | `RequireAuthorization("AdminOnly")` with no registered auth scheme throws `InvalidOperationException: No authenticationScheme was specified, and there was no DefaultChallengeScheme found` — not `401 Unauthorized`. ASP.NET Core's challenge pipeline has no handler to call, so the middleware crashes. | US3 acceptance criteria ("admin routes return 401") fails with 500; constitution Principle VIII is violated at runtime | Register a minimal challenge scheme. Either add `AddAuthentication().AddBearerToken()` (returns 401 naturally) or register a stub `EmptyAuthHandler` that writes HTTP 401 on `ChallengeAsync`. At minimum: `builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer()` with permissive development settings. |
-| SS-2 | Test Infrastructure | tasks.md T003, T018–T036 | Top-level `Program.cs` in .NET 6+ generates an `internal` class. A separate test project (`ApiSpark.Api.Tests`) cannot reference `Program` in `WebApplicationFactory<Program>` — compiler error: `'Program' is inaccessible due to its protection level`. All 8 test phases depend on WebApplicationFactory and will fail to compile. | Every test class (T018, T020–T021, T029, T032, T036) fails with a compile error before any test runs | Add `public partial class Program { }` as the last line of `src/ApiSpark.Api/Program.cs`. This is a one-line fix but must be in T017 (Program.cs creation task). |
+| SS-2 | Test Infrastructure | tasks.md T003, T018–T036 | Top-level `Program.cs` in .NET 6+ generates an `internal` class. A separate test project (`MakeBoldSpark.Api.Tests`) cannot reference `Program` in `WebApplicationFactory<Program>` — compiler error: `'Program' is inaccessible due to its protection level`. All 8 test phases depend on WebApplicationFactory and will fail to compile. | Every test class (T018, T020–T021, T029, T032, T036) fails with a compile error before any test runs | Add `public partial class Program { }` as the last line of `src/MakeBoldSpark.Api/Program.cs`. This is a one-line fix but must be in T017 (Program.cs creation task). |
 
 ---
 
@@ -45,7 +45,7 @@ The plan is architecturally sound and the constitution is fully aligned. However
 |----|----------|----------|-------|--------|------------|
 | HP-1 | CI/CD | tasks.md T034, T035 | Both `build-test.yml` (T034) and `deploy.yml` (T035) trigger on `push` to `main`. Every merge to `main` runs two complete build+test cycles: one from build-test.yml, one from the test step inside deploy.yml. Doubles CI cost and elapsed time. | 2× build time on every merge; wasted Actions minutes | Remove `push: branches: [main]` from `build-test.yml`. The deploy workflow already runs build+test. OR: make deploy.yml depend on build-test.yml completion using `needs:` and `workflow_run:` triggers. |
 | HP-2 | Security | tasks.md T027; contracts/public-content.yaml | `GET /api/public/content/articles/{slug}` passes the raw slug value to the repository with no validation at the endpoint layer. EF Core parameterized queries prevent SQL injection, but: (1) the slug is logged verbatim by the request logging middleware (T012) — log injection via crafted slug values; (2) unrestricted slug length allows multi-megabyte path parameters, causing DoS via log inflation. | Log injection; DoS via log inflation | Add slug validation in the endpoint before calling service: validate against regex `^[a-z0-9-]{1,200}$`; return `400 Bad Request` for invalid slugs. Add `[MaxLength(200)]` constraint to `Article.Slug` in EF entity. |
-| HP-3 | Testing | tasks.md T017–T036 | Tests use `WebApplicationFactory<Program>` which reads `appsettings.json` (production path: `/home/data/apispark.db`) unless explicitly overridden. No task details how `IConfiguration` is overridden in the factory to point to a test-specific SQLite. If forgotten, tests will attempt to open `/home/data/apispark.db` on developer workstations (path doesn't exist on Windows → exception) or worse, open the real development database and mutate it. | Tests fail on Windows (path not found); tests corrupt local dev database on Linux | The `WebApplicationFactory<Program>` setup (T031-equivalent infrastructure) must explicitly override the connection string: `factory.WithWebHostBuilder(b => b.UseSetting("ConnectionStrings:DefaultConnection", $"Data Source={testDbPath}"))`. Document this explicitly in the auth handler task. |
+| HP-3 | Testing | tasks.md T017–T036 | Tests use `WebApplicationFactory<Program>` which reads `appsettings.json` (production path: `/home/data/makeboldspark.db`) unless explicitly overridden. No task details how `IConfiguration` is overridden in the factory to point to a test-specific SQLite. If forgotten, tests will attempt to open `/home/data/makeboldspark.db` on developer workstations (path doesn't exist on Windows → exception) or worse, open the real development database and mutate it. | Tests fail on Windows (path not found); tests corrupt local dev database on Linux | The `WebApplicationFactory<Program>` setup (T031-equivalent infrastructure) must explicitly override the connection string: `factory.WithWebHostBuilder(b => b.UseSetting("ConnectionStrings:DefaultConnection", $"Data Source={testDbPath}"))`. Document this explicitly in the auth handler task. |
 | HP-4 | Operational | tasks.md T017; plan.md §Technical Context | No graceful shutdown configuration. Azure App Service sends `SIGTERM` then kills the process after 5 seconds (default). A SQLite migration or seed data write in progress at shutdown time will leave the database in an inconsistent state. EF Core does not roll back uncommitted transactions on process kill. | Corrupt SQLite database on app service restart during a busy deployment window | Configure `builder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(10))` in Program.cs; ensure `DatabaseSetup` uses a `CancellationToken` from `app.Lifetime.ApplicationStopping` so it can abort gracefully. |
 
 ---
@@ -117,7 +117,7 @@ The plan is architecturally sound and the constitution is fully aligned. However
 | `Swashbuckle.AspNetCore` | As of .NET 9+, ASP.NET Core ships `Microsoft.AspNetCore.OpenApi` built-in. Swashbuckle has been slower to update. In .NET 10, there may be compatibility issues between Swashbuckle and the new OpenAPI document generation. | Use `Microsoft.AspNetCore.OpenApi` + `Scalar` (or Swashbuckle) — verify .NET 10 compatibility before T005 |
 | `azure/webapps-deploy@v3` | GitHub Action for Azure App Service deployment is version-specific. `@v3` may not support all .NET 10 publish output formats or Linux runtime stack targeting. | Pin to a tested version; add a test deployment step that validates the deployed endpoint |
 | EF Core + SQLite on .NET 10 | EF Core 10 and `Microsoft.EntityFrameworkCore.Sqlite 10.x` should be stable by 2026-05-07 but verify no known migration issues with .NET 10 targeting. | Check NuGet for stable 10.x release of EF Core before T005 |
-| `dotnet-ef` tool version | T015 runs `dotnet ef migrations add` — the tool version must match the EF Core version in the project. Version mismatch causes `Your startup project 'ApiSpark.Api' doesn't reference EntityFrameworkCore.Design` errors. | Pin the `dotnet-ef` tool in `.config/dotnet-tools.json` to the same major version as EF Core packages |
+| `dotnet-ef` tool version | T015 runs `dotnet ef migrations add` — the tool version must match the EF Core version in the project. Version mismatch causes `Your startup project 'MakeBoldSpark.Api' doesn't reference EntityFrameworkCore.Design` errors. | Pin the `dotnet-ef` tool in `.config/dotnet-tools.json` to the same major version as EF Core packages |
 
 ---
 
@@ -145,7 +145,7 @@ findings:
   - finding_id: critic-SS2
     severity: critical
     description: "Top-level Program.cs generates an internal class inaccessible from the test project. WebApplicationFactory<Program> fails to compile (CS0122) in all 8 test phases."
-    recommended_action: "Add 'public partial class Program { }' as the last line of src/ApiSpark.Api/Program.cs. Include this in T017 task description explicitly."
+    recommended_action: "Add 'public partial class Program { }' as the last line of src/MakeBoldSpark.Api/Program.cs. Include this in T017 task description explicitly."
     execution_mode: auto
     status: resolved
     outcome: "Resolved 2026-05-07 — see tasks.md Gate Acknowledgements table for task-level resolution details."
@@ -192,7 +192,7 @@ findings:
 
   - finding_id: critic-HP3
     severity: medium
-    description: "WebApplicationFactory uses production appsettings.json (DefaultConnection points to /home/data/apispark.db) unless explicitly overridden. Tests on Windows will throw FileNotFoundException; on Linux they may corrupt the local dev database."
+    description: "WebApplicationFactory uses production appsettings.json (DefaultConnection points to /home/data/makeboldspark.db) unless explicitly overridden. Tests on Windows will throw FileNotFoundException; on Linux they may corrupt the local dev database."
     recommended_action: "Add explicit connection string override in WebApplicationFactory configuration: factory.WithWebHostBuilder(b => b.UseSetting('ConnectionStrings:DefaultConnection', testDbPath)). Document this requirement in test infrastructure tasks."
     execution_mode: selective
     status: resolved
@@ -257,8 +257,8 @@ All 9 findings resolved. Gate status updated to PASS. Implementation may proceed
 | SS-2 | T017: `public partial class Program { }` added as explicit requirement |
 | CR-1 | T016: `MigrateAsync(ct)` + try/catch + CRITICAL log on failure |
 | CR-2 | T008/T009: `Journal Mode=WAL;Cache=Shared;` in both connection strings |
-| CR-3 | T020/T021/T029: Named shared-cache SQLite + `ApiSparkWebApplicationFactory` |
+| CR-3 | T020/T021/T029: Named shared-cache SQLite + `MakeBoldSparkWebApplicationFactory` |
 | HP-1 | T034: `push` trigger removed from `build-test.yml` |
 | HP-2 | T027: Slug regex validation returning 400 before service layer |
-| HP-3 | T029: `ApiSparkWebApplicationFactory` overrides connection string for all tests |
+| HP-3 | T029: `MakeBoldSparkWebApplicationFactory` overrides connection string for all tests |
 | HP-4 | T017: `UseShutdownTimeout(15s)` added; T016: `ApplicationStopping` CT passed |

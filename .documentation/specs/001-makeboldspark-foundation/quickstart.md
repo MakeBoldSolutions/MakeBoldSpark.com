@@ -1,8 +1,8 @@
-# Quickstart: ApiSpark Local Developer Setup
+# Quickstart: MakeBoldSpark Local Developer Setup
 
 **Target**: Developer with .NET 10 SDK installed  
 **Goal**: Running API with seeded data in under 10 minutes  
-**Branch**: `001-apispark-foundation`
+**Branch**: `001-makeboldspark-foundation`
 
 ---
 
@@ -20,8 +20,8 @@ No Azure account, no Cosmos connection, no Docker required for local development
 ## 1. Clone and Build
 
 ```bash
-git clone https://github.com/MarkHazleton/ApiSpark.git
-cd ApiSpark
+git clone https://github.com/MarkHazleton/MakeBoldSpark.git
+cd MakeBoldSpark
 dotnet restore
 dotnet build --configuration Debug
 ```
@@ -33,12 +33,12 @@ Expected: build completes with zero errors, zero warnings.
 ## 2. Run the API
 
 ```bash
-dotnet run --project src/ApiSpark.Api/ApiSpark.Api.csproj
+dotnet run --project src/MakeBoldSpark.Api/MakeBoldSpark.Api.csproj
 ```
 
 On first start, the API will automatically:
 
-1. Create `./data/apispark.local.db` (SQLite file, relative to project output)
+1. Create `./data/makeboldspark.local.db` (SQLite file, relative to project output)
 2. Apply EF Core migrations
 3. Seed sample articles and tags (only if the Articles table is empty)
 
@@ -61,7 +61,7 @@ Expected response:
 ```json
 {
   "status": "Healthy",
-  "service": "ApiSpark",
+  "service": "MakeBoldSpark",
   "version": "0.1.0"
 }
 ```
@@ -87,15 +87,15 @@ curl http://localhost:5000/api/public/content/tags
 
 ---
 
-## 5. Browse API Documentation (Scalar)
+## 5. Browse API Documentation (API Test Spark)
 
-Open in browser: `http://localhost:5000/scalar/v1`
+Open in browser: `http://localhost:5000/api-test-spark/`
 
-Scalar is the modern replacement for Swagger UI used in .NET 10 projects.
-All registered endpoints appear with interactive try-it-out, code snippets (C#, curl, Python), and dark mode.
+API Test Spark is the embedded interactive test UI used by this project (a Swagger UI alternative).
+All registered endpoints appear with interactive try-it-out, schema browsing, and curl command generation.
 The raw OpenAPI 3.1 JSON spec is available at `http://localhost:5000/openapi/v1.json`.
 
-Both endpoints are only available in the Development environment.
+Both endpoints are available in all environments for this project.
 
 ---
 
@@ -132,7 +132,7 @@ Expected: all tests pass. Test output includes coverage for:
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Data Source=./data/apispark.local.db"
+    "DefaultConnection": "Data Source=./data/makeboldspark.local.db"
   },
   "Database": {
     "ApplyMigrationsOnStartup": true,
@@ -163,10 +163,10 @@ Expected: all tests pass. Test output includes coverage for:
 ## File Layout After First Run
 
 ```text
-ApiSpark/
+MakeBoldSpark/
   data/
-    apispark.local.db     ← created automatically, .gitignored
-  src/ApiSpark.Api/
+    makeboldspark.local.db     ← created automatically, .gitignored
+  src/MakeBoldSpark.Api/
     ...
 ```
 
@@ -179,8 +179,8 @@ The `data/` directory is in `.gitignore`. Do not commit the `.db` file.
 | Symptom | Cause | Fix |
 |---------|-------|-----|
 | `Cannot open database` | `./data/` directory missing | The app creates it; ensure write permission on the project directory |
-| `Table already exists` error | Migrations ran against a pre-existing schema | Delete `./data/apispark.local.db` and restart |
-| Scalar UI not visible (`/scalar/v1` returns 404) | Running in Production environment | Set `ASPNETCORE_ENVIRONMENT=Development` |
+| `Table already exists` error | Migrations ran against a pre-existing schema | Delete `./data/makeboldspark.local.db` and restart |
+| API Test Spark UI not visible (`/api-test-spark/` returns 404) | App not started or wrong port | Check console output for the listening URL |
 | All endpoints return 404 | Project not started or wrong port | Check console output for the listening URL |
 | Admin routes return 200 (unexpected) | Auth middleware not configured | Verify `AuthorizationSetup.cs` is registered in `Program.cs` |
 
@@ -192,7 +192,7 @@ For production deployment, configure these Azure App Service application setting
 
 ```
 ASPNETCORE_ENVIRONMENT=Production
-ConnectionStrings__DefaultConnection=Data Source=/home/data/apispark.db
+ConnectionStrings__DefaultConnection=Data Source=/home/data/makeboldspark.db
 Database__ApplyMigrationsOnStartup=true
 Database__SeedOnStartup=false
 AllowedOrigins__0=https://markhazleton.com

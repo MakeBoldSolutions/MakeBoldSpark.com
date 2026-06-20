@@ -1,6 +1,6 @@
 openapi: "3.1.0"
 info:
-  title: ApiSpark Public Content API
+  title: MakeBoldSpark Public Content API
   version: "1.0.0"
   description: |
     Anonymous, read-only public content endpoints.
@@ -38,7 +38,7 @@ paths:
               example:
                 - slug: "hello-world"
                   title: "Hello World"
-                  summary: "Introduction to ApiSpark."
+                  summary: "Introduction to MakeBoldSpark."
                   publishDate: "2026-05-07T00:00:00Z"
                   tags: ["general", "intro"]
 
@@ -71,8 +71,8 @@ paths:
               example:
                 slug: "hello-world"
                 title: "Hello World"
-                summary: "Introduction to ApiSpark."
-                body: "# Hello World\n\nWelcome to ApiSpark.\n"
+                summary: "Introduction to MakeBoldSpark."
+                body: "# Hello World\n\nWelcome to MakeBoldSpark.\n"
                 publishDate: "2026-05-07T00:00:00Z"
                 tags: ["general", "intro"]
         "404":
@@ -109,7 +109,7 @@ paths:
               example:
                 - name: "general"
                 - name: "intro"
-                - name: "apispark"
+                - name: "makeboldspark"
 
 components:
   schemas:
@@ -132,7 +132,7 @@ components:
         summary:
           type: string
           description: Short description of the article
-          example: "Introduction to ApiSpark."
+          example: "Introduction to MakeBoldSpark."
         publishDate:
           type: string
           format: date-time
@@ -163,11 +163,11 @@ components:
           example: "Hello World"
         summary:
           type: string
-          example: "Introduction to ApiSpark."
+          example: "Introduction to MakeBoldSpark."
         body:
           type: string
           description: Full article content as raw Markdown string; rendering is the client's responsibility
-          example: "# Hello World\n\nWelcome to ApiSpark.\n"
+          example: "# Hello World\n\nWelcome to MakeBoldSpark.\n"
         publishDate:
           type: string
           format: date-time
