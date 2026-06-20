@@ -24,7 +24,7 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd src/ApiSpark.Api && dotnet run --urls=http://0.0.0.0:5000 --environment=Development"
+args = "cd src/MakeBoldSpark.Api && dotnet run --urls=http://0.0.0.0:5000 --environment=Development"
 waitForPort = 5000
 
 [workflows.workflow.metadata]
@@ -36,5 +36,5 @@ externalPort = 80
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["dotnet", "src/ApiSpark.Api/ApiSpark.Api.dll", "--urls=http://0.0.0.0:5000"]
-build = ["dotnet", "publish", "src/ApiSpark.Api/ApiSpark.Api.csproj", "-c", "Release", "-o", "publish"]
+run = ["dotnet", "src/MakeBoldSpark.Api/MakeBoldSpark.Api.dll", "--urls=http://0.0.0.0:5000"]
+build = ["dotnet", "publish", "src/MakeBoldSpark.Api/MakeBoldSpark.Api.csproj", "-c", "Release", "-o", "publish"]

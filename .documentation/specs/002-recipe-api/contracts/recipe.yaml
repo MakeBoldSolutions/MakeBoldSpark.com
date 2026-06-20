@@ -1,8 +1,8 @@
 openapi: "3.0.3"
 info:
-  title: ApiSpark – Recipe API
+  title: MakeBoldSpark – Recipe API
   version: "1.0.0"
-  description: Public and publisher-gated endpoints for the WebSpark Recipe domain.
+  description: Public and publisher-gated endpoints for the MakeBoldSpark Recipe domain.
 
 servers:
   - url: https://api.markhazleton.com

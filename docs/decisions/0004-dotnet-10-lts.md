@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-ApiSpark should use a stable long-term support framework suitable for production and portfolio use.
+MakeBoldSpark should use a stable long-term support framework suitable for production and portfolio use.
 
 ## Decision
 Target .NET 10 LTS for all projects.

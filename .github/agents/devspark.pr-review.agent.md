@@ -1,7 +1,11 @@
 ---
-name: "devspark.pr-review"
-description: "Run devspark.pr-review"
+description: Perform constitution-aware pull request review with actionable feedback for any PR in the repository
+handoffs:
+  - label: View Review History
+    agent: devspark.pr-review
+    prompt: Show me previous PR reviews in .documentation/specs/pr-review/
 ---
+
 ## Prompt Resolution
 
 Determine the current git user by running `git config user.name`.
@@ -12,8 +16,12 @@ Read and execute the instructions from the **first file that exists**:
 2. `.documentation/commands/devspark.pr-review.md` (team customization)
 3. `.devspark/defaults/commands/devspark.pr-review.md` (stock default)
 
+Where `{git-user}` is the normalized slug from step above.
+
 ## User Input
 
-{{input}}
+```text
+$ARGUMENTS
+```
 
 Pass the user input above to the resolved prompt.

@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-RY77Z11S9E"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-RY77Z11S9E");
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Explore the Make Bold Spark ecosystem from Make Bold Solutions: DevSpark, ApiTestSpark, Git utilities, application frameworks, and reference implementations."
+    />
+    <title>Ecosystem - Make Bold Spark by Make Bold Solutions</title>
+    <link rel="stylesheet" href="/assets/makebold/brand.css" />
+  </head>
+  <body>
+    <nav class="site-nav" aria-label="Main navigation">
+      <a class="brand-link" href="/">
+        <img
+          class="brand-logo"
+          src="/assets/makebold/logos/make-bold-solutions-logo.svg"
+          alt="Make Bold Solutions"
+        />
+        <span class="brand-text">
+          <span class="brand-name">Make Bold Spark</span>
+          <span class="brand-byline">By Make Bold Solutions</span>
+        </span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/vision.html">Vision</a></li>
+        <li><a href="/ecosystem.html">Ecosystem</a></li>
+        <li><a href="/#devspark">DevSpark</a></li>
+        <li><a href="/#api-context">ApiTestSpark</a></li>
+        <li><a href="/ecosystem.html#git-stats-reporting">Git Utilities</a></li>
+      </ul>
+    </nav>
+
+    <header class="hero">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">Ecosystem Inventory</p>
+          <h1>Make Bold Spark <em>Ecosystem</em></h1>
+          <p class="lead" id="ecosystem-intro">Loading ecosystem inventory...</p>
+          <div class="actions" style="margin-top: 2rem">
+            <a class="btn btn-primary" href="#inventory">Browse Initiatives</a>
+            <a class="btn btn-outline" href="/vision.html">Read the Vision</a>
+          </div>
+        </div>
+        <div class="hero-mark">
+          <img
+            src="/assets/makebold/logos/make-bold-solutions-vertical.png"
+            alt="Make Bold Solutions logo"
+          />
+        </div>
+      </div>
+    </header>
+
+    <div class="band">
+      <section class="band-inner">
+        <p class="section-label">Relationship Model</p>
+        <h2 class="section-title">Make Bold Solutions is the root</h2>
+        <p class="section-desc" id="relationship-note">
+          Make Bold Spark serves as the public-facing innovation ecosystem of
+          Make Bold Solutions LLC.
+        </p>
+        <div class="diagram" id="relationship-diagram"></div>
+      </section>
+    </div>
+
+    <section class="section" id="inventory">
+      <p class="section-label">Inventory</p>
+      <h2 class="section-title">Initiatives, systems, and platforms</h2>
+      <p class="section-desc">
+        This catalog is generated from the centralized ecosystem metadata in
+        <code>subsites.json</code> and styled with the Make Bold Solutions brand
+        system.
+      </p>
+      <div id="inventory-shell"></div>
+    </section>
+
+    <footer>
+      <div class="footer-inner">
+        <div>
+          <a class="footer-brand" href="/">
+            <img
+              class="brand-logo"
+              src="/assets/makebold/logos/make-bold-solutions-logo.svg"
+              alt="Make Bold Solutions"
+            />
+            <span class="brand-text">
+              <span class="brand-name">Make Bold Spark</span>
+              <span class="brand-byline">By Make Bold Solutions</span>
+            </span>
+          </a>
+          <p>Spec-driven systems. Real applications. Practical AI.</p>
+        </div>
+        <ul class="footer-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/systems/">Systems</a></li>
+          <li><a href="/insights/">Insights</a></li>
+          <li><a href="/vision.html">Vision</a></li>
+          <li><a href="https://github.com/MarkHazleton/MakeBoldSpark">GitHub</a></li>
+        </ul>
+      </div>
+      <p class="copyright">
+        &copy; 2026 Make Bold Solutions LLC. Make Bold Spark is a Make Bold
+        Solutions initiative.
+      </p>
+    </footer>
+
+    <script>
+      function categoryName(data, id) {
+        return (
+          data.taxonomy?.categories?.find((category) => category.id === id)
+            ?.name || id
+        );
+      }
+
+      function links(site) {
+        const output = [
+          `<a href="${site.url}" target="_blank" rel="noopener">Open Site</a>`,
+        ];
+        if (site.links?.repository) {
+          output.push(
+            `<a href="${site.links.repository}" target="_blank" rel="noopener">GitHub</a>`,
+          );
+        }
+        return output.join("");
+      }
+
+      function card(site, data) {
+        const related = Array.isArray(site.relatedInitiatives)
+          ? site.relatedInitiatives
+              .map((id) => data.subsites.find((item) => item.id === id))
+              .filter(Boolean)
+              .slice(0, 3)
+          : [];
+        const relatedMarkup = related.length
+          ? `<div class="meta-row">${related
+              .map(
+                (item) =>
+                  `<span class="meta-pill">${item.displayName || item.name}</span>`,
+              )
+              .join("")}</div>`
+          : "";
+
+        return `
+          <article class="card inventory-card">
+            <div class="card-top">
+              <div class="icon">${site.icon}</div>
+              <div>
+                <h3 class="name">${site.displayName || site.name}</h3>
+                <div class="tagline">${site.tagline || ""}</div>
+              </div>
+            </div>
+            <div class="meta-row">
+              <span class="tag">${site.status || "Reference Implementation"}</span>
+              <span class="tag">${categoryName(data, site.strategicCategory)}</span>
+            </div>
+            <p class="desc">${site.description}</p>
+            <div class="pattern">${site.deliveryPattern || ""}</div>
+            ${relatedMarkup}
+            <div class="links">${links(site)}</div>
+          </article>`;
+      }
+
+      async function loadEcosystem() {
+        const response = await fetch("/subsites.json");
+        if (!response.ok) throw new Error("Could not load subsites.json");
+        const data = await response.json();
+        const sites = data.subsites
+          .filter((site) => site.active !== false)
+          .sort((a, b) => (a.sortOrder ?? 999) - (b.sortOrder ?? 999));
+        const categories = [...(data.taxonomy?.categories || [])].sort(
+          (a, b) => (a.sortOrder ?? 999) - (b.sortOrder ?? 999),
+        );
+
+        document.getElementById("ecosystem-intro").textContent =
+          data.meta.ecosystemIntroduction || data.meta.positioning;
+
+        const relationship = data.taxonomy?.relationshipDiagram || {};
+        document.getElementById("relationship-note").textContent =
+          relationship.note || data.meta.positioning;
+        document.getElementById("relationship-diagram").innerHTML = `
+          <div class="diagram-row"><span class="tag">Owner</span>${relationship.root || data.meta.organization}</div>
+          <div class="diagram-row"><span class="tag">Ecosystem</span>${relationship.ecosystem || "Make Bold Spark"}</div>
+          <div class="diagram-row"><span class="tag">Primary</span>${(relationship.primaryInitiatives || []).join(" + ")}</div>
+          <div class="diagram-row"><span class="tag">Supporting</span>${(relationship.supportingInitiatives || []).join(" + ")}</div>`;
+
+        document.getElementById("inventory-shell").innerHTML = categories
+          .map((category) => {
+            const categorySites = sites.filter(
+              (site) => site.strategicCategory === category.id,
+            );
+            if (!categorySites.length) return "";
+
+            return `
+              <section class="category" id="${category.id}">
+                <div class="category-header">
+                  <h3>${category.name}</h3>
+                  <p>${category.description}</p>
+                </div>
+                <div class="grid">
+                  ${categorySites.map((site) => card(site, data)).join("")}
+                </div>
+              </section>`;
+          })
+          .join("");
+      }
+
+      loadEcosystem().catch((error) => {
+        document.getElementById("inventory-shell").innerHTML =
+          `<p class="section-desc">Could not load the ecosystem inventory.</p>`;
+        console.error(error);
+      });
+    </script>
+  </body>
+</html>

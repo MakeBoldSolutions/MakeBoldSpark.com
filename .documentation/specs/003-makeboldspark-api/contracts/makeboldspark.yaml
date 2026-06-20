@@ -1,0 +1,1051 @@
+openapi: "3.0.3"
+info:
+  title: MakeBoldSpark – MakeBoldSpark CMS API
+  version: "1.0.0"
+  description: |
+    Public read-only and admin CRUD endpoints for the MakeBoldSpark.Core CMS domain.
+    Public routes are anonymous. Admin routes require the AdminOnly policy (JWT Bearer, Admin role).
+
+servers:
+  - url: https://api.markhazleton.com
+    description: Production
+
+tags:
+  - name: MakeBoldSpark-Domains
+  - name: MakeBoldSpark-Blogs
+  - name: MakeBoldSpark-Authors
+  - name: MakeBoldSpark-Posts
+  - name: MakeBoldSpark-Categories
+  - name: MakeBoldSpark-Menu
+  - name: MakeBoldSpark-Keywords
+  - name: MakeBoldSpark-ContentParts
+  - name: MakeBoldSpark-Subscribers
+  - name: MakeBoldSpark-Newsletters
+  - name: MakeBoldSpark-MailSettings
+
+paths:
+
+  # ── Domains ──────────────────────────────────────────────────────────────────
+
+  /api/public/makeboldspark/domains:
+    get:
+      operationId: GetDomains
+      summary: List all domains
+      tags: [MakeBoldSpark-Domains]
+      security: []
+      responses:
+        "200":
+          description: Array of domains
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WebSite'
+
+  /api/public/makeboldspark/domains/{id}:
+    get:
+      operationId: GetDomain
+      summary: Get a domain by ID
+      tags: [MakeBoldSpark-Domains]
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "200":
+          description: Domain found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSite'
+        "404":
+          description: Not found
+
+  /api/admin/makeboldspark/domains:
+    post:
+      operationId: CreateDomain
+      summary: Create a domain
+      tags: [MakeBoldSpark-Domains]
+      security:
+        - adminAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebSite'
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSite'
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /api/admin/makeboldspark/domains/{id}:
+    put:
+      operationId: UpdateDomain
+      summary: Update a domain
+      tags: [MakeBoldSpark-Domains]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebSite'
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSite'
+        "404":
+          description: Not found
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    delete:
+      operationId: DeleteDomain
+      summary: Delete a domain
+      tags: [MakeBoldSpark-Domains]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  # ── Blogs ─────────────────────────────────────────────────────────────────────
+
+  /api/public/makeboldspark/blogs:
+    get:
+      operationId: GetBlogs
+      summary: List all blogs
+      tags: [MakeBoldSpark-Blogs]
+      security: []
+      responses:
+        "200":
+          description: Array of blogs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+  /api/public/makeboldspark/blogs/{id}:
+    get:
+      operationId: GetBlog
+      summary: Get a blog by ID
+      tags: [MakeBoldSpark-Blogs]
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "200":
+          description: Blog found
+          content:
+            application/json:
+              schema:
+                type: object
+        "404":
+          description: Not found
+
+  /api/admin/makeboldspark/blogs:
+    post:
+      operationId: CreateBlog
+      summary: Create a blog
+      tags: [MakeBoldSpark-Blogs]
+      security:
+        - adminAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "201":
+          description: Created
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /api/admin/makeboldspark/blogs/{id}:
+    put:
+      operationId: UpdateBlog
+      summary: Update a blog
+      tags: [MakeBoldSpark-Blogs]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Updated
+        "404":
+          description: Not found
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    delete:
+      operationId: DeleteBlog
+      summary: Delete a blog
+      tags: [MakeBoldSpark-Blogs]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  # ── Authors ──────────────────────────────────────────────────────────────────
+
+  /api/public/makeboldspark/authors:
+    get:
+      operationId: GetAuthors
+      summary: List all authors
+      tags: [MakeBoldSpark-Authors]
+      security: []
+      responses:
+        "200":
+          description: Array of authors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+  /api/public/makeboldspark/authors/{id}:
+    get:
+      operationId: GetAuthor
+      summary: Get author by ID
+      tags: [MakeBoldSpark-Authors]
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "200":
+          description: Author found
+        "404":
+          description: Not found
+
+  /api/admin/makeboldspark/authors:
+    post:
+      operationId: CreateAuthor
+      summary: Create an author
+      tags: [MakeBoldSpark-Authors]
+      security:
+        - adminAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "201":
+          description: Created
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /api/admin/makeboldspark/authors/{id}:
+    put:
+      operationId: UpdateAuthor
+      summary: Update an author
+      tags: [MakeBoldSpark-Authors]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Updated
+        "404":
+          description: Not found
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    delete:
+      operationId: DeleteAuthor
+      summary: Delete an author
+      tags: [MakeBoldSpark-Authors]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  # ── Posts ─────────────────────────────────────────────────────────────────────
+
+  /api/public/makeboldspark/posts:
+    get:
+      operationId: GetPosts
+      summary: List posts, optionally filtered by blogId
+      tags: [MakeBoldSpark-Posts]
+      security: []
+      parameters:
+        - name: blogId
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Array of posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+
+  /api/public/makeboldspark/posts/{id}:
+    get:
+      operationId: GetPost
+      summary: Get post by ID
+      tags: [MakeBoldSpark-Posts]
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "200":
+          description: Post found
+        "404":
+          description: Not found
+
+  /api/admin/makeboldspark/posts:
+    post:
+      operationId: CreatePost
+      summary: Create a post
+      tags: [MakeBoldSpark-Posts]
+      security:
+        - adminAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "201":
+          description: Created
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /api/admin/makeboldspark/posts/{id}:
+    put:
+      operationId: UpdatePost
+      summary: Update a post
+      tags: [MakeBoldSpark-Posts]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Updated
+        "404":
+          description: Not found
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    delete:
+      operationId: DeletePost
+      summary: Delete a post
+      tags: [MakeBoldSpark-Posts]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  # ── Categories, Menus, Keywords, ContentParts ─────────────────────────────────
+  # (abbreviated — same GET public / CRUD admin pattern)
+
+  /api/public/makeboldspark/categories:
+    get:
+      operationId: GetCategories
+      summary: List all categories
+      tags: [MakeBoldSpark-Categories]
+      security: []
+      responses:
+        "200":
+          description: Array of categories
+
+  /api/public/makeboldspark/categories/{id}:
+    get:
+      operationId: GetCategory
+      summary: Get category by ID
+      tags: [MakeBoldSpark-Categories]
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "200":
+          description: Category found
+        "404":
+          description: Not found
+
+  /api/admin/makeboldspark/categories:
+    post:
+      operationId: CreateCategory
+      summary: Create a category
+      tags: [MakeBoldSpark-Categories]
+      security:
+        - adminAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "201":
+          description: Created
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /api/admin/makeboldspark/categories/{id}:
+    put:
+      operationId: UpdateCategory
+      summary: Update a category
+      tags: [MakeBoldSpark-Categories]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Updated
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    delete:
+      operationId: DeleteCategory
+      summary: Delete a category
+      tags: [MakeBoldSpark-Categories]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "204":
+          description: Deleted
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /api/public/makeboldspark/menus:
+    get:
+      operationId: GetMenus
+      summary: List menus, optionally filtered by domainId
+      tags: [MakeBoldSpark-Menu]
+      security: []
+      parameters:
+        - name: domainId
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Array of menus
+
+  /api/public/makeboldspark/menus/{id}:
+    get:
+      operationId: GetMenu
+      summary: Get menu by ID
+      tags: [MakeBoldSpark-Menu]
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "200":
+          description: Menu found
+        "404":
+          description: Not found
+
+  /api/admin/makeboldspark/menus:
+    post:
+      operationId: CreateMenu
+      summary: Create a menu
+      tags: [MakeBoldSpark-Menu]
+      security:
+        - adminAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "201":
+          description: Created
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /api/admin/makeboldspark/menus/{id}:
+    put:
+      operationId: UpdateMenu
+      summary: Update a menu
+      tags: [MakeBoldSpark-Menu]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Updated
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    delete:
+      operationId: DeleteMenu
+      summary: Delete a menu
+      tags: [MakeBoldSpark-Menu]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "204":
+          description: Deleted
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /api/public/makeboldspark/keywords:
+    get:
+      operationId: GetKeywords
+      summary: List all keywords
+      tags: [MakeBoldSpark-Keywords]
+      security: []
+      responses:
+        "200":
+          description: Array of keywords
+
+  /api/public/makeboldspark/keywords/{id}:
+    get:
+      operationId: GetKeyword
+      summary: Get keyword by ID
+      tags: [MakeBoldSpark-Keywords]
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "200":
+          description: Keyword found
+        "404":
+          description: Not found
+
+  /api/admin/makeboldspark/keywords:
+    post:
+      operationId: CreateKeyword
+      summary: Create a keyword
+      tags: [MakeBoldSpark-Keywords]
+      security:
+        - adminAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "201":
+          description: Created
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /api/admin/makeboldspark/keywords/{id}:
+    put:
+      operationId: UpdateKeyword
+      summary: Update a keyword
+      tags: [MakeBoldSpark-Keywords]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Updated
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    delete:
+      operationId: DeleteKeyword
+      summary: Delete a keyword
+      tags: [MakeBoldSpark-Keywords]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "204":
+          description: Deleted
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /api/public/makeboldspark/content-parts:
+    get:
+      operationId: GetContentParts
+      summary: List all content parts
+      tags: [MakeBoldSpark-ContentParts]
+      security: []
+      responses:
+        "200":
+          description: Array of content parts
+
+  /api/public/makeboldspark/content-parts/{id}:
+    get:
+      operationId: GetContentPart
+      summary: Get content part by ID
+      tags: [MakeBoldSpark-ContentParts]
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "200":
+          description: Content part found
+        "404":
+          description: Not found
+
+  /api/admin/makeboldspark/content-parts:
+    post:
+      operationId: CreateContentPart
+      summary: Create a content part
+      tags: [MakeBoldSpark-ContentParts]
+      security:
+        - adminAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "201":
+          description: Created
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /api/admin/makeboldspark/content-parts/{id}:
+    put:
+      operationId: UpdateContentPart
+      summary: Update a content part
+      tags: [MakeBoldSpark-ContentParts]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Updated
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    delete:
+      operationId: DeleteContentPart
+      summary: Delete a content part
+      tags: [MakeBoldSpark-ContentParts]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "204":
+          description: Deleted
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  # ── Subscribers ──────────────────────────────────────────────────────────────
+
+  /api/admin/makeboldspark/subscribers:
+    get:
+      operationId: GetSubscribers
+      summary: List all subscribers
+      tags: [MakeBoldSpark-Subscribers]
+      security:
+        - adminAuth: []
+      responses:
+        "200":
+          description: Array of subscribers
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    post:
+      operationId: CreateSubscriber
+      summary: Create a subscriber
+      tags: [MakeBoldSpark-Subscribers]
+      security:
+        - adminAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "201":
+          description: Created
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /api/admin/makeboldspark/subscribers/{id}:
+    get:
+      operationId: GetSubscriber
+      summary: Get subscriber by ID
+      tags: [MakeBoldSpark-Subscribers]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "200":
+          description: Subscriber found
+        "404":
+          description: Not found
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    put:
+      operationId: UpdateSubscriber
+      summary: Update a subscriber
+      tags: [MakeBoldSpark-Subscribers]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Updated
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    delete:
+      operationId: DeleteSubscriber
+      summary: Delete a subscriber
+      tags: [MakeBoldSpark-Subscribers]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "204":
+          description: Deleted
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  # ── Newsletters ──────────────────────────────────────────────────────────────
+
+  /api/admin/makeboldspark/newsletters:
+    get:
+      operationId: GetNewsletters
+      summary: List all newsletters
+      tags: [MakeBoldSpark-Newsletters]
+      security:
+        - adminAuth: []
+      responses:
+        "200":
+          description: Array of newsletters
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    post:
+      operationId: CreateNewsletter
+      summary: Create a newsletter
+      tags: [MakeBoldSpark-Newsletters]
+      security:
+        - adminAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "201":
+          description: Created
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /api/admin/makeboldspark/newsletters/{id}:
+    get:
+      operationId: GetNewsletter
+      summary: Get newsletter by ID
+      tags: [MakeBoldSpark-Newsletters]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "200":
+          description: Newsletter found
+        "404":
+          description: Not found
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    delete:
+      operationId: DeleteNewsletter
+      summary: Delete a newsletter
+      tags: [MakeBoldSpark-Newsletters]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "204":
+          description: Deleted
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  # ── MailSettings ─────────────────────────────────────────────────────────────
+
+  /api/admin/makeboldspark/mail-settings:
+    get:
+      operationId: GetMailSettings
+      summary: List all mail settings
+      tags: [MakeBoldSpark-MailSettings]
+      security:
+        - adminAuth: []
+      responses:
+        "200":
+          description: Array of mail settings
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    post:
+      operationId: CreateMailSetting
+      summary: Create a mail setting
+      tags: [MakeBoldSpark-MailSettings]
+      security:
+        - adminAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "201":
+          description: Created
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+  /api/admin/makeboldspark/mail-settings/{id}:
+    get:
+      operationId: GetMailSetting
+      summary: Get mail setting by ID
+      tags: [MakeBoldSpark-MailSettings]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "200":
+          description: Mail setting found
+        "404":
+          description: Not found
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    put:
+      operationId: UpdateMailSetting
+      summary: Update a mail setting
+      tags: [MakeBoldSpark-MailSettings]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Updated
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+    delete:
+      operationId: DeleteMailSetting
+      summary: Delete a mail setting
+      tags: [MakeBoldSpark-MailSettings]
+      security:
+        - adminAuth: []
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        "204":
+          description: Deleted
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+components:
+  securitySchemes:
+    adminAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Requires Admin role (AdminOnly policy)
+
+  parameters:
+    IdParam:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+
+  schemas:
+    WebSite:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+        description:
+          type: string
+        url:
+          type: string

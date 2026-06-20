@@ -17,7 +17,7 @@ required_gates: none
 
 ## Problem Statement
 
-ApiSpark needs to expose recipe data from the existing `WebSpark.Recipe` domain library so
+MakeBoldSpark needs to expose recipe data from the existing `MakeBoldSpark.Recipe` domain library so
 that static client sites can display recipe content anonymously, and authorized publishers
 can manage recipe and category records through a versioned API.
 
@@ -51,7 +51,7 @@ can manage recipe and category records through a versioned API.
 
 ## Non-Functional Requirements
 
-- Data source: `WebSpark.Recipe` domain library via `RecipeDbContext` (EF Core + SQLite)
+- Data source: `MakeBoldSpark.Recipe` domain library via `RecipeDbContext` (EF Core + SQLite)
 - Persistence: `RecipeConnection` SQLite database (follows Principle IX)
 - Authorization: inherits from `/api/publish` route group policy (Constitution Principle VIII)
 - No hardcoded connection strings or credentials (Constitution Principle X)
@@ -66,12 +66,12 @@ can manage recipe and category records through a versioned API.
 ## Out of Scope
 
 - Recipe search / filtering (future enhancement)
-- Recipe image upload (served from existing `WebSpark.Recipe` storage)
+- Recipe image upload (served from existing `MakeBoldSpark.Recipe` storage)
 - Rate limiting (platform-level concern)
 
 ## Implementation Notes
 
-- `RecipeService` wraps `IRecipeService` (from `WebSpark.Recipe`) — no direct DbContext injection
+- `RecipeService` wraps `IRecipeService` (from `MakeBoldSpark.Recipe`) — no direct DbContext injection
 - Route group `MapPublicRecipeApi` mounted on `/api/public`
 - Route group `MapPublishRecipeApi` mounted on `/api/publish` (inherits Publisher policy)
-- Feature folder: `src/ApiSpark.Api/Features/Recipe/`
+- Feature folder: `src/MakeBoldSpark.Api/Features/Recipe/`

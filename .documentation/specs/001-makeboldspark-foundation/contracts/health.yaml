@@ -1,0 +1,62 @@
+openapi: "3.1.0"
+info:
+  title: MakeBoldSpark Health API
+  version: "1.0.0"
+  description: |
+    Public health check endpoint. Anonymous, read-only.
+    Returns service status, name, and version.
+
+servers:
+  - url: https://api.markhazleton.com
+    description: Production
+  - url: http://localhost:5000
+    description: Local development
+
+paths:
+  /api/health:
+    get:
+      operationId: GetHealth
+      summary: Shallow health check
+      description: |
+        Returns the operational status of the MakeBoldSpark API.
+        Accessible without authentication. Suitable for uptime monitors and static client startup checks.
+      tags:
+        - Health
+      security: []
+      responses:
+        "200":
+          description: Service is healthy and running
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+              example:
+                status: "Healthy"
+                service: "MakeBoldSpark"
+                version: "0.1.0"
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - service
+        - version
+      properties:
+        status:
+          type: string
+          description: Health status of the service
+          enum:
+            - Healthy
+            - Degraded
+            - Unhealthy
+          example: "Healthy"
+        service:
+          type: string
+          description: Name of the service
+          example: "MakeBoldSpark"
+        version:
+          type: string
+          description: Running version of the service (non-empty)
+          example: "0.1.0"

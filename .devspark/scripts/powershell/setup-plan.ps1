@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env pwsh
+#!/usr/bin/env pwsh
 # Setup implementation plan for a feature
 
 [CmdletBinding()]

@@ -1,4 +1,4 @@
-﻿---
+---
 description: Check the installed DevSpark version, identify stale framework files, and guide a safe upgrade to the latest release
 ---
 
@@ -143,8 +143,8 @@ These are written to `.devspark/` and should match the latest version:
 
 - `.devspark/defaults/commands/devspark.*.md` — stock prompt templates
 - `.devspark/templates/` — stock helper templates
-- `.devspark/templates/skills/` — portable Agent Skill packages (SKILL.md + scripts + references) consumed by commands such as `/devspark.specify`
-- `.devspark/scripts/bash/*.sh` and `.devspark/scripts/powershell/*.ps1` — both sets always present
+- `.devspark/scripts/bash/*.sh`
+- `.devspark/scripts/powershell/*.ps1`
 - `.devspark/VERSION`
 - Agent shim files:
   - `.github/agents/*.agent.md`
@@ -215,10 +215,7 @@ Missing framework files should be reported as:
 ```
 MISSING: .devspark/scripts/powershell/setup-plan.ps1
 MISSING: .github/agents/devspark.specify.agent.md
-MISSING: .devspark/templates/skills/write-spec/SKILL.md
 ```
-
-For every command prompt that delegates to a skill (currently `/devspark.specify` → `write-spec`), verify the skill's `SKILL.md`, `scripts/`, and `references/` are present under `.devspark/templates/skills/`. A missing skill must be reported at the same severity as a missing script — commands that delegate to a missing skill silently degrade to fallback behaviour.
 
 ### 7. Perform the Upgrade
 
@@ -229,23 +226,7 @@ For every command prompt that delegates to a skill (currently `/devspark.specify
 #### 7a. Update stock defaults
 
 Write the latest DevSpark prompt templates to `.devspark/defaults/commands/`
-and **both** script sets to `.devspark/scripts/bash/` and `.devspark/scripts/powershell/`.
-Always sync both sets regardless of the current OS — a repo is shared across macOS,
-Linux, and Windows, so both sets must be present at all times.
-
-Also write the latest **Agent Skill packages** from upstream `templates/skills/` to
-`.devspark/templates/skills/`. This directory is framework-owned and safe to overwrite
-completely. At minimum the following must land:
-
-- `.devspark/templates/skills/README.md`
-- `.devspark/templates/skills/ADAPTER-contract.md`
-- `.devspark/templates/skills/SKILL-validation-contract.md`
-- `.devspark/templates/skills/references/devspark-skills-guide.md`
-- `.devspark/templates/skills/write-spec/SKILL.md`
-- `.devspark/templates/skills/write-spec/references/spec-template.md`
-- `.devspark/templates/skills/write-spec/scripts/gather-context.ps1`
-- `.devspark/templates/skills/write-spec/scripts/gather-context.sh`
-
+and stock scripts to `.devspark/scripts/`.
 These directories are framework-owned and safe to overwrite completely.
 
 **Important**: Do NOT write to `.documentation/commands/` or `.documentation/scripts/`.
@@ -294,7 +275,7 @@ Offer to show diffs for any changed files so the team can decide what to merge.
 
 **Legacy migration collision guidance:**
 
-- If legacy `.specify/`, root `scripts/`, root `templates/`, or root `specs/` content is migrated and an equivalent file already exists under `.documentation/`, keep the existing `.documentation/` file.
+- If legacy `.documentation/`, root `scripts/`, root `templates/`, or root `specs/` content is migrated and an equivalent file already exists under `.documentation/`, keep the existing `.documentation/` file.
 - Report the skipped legacy file and preserve it in the corresponding `.old/` backup for manual review.
 - Never silently replace active `.documentation/` overrides with legacy content during upgrade.
 
@@ -314,9 +295,7 @@ Post-Upgrade Verification
   VERSION stamp      : 1.2.4  (was 1.1.0)
   defaults/commands/ : updated (27 prompts)
   commands/          : unchanged (team customizations preserved)
-  stock scripts/bash : updated (15 scripts)
-  stock scripts/ps   : updated (16 scripts)
-  stock skills/      : updated (write-spec + contracts)
+  stock scripts/     : updated (15 scripts)
   team scripts/      : unchanged (overrides preserved)
   constitution.md    : untouched (never modified by upgrades)
 ```
@@ -333,7 +312,7 @@ DevSpark Upgrade Summary
   Date             : <TODAY>
 
 Stock prompts updated in .devspark/defaults/commands/.
-Stock scripts updated in .devspark/scripts/bash/ and .devspark/scripts/powershell/ (both sets).
+Stock scripts updated in .devspark/scripts/.
 Team customizations in .documentation/commands/ and .documentation/scripts/ are untouched.
 
 To merge specific improvements into your team prompts:

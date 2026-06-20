@@ -25,7 +25,7 @@ MakeBoldSpark demonstrates how to host multiple low-volume APIs in a single, cos
 
 - .NET 10 LTS
 - Azure App Service Linux B1
-- SQLite under persistent App Service storage (`/home/data/apispark.db`)
+- SQLite under persistent App Service storage (`/home/data/makeboldspark.db`)
 - Azure Static Web Apps for public clients
 
 ## Route Areas
@@ -40,12 +40,12 @@ MakeBoldSpark demonstrates how to host multiple low-volume APIs in a single, cos
 ## Quick Start
 
 ```bash
-git clone https://github.com/MarkHazleton/ApiSpark.git
-cd ApiSpark
-dotnet run --project src/ApiSpark.Api
+git clone https://github.com/MarkHazleton/MakeBoldSpark.git
+cd MakeBoldSpark
+dotnet run --project src/MakeBoldSpark.Api
 ```
 
-See [quickstart.md](.documentation/specs/001-apispark-foundation/quickstart.md) for full local setup instructions.
+See [quickstart.md](.documentation/specs/001-makeboldspark-foundation/quickstart.md) for full local setup instructions.
 
 ## Architecture
 

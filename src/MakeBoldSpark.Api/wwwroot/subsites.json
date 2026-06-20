@@ -1,0 +1,1083 @@
+{
+  "meta": {
+    "domain": "makeboldspark.com",
+    "description": "Make Bold Spark ecosystem inventory of initiatives, reference implementations, tools, and demonstrations",
+    "lastUpdated": "2026-06-08",
+    "positioning": "Make Bold Spark explores practical ways to improve software delivery through better context, specifications, and AI-assisted development.",
+    "tagline": "Spec-Driven Systems. Real Applications. Practical AI.",
+    "supportingPhrase": "Better Context. Better Software. Faster Delivery.",
+    "inventoryPurpose": "Show how each Spark initiative supports practical specification-driven and AI-assisted software delivery.",
+    "inventorySource": "Generated from active Make Bold Spark subdomain metadata maintained in this file.",
+    "organization": "Make Bold Solutions LLC",
+    "ecosystemTitle": "The Make Bold Spark Ecosystem",
+    "ecosystemIntroduction": "Each Spark initiative explores a different aspect of building better software through better context, specifications, workflows, contracts, and AI-assisted development. Together they form a practical collection of reference implementations demonstrating real-world software delivery patterns."
+  },
+  "taxonomy": {
+    "categories": [
+      {
+        "id": "flagship-initiatives",
+        "name": "Flagship Initiatives",
+        "description": "Primary Make Bold Spark initiatives that define the platform vision and most directly express the ecosystem message.",
+        "messageRole": "Establishes Make Bold Spark as the organizing vision for specification-driven, agent-ready software delivery.",
+        "sortOrder": 10
+      },
+      {
+        "id": "context-ai",
+        "name": "Context and AI",
+        "description": "Tools and patterns for prompt context, conversation context, and AI-assisted workflows.",
+        "messageRole": "Explores how better context improves human and AI collaboration.",
+        "sortOrder": 20
+      },
+      {
+        "id": "git-stats-reporting",
+        "name": "GitHub and Git Utilities",
+        "description": "Git repository analysis, GitHub user statistics, owned-repository reporting, and contribution visibility tools.",
+        "messageRole": "Turns Git and GitHub activity into delivery context, repository insight, and reporting artifacts.",
+        "sortOrder": 25
+      },
+      {
+        "id": "api-context-integration",
+        "name": "API Context and Integration",
+        "description": "Contracts, clients, request workflows, resilience patterns, examples, and integration guidance.",
+        "messageRole": "Turns API behavior into implementation-ready context.",
+        "sortOrder": 30
+      },
+      {
+        "id": "application-frameworks",
+        "name": "Application Frameworks",
+        "description": "Reusable web, UI, publishing, component, and application delivery patterns.",
+        "messageRole": "Demonstrates implementation patterns that accelerate application delivery.",
+        "sortOrder": 40
+      },
+      {
+        "id": "learning-demonstration",
+        "name": "Learning and Demonstration",
+        "description": "Working applications that make technical concepts, workflows, and behavior visible.",
+        "messageRole": "Validates ideas through systems that can be inspected and used.",
+        "sortOrder": 50
+      },
+      {
+        "id": "emerging-initiatives",
+        "name": "Emerging Initiatives",
+        "description": "Reference implementations and future-facing systems that extend the ecosystem into adjacent delivery patterns.",
+        "messageRole": "Shows the broader surface area of practical software delivery exploration.",
+        "sortOrder": 60
+      }
+    ],
+    "initiativeTypes": [
+      "flagship-initiative",
+      "supporting-initiative",
+      "reference-implementation",
+      "platform-component",
+      "learning-system",
+      "git-utility",
+      "reporting-system"
+    ],
+    "strategicThemes": [
+      "specification-driven development",
+      "agent-ready context",
+      "API contracts",
+      "workflow guidance",
+      "reference implementations",
+      "delivery acceleration",
+      "learning by working software",
+      "Git repository analytics",
+      "GitHub user statistics",
+      "delivery reporting"
+    ],
+    "relationshipDiagram": {
+      "root": "Make Bold Solutions LLC",
+      "ecosystem": "Make Bold Spark",
+      "primaryInitiatives": [
+        "DevSpark",
+        "ApiTestSpark"
+      ],
+      "supportingInitiatives": [
+        "PromptSpark",
+        "MakeBoldSpark",
+        "BootstrapSpark",
+        "RequestSpark",
+        "GitSpark",
+        "GitHub Stats Spark"
+      ],
+      "note": "Make Bold Spark serves as the public-facing innovation ecosystem of Make Bold Solutions LLC. Each initiative explores practical ways to improve software delivery through better context, specifications, workflows, contracts, Git/GitHub reporting, and AI-assisted development."
+    },
+    "inventoryCardFields": [
+      "name",
+      "tagline",
+      "description",
+      "category",
+      "link",
+      "status"
+    ]
+  },
+  "subsites": [
+    {
+      "id": "dev",
+      "name": "DevSpark",
+      "subdomain": "dev",
+      "url": "https://dev.makeboldspark.com",
+      "icon": "🛠️",
+      "description": "Flagship specification-driven development initiative that helps transform requirements into specifications, plans, tasks, and implementation context.",
+      "host": "markhazleton.github.io",
+      "hostType": "github",
+      "tag": "GitHub Pages",
+      "active": true,
+      "featured": true,
+      "sortOrder": 10,
+      "strategicCategory": "flagship-initiatives",
+      "initiativeType": "flagship-initiative",
+      "makeBoldSparkRole": "Defines the core Make Bold Spark workflow for moving from business intent to implementation-ready context.",
+      "contextContribution": "Transforms requirements into specifications, plans, tasks, and coding-agent guidance.",
+      "deliveryPattern": "Requirements -> Specifications -> Plans -> Tasks -> Implementation",
+      "audience": [
+        "software architects",
+        "developers",
+        "technical leads"
+      ],
+      "capabilities": [
+        "specification-driven development",
+        "workflow guidance",
+        "agent-ready context",
+        "implementation planning"
+      ],
+      "displayName": "DevSpark",
+      "tagline": "From Requirements to Working Software",
+      "status": "Flagship Initiative",
+      "featuredRank": 1,
+      "relatedInitiatives": [
+        "apitest",
+        "git-spark",
+        "simpleblog"
+      ],
+      "links": {
+        "site": "https://dev.makeboldspark.com"
+      }
+    },
+    {
+      "id": "apitest",
+      "name": "API Test Spark",
+      "subdomain": "apitest",
+      "url": "https://apitest.makeboldspark.com",
+      "icon": "⚡",
+      "description": "From API contracts to feature stories: OpenAPI-powered exploration with real request and response examples for agent-ready implementation context.",
+      "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
+      "hostType": "azure",
+      "tag": "Azure",
+      "active": true,
+      "featured": true,
+      "sortOrder": 20,
+      "strategicCategory": "flagship-initiatives",
+      "initiativeType": "supporting-initiative",
+      "makeBoldSparkRole": "Explains how APIs are consumed by converting contracts and live behavior into better implementation context.",
+      "contextContribution": "Combines OpenAPI metadata, remote API exploration, real responses, and workflow examples.",
+      "deliveryPattern": "OpenAPI Contracts -> Feature Stories -> Client Implementation",
+      "audience": [
+        "API developers",
+        "integration teams",
+        "coding agents"
+      ],
+      "capabilities": [
+        "OpenAPI exploration",
+        "remote API support",
+        "request and response examples",
+        "workflow understanding",
+        "hallucination reduction"
+      ],
+      "displayName": "ApiTestSpark",
+      "tagline": "From API Contracts to Feature Stories",
+      "status": "Featured Initiative",
+      "featuredRank": 2,
+      "relatedInitiatives": [
+        "dev",
+        "httpclientutility",
+        "httpclientdecorator"
+      ],
+      "links": {
+        "site": "https://apitest.makeboldspark.com"
+      }
+    },
+    {
+      "id": "chat",
+      "name": "Chat",
+      "subdomain": "chat",
+      "url": "https://chat.makeboldspark.com",
+      "icon": "💬",
+      "description": "Real-time chat and AI-powered conversation interfaces built on SignalR.",
+      "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
+      "hostType": "azure",
+      "tag": "Azure",
+      "active": true,
+      "featured": false,
+      "sortOrder": 30,
+      "strategicCategory": "context-ai",
+      "initiativeType": "reference-implementation",
+      "makeBoldSparkRole": "Demonstrates conversation-oriented interfaces that can become reusable context.",
+      "contextContribution": "Shows how real-time conversations and AI interactions can be captured as structured software delivery inputs.",
+      "deliveryPattern": "Conversations -> Interaction Context -> Guided Follow-up",
+      "audience": [
+        "developers",
+        "product teams"
+      ],
+      "capabilities": [
+        "SignalR",
+        "real-time workflows",
+        "conversation context"
+      ],
+      "tagline": "Conversation Interfaces as Context",
+      "status": "Reference Implementation",
+      "relatedInitiatives": [
+        "dev",
+        "simpleblog"
+      ],
+      "displayName": "Chat",
+      "links": {
+        "site": "https://chat.makeboldspark.com"
+      }
+    },
+    {
+      "id": "git-spark",
+      "name": "Git Spark",
+      "subdomain": "git-spark",
+      "url": "https://git-spark.makeboldspark.com",
+      "icon": "🔥",
+      "description": "npm package and reporting utility for analyzing any Git repository and generating interactive reports with contributor statistics, commit history, code change patterns, and file analysis.",
+      "host": "markhazleton.github.io",
+      "hostType": "github",
+      "tag": "GitHub Pages",
+      "active": true,
+      "featured": false,
+      "sortOrder": 60,
+      "strategicCategory": "git-stats-reporting",
+      "initiativeType": "git-utility",
+      "makeBoldSparkRole": "Provides repository-agnostic Git reporting that turns commit history into delivery insight and review context.",
+      "contextContribution": "Analyzes local or accessible Git repositories to summarize commits, contributors, change patterns, and files without depending on GitHub-specific ownership data.",
+      "deliveryPattern": "Any Git Repository -> Commit Analysis -> Interactive Delivery Report",
+      "audience": [
+        "developers",
+        "engineering leads",
+        "repository maintainers"
+      ],
+      "capabilities": [
+        "npm package",
+        "Git repository analytics",
+        "commit history reporting",
+        "contributor statistics",
+        "code change analysis"
+      ],
+      "displayName": "GitSpark",
+      "tagline": "Git Repository Reporting for Any Repo",
+      "status": "Git Utility",
+      "relatedInitiatives": [
+        "github-stats",
+        "dataanalysis",
+        "dev"
+      ],
+      "links": {
+        "site": "https://git-spark.makeboldspark.com"
+      }
+    },
+    {
+      "id": "simpleblog",
+      "name": "Simple Blog",
+      "subdomain": "simpleblog",
+      "url": "https://simpleblog.makeboldspark.com",
+      "icon": "📝",
+      "description": "Mark's Dev Notebook — a simple developer blog on GitHub Pages with Jekyll covering Azure, .NET, and software delivery topics.",
+      "host": "markhazleton.github.io",
+      "hostType": "github",
+      "tag": "GitHub Pages",
+      "active": true,
+      "featured": false,
+      "sortOrder": 50,
+      "strategicCategory": "context-ai",
+      "initiativeType": "supporting-initiative",
+      "makeBoldSparkRole": "Publishes practical delivery insights that support the broader Make Bold Spark message.",
+      "contextContribution": "Captures reusable technical notes, examples, and decision context.",
+      "deliveryPattern": "Experience -> Insight -> Reusable Guidance",
+      "audience": [
+        "developers",
+        "architects"
+      ],
+      "capabilities": [
+        "technical writing",
+        "delivery guidance",
+        "developer experience"
+      ],
+      "tagline": "Reusable Technical Insight",
+      "status": "Supporting Initiative",
+      "relatedInitiatives": [
+        "dev"
+      ],
+      "displayName": "Simple Blog",
+      "links": {
+        "site": "https://simpleblog.makeboldspark.com"
+      }
+    },
+    {
+      "id": "httpclientdecorator",
+      "name": "HttpClient Decorator",
+      "subdomain": "httpclientdecorator",
+      "url": "https://httpclientdecorator.makeboldspark.com",
+      "icon": "🔗",
+      "description": "Resilience patterns for .NET HTTP clients — retry, circuit breaker, caching, and logging decorators.",
+      "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
+      "hostType": "azure",
+      "tag": "Azure",
+      "active": true,
+      "featured": false,
+      "sortOrder": 110,
+      "strategicCategory": "api-context-integration",
+      "initiativeType": "reference-implementation",
+      "makeBoldSparkRole": "Demonstrates practical API client resilience patterns.",
+      "contextContribution": "Shows implementation examples for reliable outbound HTTP behavior.",
+      "deliveryPattern": "Integration Need -> Resilience Pattern -> Client Implementation",
+      "audience": [
+        "backend developers",
+        ".NET teams"
+      ],
+      "capabilities": [
+        "HTTP clients",
+        "Polly",
+        "retry patterns",
+        "circuit breaker",
+        "logging"
+      ],
+      "displayName": "RequestSpark Pattern: HttpClient Decorator",
+      "tagline": "Structured API Resilience",
+      "status": "Reference Implementation",
+      "relatedInitiatives": [
+        "apitest",
+        "httpclientutility"
+      ],
+      "links": {
+        "site": "https://httpclientdecorator.makeboldspark.com"
+      }
+    },
+    {
+      "id": "httpclientutility",
+      "name": "HttpClient Utility",
+      "subdomain": "httpclientutility",
+      "url": "https://httpclientutility.makeboldspark.com",
+      "icon": "🔧",
+      "description": "Drop-in HttpClient wrapper for .NET 8-10 with Polly resilience, response caching, OpenTelemetry tracing, and batch execution orchestration.",
+      "host": "markhazleton.github.io",
+      "hostType": "github",
+      "tag": "GitHub Pages",
+      "active": true,
+      "featured": false,
+      "sortOrder": 120,
+      "strategicCategory": "api-context-integration",
+      "initiativeType": "reference-implementation",
+      "makeBoldSparkRole": "Packages proven API client patterns into a reusable implementation accelerator.",
+      "contextContribution": "Provides concrete client behavior that can be reused instead of re-specified from scratch.",
+      "deliveryPattern": "Client Requirements -> Reusable Utility -> Consistent Integration",
+      "audience": [
+        ".NET developers",
+        "integration teams"
+      ],
+      "capabilities": [
+        "HTTP clients",
+        "resilience",
+        "OpenTelemetry",
+        "caching",
+        "batch execution"
+      ],
+      "displayName": "RequestSpark Pattern: HttpClient Utility",
+      "tagline": "Reusable API Client Infrastructure",
+      "status": "Reference Implementation",
+      "relatedInitiatives": [
+        "apitest",
+        "httpclientdecorator"
+      ],
+      "links": {
+        "site": "https://httpclientutility.makeboldspark.com"
+      }
+    },
+    {
+      "id": "slurper",
+      "name": "Slurper Spark",
+      "subdomain": "slurper",
+      "url": "https://slurper.makeboldspark.com",
+      "icon": "🎯",
+      "description": "MakeBoldSpark.Slurper NuGet package site — a .NET data extractor for XML, JSON, CSV, and HTML using dynamic objects.",
+      "host": "markhazleton.github.io",
+      "hostType": "github",
+      "tag": "GitHub Pages",
+      "active": true,
+      "featured": false,
+      "sortOrder": 130,
+      "strategicCategory": "api-context-integration",
+      "initiativeType": "reference-implementation",
+      "makeBoldSparkRole": "Turns varied data formats into consumable implementation context.",
+      "contextContribution": "Extracts useful structure from XML, JSON, CSV, and HTML without requiring custom models first.",
+      "deliveryPattern": "Raw Data -> Structured Extraction -> Application Context",
+      "audience": [
+        "developers",
+        "data integration teams"
+      ],
+      "capabilities": [
+        "data extraction",
+        "XML",
+        "JSON",
+        "CSV",
+        "HTML"
+      ],
+      "tagline": "Extracting Structure from Raw Data",
+      "status": "Reference Implementation",
+      "relatedInitiatives": [
+        "slurper-demo",
+        "apitest"
+      ],
+      "displayName": "Slurper Spark",
+      "links": {
+        "site": "https://slurper.makeboldspark.com"
+      }
+    },
+    {
+      "id": "slurper-demo",
+      "name": "Slurper Demo",
+      "subdomain": "slurper-demo",
+      "url": "https://slurper-demo.makeboldspark.com",
+      "icon": "🕵️",
+      "description": "Interactive demo for the MakeBoldSpark.Slurper data extraction library covering XML, JSON, CSV, and HTML parsing.",
+      "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
+      "hostType": "azure",
+      "tag": "Azure",
+      "active": true,
+      "featured": false,
+      "sortOrder": 140,
+      "strategicCategory": "api-context-integration",
+      "initiativeType": "learning-system",
+      "makeBoldSparkRole": "Makes data extraction behavior inspectable through a working demonstration system.",
+      "contextContribution": "Provides examples that explain how raw data becomes usable application input.",
+      "deliveryPattern": "Sample Data -> Extraction Demo -> Implementation Example",
+      "audience": [
+        "developers",
+        "learners"
+      ],
+      "capabilities": [
+        "interactive examples",
+        "data parsing",
+        "implementation demonstration"
+      ],
+      "tagline": "Data Extraction by Example",
+      "status": "Demonstration System",
+      "relatedInitiatives": [
+        "slurper"
+      ],
+      "displayName": "Slurper Demo",
+      "links": {
+        "site": "https://slurper-demo.makeboldspark.com"
+      }
+    },
+    {
+      "id": "bootstrap",
+      "name": "Bootstrap Showcase",
+      "subdomain": "bootstrap",
+      "url": "https://bootstrap.makeboldspark.com",
+      "icon": "🅱️",
+      "description": "Component library and theme gallery built on Bootstrap 5, deployed to Azure Static Web Apps.",
+      "host": "gentle-smoke-063be0b10.6.azurestaticapps.net",
+      "hostType": "static",
+      "tag": "Static Web App",
+      "active": true,
+      "featured": false,
+      "sortOrder": 210,
+      "strategicCategory": "application-frameworks",
+      "initiativeType": "reference-implementation",
+      "makeBoldSparkRole": "Demonstrates Bootstrap-based UI patterns that can accelerate application delivery.",
+      "contextContribution": "Provides concrete component examples and visual implementation guidance.",
+      "deliveryPattern": "UI Pattern -> Component Example -> Application Screen",
+      "audience": [
+        "frontend developers",
+        "application teams"
+      ],
+      "capabilities": [
+        "Bootstrap",
+        "component library",
+        "theme gallery"
+      ],
+      "displayName": "BootstrapSpark",
+      "tagline": "Accelerating Application Delivery",
+      "status": "Reference Implementation",
+      "relatedInitiatives": [
+        "web",
+        "ui",
+        "bootswatch"
+      ],
+      "links": {
+        "site": "https://bootstrap.makeboldspark.com"
+      }
+    },
+    {
+      "id": "bootswatch",
+      "name": "Bootswatch Themes",
+      "subdomain": "bootswatch",
+      "url": "https://bootswatch.makeboldspark.com",
+      "icon": "🎨",
+      "description": "Live preview and comparison of Bootswatch themes across Bootstrap components.",
+      "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
+      "hostType": "azure",
+      "tag": "Azure",
+      "active": true,
+      "featured": false,
+      "sortOrder": 220,
+      "strategicCategory": "application-frameworks",
+      "initiativeType": "reference-implementation",
+      "makeBoldSparkRole": "Helps evaluate visual system choices through working component previews.",
+      "contextContribution": "Provides comparative UI examples that reduce ambiguity in design implementation.",
+      "deliveryPattern": "Theme Option -> Component Preview -> UI Decision",
+      "audience": [
+        "frontend developers",
+        "design-minded developers"
+      ],
+      "capabilities": [
+        "Bootstrap",
+        "Bootswatch",
+        "theme comparison"
+      ],
+      "tagline": "Theme Decisions by Preview",
+      "status": "Reference Implementation",
+      "relatedInitiatives": [
+        "bootstrap",
+        "ui"
+      ],
+      "displayName": "Bootswatch Themes",
+      "links": {
+        "site": "https://bootswatch.makeboldspark.com"
+      }
+    },
+    {
+      "id": "tailwind",
+      "name": "Tailwind Showcase",
+      "subdomain": "tailwind",
+      "url": "https://tailwind.makeboldspark.com",
+      "icon": "🌊",
+      "description": "Design system showcase and component gallery built with Tailwind CSS.",
+      "host": "markhazleton.github.io",
+      "hostType": "github",
+      "tag": "GitHub Pages",
+      "active": true,
+      "featured": false,
+      "sortOrder": 230,
+      "strategicCategory": "application-frameworks",
+      "initiativeType": "reference-implementation",
+      "makeBoldSparkRole": "Demonstrates Tailwind-based implementation patterns for reusable application UI.",
+      "contextContribution": "Shows component-level examples that can guide future frontend implementation.",
+      "deliveryPattern": "Design Intent -> Tailwind Component -> Application UI",
+      "audience": [
+        "frontend developers",
+        "application teams"
+      ],
+      "capabilities": [
+        "Tailwind CSS",
+        "design systems",
+        "component gallery"
+      ],
+      "displayName": "TailwindSpark",
+      "tagline": "Modern UI Foundations",
+      "status": "Reference Implementation",
+      "relatedInitiatives": [
+        "ui",
+        "bootstrap"
+      ],
+      "links": {
+        "site": "https://tailwind.makeboldspark.com"
+      }
+    },
+    {
+      "id": "ui",
+      "name": "UI Components",
+      "subdomain": "ui",
+      "url": "https://ui.makeboldspark.com",
+      "icon": "🖥️",
+      "description": "Reusable UI component library and design system used across Make Bold Spark systems.",
+      "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
+      "hostType": "azure",
+      "tag": "Azure",
+      "active": true,
+      "featured": false,
+      "sortOrder": 240,
+      "strategicCategory": "application-frameworks",
+      "initiativeType": "platform-component",
+      "makeBoldSparkRole": "Provides reusable interface building blocks for consistent application delivery.",
+      "contextContribution": "Captures UI patterns as concrete, inspectable components.",
+      "deliveryPattern": "Reusable Pattern -> Shared Component -> Consistent Experience",
+      "audience": [
+        "frontend developers",
+        "product teams"
+      ],
+      "capabilities": [
+        "UI components",
+        "design system",
+        "reuse"
+      ],
+      "tagline": "Shared Interface Building Blocks",
+      "status": "Platform Component",
+      "relatedInitiatives": [
+        "bootstrap",
+        "tailwind",
+        "web"
+      ],
+      "displayName": "UI Components",
+      "links": {
+        "site": "https://ui.makeboldspark.com"
+      }
+    },
+    {
+      "id": "web",
+      "name": "Web Spark",
+      "subdomain": "web",
+      "url": "https://web.makeboldspark.com",
+      "icon": "🌐",
+      "description": "MakeBoldSpark platform — the publishing engine powering content-driven Make Bold Spark systems.",
+      "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
+      "hostType": "azure",
+      "tag": "Azure",
+      "active": true,
+      "featured": false,
+      "sortOrder": 250,
+      "strategicCategory": "application-frameworks",
+      "initiativeType": "platform-component",
+      "makeBoldSparkRole": "Provides the publishing and content platform pattern behind several Make Bold Spark systems.",
+      "contextContribution": "Turns content structure and site configuration into deployable web experiences.",
+      "deliveryPattern": "Content Model -> Publishing Platform -> Static-first Experience",
+      "audience": [
+        "developers",
+        "content system builders"
+      ],
+      "capabilities": [
+        "publishing",
+        "content platform",
+        "static-first sites"
+      ],
+      "displayName": "MakeBoldSpark",
+      "tagline": "Building Modern Web Applications Faster",
+      "status": "Platform Component",
+      "relatedInitiatives": [
+        "bootstrap",
+        "ui"
+      ],
+      "links": {
+        "site": "https://web.makeboldspark.com"
+      }
+    },
+    {
+      "id": "prism",
+      "name": "Prism",
+      "subdomain": "prism",
+      "url": "https://prism.makeboldspark.com",
+      "icon": "🔷",
+      "description": "Code syntax highlighting and documentation tools powered by the Prism.js library.",
+      "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
+      "hostType": "azure",
+      "tag": "Azure",
+      "active": true,
+      "featured": false,
+      "sortOrder": 260,
+      "strategicCategory": "application-frameworks",
+      "initiativeType": "reference-implementation",
+      "makeBoldSparkRole": "Supports clearer code examples and documentation experiences.",
+      "contextContribution": "Improves the readability of implementation guidance and technical examples.",
+      "deliveryPattern": "Code Example -> Highlighted Documentation -> Better Understanding",
+      "audience": [
+        "developers",
+        "technical writers"
+      ],
+      "capabilities": [
+        "syntax highlighting",
+        "documentation",
+        "code examples"
+      ],
+      "tagline": "Readable Code Examples",
+      "status": "Reference Implementation",
+      "relatedInitiatives": [
+        "web",
+        "simpleblog"
+      ],
+      "displayName": "Prism",
+      "links": {
+        "site": "https://prism.makeboldspark.com"
+      }
+    },
+    {
+      "id": "async",
+      "name": "Async Patterns",
+      "subdomain": "async",
+      "url": "https://async.makeboldspark.com",
+      "icon": "⚡",
+      "description": "Interactive demonstrations of async/await, concurrency, and parallel execution in .NET.",
+      "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
+      "hostType": "azure",
+      "tag": "Azure",
+      "active": true,
+      "featured": false,
+      "sortOrder": 310,
+      "strategicCategory": "learning-demonstration",
+      "initiativeType": "learning-system",
+      "makeBoldSparkRole": "Makes concurrency concepts visible through working .NET examples.",
+      "contextContribution": "Provides concrete examples that explain runtime behavior and implementation tradeoffs.",
+      "deliveryPattern": "Concept -> Working Example -> Implementation Understanding",
+      "audience": [
+        ".NET developers",
+        "learners"
+      ],
+      "capabilities": [
+        "async/await",
+        "concurrency",
+        "parallel execution",
+        ".NET"
+      ],
+      "displayName": "AsyncSpark",
+      "tagline": "Understanding Asynchronous Programming",
+      "status": "Learning System",
+      "relatedInitiatives": [
+        "teach"
+      ],
+      "links": {
+        "site": "https://async.makeboldspark.com"
+      }
+    },
+    {
+      "id": "teach",
+      "name": "Teach",
+      "subdomain": "teach",
+      "url": "https://teach.makeboldspark.com",
+      "icon": "🎓",
+      "description": "Learning tools and educational content covering software development concepts and practices.",
+      "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
+      "hostType": "azure",
+      "tag": "Azure",
+      "active": true,
+      "featured": false,
+      "sortOrder": 320,
+      "strategicCategory": "learning-demonstration",
+      "initiativeType": "learning-system",
+      "makeBoldSparkRole": "Supports the Make Bold Spark goal of explaining practical software delivery through structured learning.",
+      "contextContribution": "Organizes technical concepts into teachable examples and learning flows.",
+      "deliveryPattern": "Concept -> Lesson Context -> Practical Understanding",
+      "audience": [
+        "learners",
+        "developers"
+      ],
+      "capabilities": [
+        "education",
+        "software concepts",
+        "guided learning"
+      ],
+      "displayName": "TeachSpark",
+      "tagline": "Educational Technology Demonstrations",
+      "status": "Learning System",
+      "relatedInitiatives": [
+        "async",
+        "trivia"
+      ],
+      "links": {
+        "site": "https://teach.makeboldspark.com"
+      }
+    },
+    {
+      "id": "trivia",
+      "name": "Trivia",
+      "subdomain": "trivia",
+      "url": "https://trivia.makeboldspark.com",
+      "icon": "🧠",
+      "description": "Interactive trivia engine with categories, scoring, and real-time multiplayer support.",
+      "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
+      "hostType": "azure",
+      "tag": "Azure",
+      "active": true,
+      "featured": false,
+      "sortOrder": 330,
+      "strategicCategory": "learning-demonstration",
+      "initiativeType": "reference-implementation",
+      "makeBoldSparkRole": "Demonstrates a complete interactive application with state, scoring, and user workflows.",
+      "contextContribution": "Provides a working application pattern for interactive learning and game-like flows.",
+      "deliveryPattern": "Domain Rules -> Interactive Workflow -> Working Application",
+      "audience": [
+        "developers",
+        "learners"
+      ],
+      "capabilities": [
+        "interactive application",
+        "real-time workflows",
+        "scoring"
+      ],
+      "displayName": "TriviaSpark",
+      "tagline": "Learning Through Interactive Experiences",
+      "status": "Learning System",
+      "relatedInitiatives": [
+        "teach"
+      ],
+      "links": {
+        "site": "https://trivia.makeboldspark.com"
+      }
+    },
+    {
+      "id": "museum",
+      "name": "Museum",
+      "subdomain": "museum",
+      "url": "https://museum.makeboldspark.com",
+      "icon": "🏛️",
+      "description": "Digital museum experience showcasing curated collections and interactive exhibits.",
+      "host": "markhazleton.github.io",
+      "hostType": "github",
+      "tag": "GitHub Pages",
+      "active": true,
+      "featured": false,
+      "sortOrder": 340,
+      "strategicCategory": "emerging-initiatives",
+      "initiativeType": "reference-implementation",
+      "makeBoldSparkRole": "Shows how curated information can become a navigable, interactive experience.",
+      "contextContribution": "Turns collection data and exhibit structure into user-facing context.",
+      "deliveryPattern": "Curated Content -> Exhibit Model -> Interactive Experience",
+      "audience": [
+        "developers",
+        "content creators"
+      ],
+      "capabilities": [
+        "curation",
+        "interactive exhibits",
+        "content modeling"
+      ],
+      "displayName": "MuseumSpark",
+      "tagline": "Curated Knowledge Experiences",
+      "status": "Emerging Initiative",
+      "relatedInitiatives": [
+        "teach"
+      ],
+      "links": {
+        "site": "https://museum.makeboldspark.com"
+      }
+    },
+    {
+      "id": "dataanalysis",
+      "name": "Data Analysis",
+      "subdomain": "dataanalysis",
+      "url": "https://dataanalysis.makeboldspark.com",
+      "icon": "📈",
+      "description": "Data visualization and analytics tools exploring patterns in real datasets.",
+      "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
+      "hostType": "azure",
+      "tag": "Azure",
+      "active": true,
+      "featured": false,
+      "sortOrder": 350,
+      "strategicCategory": "emerging-initiatives",
+      "initiativeType": "reference-implementation",
+      "makeBoldSparkRole": "Demonstrates how raw data becomes insight through visualization and analysis.",
+      "contextContribution": "Converts datasets into patterns that support understanding and decisions.",
+      "deliveryPattern": "Raw Data -> Analysis -> Delivery Insight",
+      "audience": [
+        "developers",
+        "analysts"
+      ],
+      "capabilities": [
+        "data visualization",
+        "analytics",
+        "real datasets"
+      ],
+      "displayName": "DataSpark",
+      "tagline": "Turning Data into Delivery Insight",
+      "status": "Emerging Initiative",
+      "relatedInitiatives": [
+        "github-stats",
+        "git-spark"
+      ],
+      "links": {
+        "site": "https://dataanalysis.makeboldspark.com"
+      }
+    },
+    {
+      "id": "github-stats",
+      "name": "GitHub Stats",
+      "subdomain": "github-stats",
+      "url": "https://github-stats.makeboldspark.com",
+      "icon": "📊",
+      "description": "GitHub user statistics dashboard focused on owned repositories, contribution activity, repository visibility, and profile-level reporting.",
+      "host": "markhazleton.github.io",
+      "hostType": "github",
+      "tag": "GitHub Pages",
+      "active": true,
+      "featured": false,
+      "sortOrder": 70,
+      "strategicCategory": "git-stats-reporting",
+      "initiativeType": "reporting-system",
+      "makeBoldSparkRole": "Turns GitHub account and owned-repository activity into visible delivery and contribution context.",
+      "contextContribution": "Summarizes GitHub user activity, owned repositories, contribution patterns, and repository-level metrics for portfolio and delivery reporting.",
+      "deliveryPattern": "GitHub User -> Owned Repository Stats -> Contribution Dashboard",
+      "audience": [
+        "developers",
+        "technical leaders",
+        "portfolio owners"
+      ],
+      "capabilities": [
+        "GitHub user stats",
+        "owned repository reporting",
+        "contribution visualization",
+        "repository dashboards"
+      ],
+      "displayName": "GitHub Stats Spark",
+      "tagline": "GitHub User and Owned Repository Stats",
+      "status": "GitHub Reporting",
+      "relatedInitiatives": [
+        "git-spark",
+        "dataanalysis",
+        "simpleblog"
+      ],
+      "links": {
+        "site": "https://github-stats.makeboldspark.com"
+      }
+    },
+    {
+      "id": "keypresscounter",
+      "name": "Keypress Counter",
+      "subdomain": "keypresscounter",
+      "url": "https://keypresscounter.makeboldspark.com",
+      "icon": "⌨️",
+      "description": "Track keystrokes, measure WPM, and explore typing patterns in real time.",
+      "host": "markhazleton.github.io",
+      "hostType": "github",
+      "tag": "GitHub Pages",
+      "active": true,
+      "featured": false,
+      "sortOrder": 370,
+      "strategicCategory": "learning-demonstration",
+      "initiativeType": "learning-system",
+      "makeBoldSparkRole": "Demonstrates real-time input tracking and feedback loops.",
+      "contextContribution": "Turns user input events into measurable behavior and immediate feedback.",
+      "deliveryPattern": "Input Events -> Metrics -> Feedback",
+      "audience": [
+        "learners",
+        "developers"
+      ],
+      "capabilities": [
+        "real-time input",
+        "metrics",
+        "feedback loops"
+      ],
+      "tagline": "Real-Time Input Feedback",
+      "status": "Demonstration System",
+      "relatedInitiatives": [
+        "wpm"
+      ],
+      "displayName": "Keypress Counter",
+      "links": {
+        "site": "https://keypresscounter.makeboldspark.com"
+      }
+    },
+    {
+      "id": "wpm",
+      "name": "WPM Trainer",
+      "subdomain": "wpm",
+      "url": "https://wpm.makeboldspark.com",
+      "icon": "🏃",
+      "description": "Typing speed and accuracy training tool with progressive challenges.",
+      "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
+      "hostType": "azure",
+      "tag": "Azure",
+      "active": true,
+      "featured": false,
+      "sortOrder": 380,
+      "strategicCategory": "learning-demonstration",
+      "initiativeType": "learning-system",
+      "makeBoldSparkRole": "Shows a focused practice workflow with measurable progress.",
+      "contextContribution": "Turns practice sessions into performance context and improvement feedback.",
+      "deliveryPattern": "Practice -> Measurement -> Improvement",
+      "audience": [
+        "learners",
+        "developers"
+      ],
+      "capabilities": [
+        "training workflow",
+        "progressive challenge",
+        "performance metrics"
+      ],
+      "tagline": "Practice, Measure, Improve",
+      "status": "Learning System",
+      "relatedInitiatives": [
+        "keypresscounter"
+      ],
+      "displayName": "WPM Trainer",
+      "links": {
+        "site": "https://wpm.makeboldspark.com"
+      }
+    },
+    {
+      "id": "art",
+      "name": "Art",
+      "subdomain": "art",
+      "url": "https://art.makeboldspark.com",
+      "icon": "🎨",
+      "description": "Generative art and creative coding reference implementations exploring algorithmic aesthetics.",
+      "host": "markhazleton-01.southcentralus.cloudapp.azure.com",
+      "hostType": "azure",
+      "tag": "Azure",
+      "active": true,
+      "featured": false,
+      "sortOrder": 390,
+      "strategicCategory": "emerging-initiatives",
+      "initiativeType": "reference-implementation",
+      "makeBoldSparkRole": "Demonstrates creative coding as inspectable algorithmic behavior.",
+      "contextContribution": "Turns generation rules and parameters into visible outcomes.",
+      "deliveryPattern": "Algorithm -> Parameters -> Generated Output",
+      "audience": [
+        "creative developers",
+        "learners"
+      ],
+      "capabilities": [
+        "creative coding",
+        "generative systems",
+        "algorithmic examples"
+      ],
+      "displayName": "ArtSpark",
+      "tagline": "Creative Coding as Working Software",
+      "status": "Emerging Initiative",
+      "relatedInitiatives": [
+        "museum"
+      ],
+      "links": {
+        "site": "https://art.makeboldspark.com"
+      }
+    },
+    {
+      "id": "support",
+      "name": "Support Spark",
+      "subdomain": "support",
+      "url": "https://support.makeboldspark.com",
+      "icon": "💙",
+      "description": "SupportSpark — a safe, distraction-free space to share your journey through difficult times with the people who matter most. Private, secure, and ad-free.",
+      "host": "markhazleton.github.io",
+      "hostType": "github",
+      "tag": "GitHub Pages",
+      "active": true,
+      "featured": false,
+      "sortOrder": 400,
+      "strategicCategory": "emerging-initiatives",
+      "initiativeType": "reference-implementation",
+      "makeBoldSparkRole": "Demonstrates a focused, human-centered application workflow with privacy-sensitive positioning.",
+      "contextContribution": "Shows how domain needs, trust, and guided interaction shape implementation decisions.",
+      "deliveryPattern": "Human Need -> Guided Workflow -> Focused Application",
+      "audience": [
+        "application developers",
+        "product teams"
+      ],
+      "capabilities": [
+        "private workflows",
+        "human-centered design",
+        "focused application"
+      ],
+      "displayName": "SupportSpark",
+      "tagline": "Focused Human-Centered Workflows",
+      "status": "Reference Implementation",
+      "relatedInitiatives": [
+        "web",
+        "ui"
+      ],
+      "links": {
+        "site": "https://support.makeboldspark.com"
+      }
+    }
+  ]
+}

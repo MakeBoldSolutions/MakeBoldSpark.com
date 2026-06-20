@@ -13,7 +13,7 @@ Templates reviewed:
 Deferred items: None.
 -->
 
-# ApiSpark Constitution
+# MakeBoldSpark Constitution
 
 **Version**: 1.1.0 | **Ratified**: 2026-05-06 | **Last Amended**: 2026-05-06 | **Author**: Mark Hazleton
 
@@ -56,7 +56,7 @@ Skipping specification requires explicit documented justification.
 
 ### VII. Single Backend Platform (NON-NEGOTIABLE)
 
-ApiSpark MUST remain one modular ASP.NET Core application — not a collection of microservices or per-API repositories.
+MakeBoldSpark MUST remain one modular ASP.NET Core application — not a collection of microservices or per-API repositories.
 Multiple small APIs are hosted under one backend through clearly separated route groups and feature folders.
 Splitting into separate services or repos MUST only occur when scale, security, release cadence, or reliability
 explicitly justifies the additional operational complexity, and requires documented justification.
@@ -96,7 +96,7 @@ Service-token access MUST be limited to narrow, specific routes.
 
 ## Platform Architecture
 
-ApiSpark is a consolidated backend API platform for small, low-volume personal and portfolio APIs,
+MakeBoldSpark is a consolidated backend API platform for small, low-volume personal and portfolio APIs,
 hosted on Azure App Service Linux B1 and consumed by Azure Static Web Apps clients.
 
 ### Hosting Model
@@ -105,7 +105,7 @@ hosted on Azure App Service Linux B1 and consumed by Azure Static Web Apps clien
 |---|---|
 | Azure App Service Linux B1 | Single backend API host (`api.markhazleton.com`) |
 | Azure Static Web Apps | Public websites and static clients |
-| SQLite `/home/data/apispark.db` | Default persistent relational data store |
+| SQLite `/home/data/makeboldspark.db` | Default persistent relational data store |
 | Cosmos DB | Selective document-oriented features only |
 | Blob Storage | Backups and exported artifacts |
 | GitHub | Source control, deployment automation, and optional publishing target |
@@ -184,7 +184,7 @@ Version increments follow semantic versioning:
 - **MINOR**: New principle or section added, or materially expanded guidance.
 - **PATCH**: Clarifications, wording fixes, non-semantic refinements.
 
-**Project**: ApiSpark
+**Project**: MakeBoldSpark
 **Version**: 1.1.0
 **Ratified**: 2026-05-06
 **Last Amended**: 2026-05-06

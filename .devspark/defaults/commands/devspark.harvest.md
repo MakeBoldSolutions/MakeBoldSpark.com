@@ -1,4 +1,4 @@
-﻿---
+---
 description: Post-release cleanup — preserve knowledge into living docs, rewrite spec-linked code comments, and move stale artifacts to /.archive/
 handoffs:
   - label: Run Documentation Audit
@@ -7,9 +7,6 @@ handoffs:
   - label: Run Release First
     agent: devspark.release
     prompt: Seal the release and archive completed specs before running harvest
-scripts:
-  sh: .devspark/scripts/bash/harvest.sh $ARGUMENTS --json
-  ps: .devspark/scripts/powershell/harvest.ps1 $ARGUMENTS -Json
 ---
 
 ## User Input
@@ -71,7 +68,7 @@ Multiple scopes may be combined: `--scope=specs,comments`
 
 ### 1. Initialize Harvest Context
 
-> **Script Resolution**: Before running `{SCRIPT}`, apply this ordered resolution chain and preserve all arguments:
+> **Script Resolution**: Before running `.devspark/scripts/powershell/harvest.ps1 $ARGUMENTS -Json`, apply this ordered resolution chain and preserve all arguments:
 >
 > 1. Team override: `.documentation/scripts/powershell/<filename>` or `.documentation/scripts/bash/<filename>`
 > 2. Consumer default: `.devspark/scripts/powershell/<filename>` or `.devspark/scripts/bash/<filename>`
@@ -79,7 +76,7 @@ Multiple scopes may be combined: `--scope=specs,comments`
 >
 > Team overrides in `.documentation/scripts/` always take priority.
 
-Run `{SCRIPT}` and parse its JSON output.
+Run `.devspark/scripts/powershell/harvest.ps1 $ARGUMENTS -Json` and parse its JSON output.
 
 If the tool/output channel truncates or fails to persist JSON, rerun the same script with an explicit context file output:
 

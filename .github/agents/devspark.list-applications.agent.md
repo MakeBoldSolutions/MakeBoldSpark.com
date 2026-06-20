@@ -1,7 +1,7 @@
 ---
-name: "devspark.list-applications"
-description: "Run devspark.list-applications"
+description: Display all registered applications in the multi-app repository with metadata, dependencies, and documentation roots.
 ---
+
 ## Prompt Resolution
 
 Determine the current git user by running `git config user.name`.
@@ -12,8 +12,12 @@ Read and execute the instructions from the **first file that exists**:
 2. `.documentation/commands/devspark.list-applications.md` (team customization)
 3. `.devspark/defaults/commands/devspark.list-applications.md` (stock default)
 
+Where `{git-user}` is the normalized slug from step above.
+
 ## User Input
 
-{{input}}
+```text
+$ARGUMENTS
+```
 
 Pass the user input above to the resolved prompt.

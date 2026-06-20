@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MakeBoldSpark.Api/MakeBoldSpark.Api.csproj" />
+    <Project Path="src/MakeBoldSpark.Core/MakeBoldSpark.Core.csproj" />
+    <Project Path="src/MakeBoldSpark.Recipe/MakeBoldSpark.Recipe.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MakeBoldSpark.Api.Tests/MakeBoldSpark.Api.Tests.csproj" />
+  </Folder>
+</Solution>

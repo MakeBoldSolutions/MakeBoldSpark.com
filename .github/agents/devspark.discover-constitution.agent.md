@@ -1,7 +1,14 @@
 ---
-name: "devspark.discover-constitution"
-description: "Run devspark.discover-constitution"
+description: Analyze existing codebase to discover implicit patterns and conventions, then guide user through crafting a constitution via interactive questioning.
+handoffs:
+  - label: Create Constitution
+    agent: devspark.constitution
+    prompt: Formalize the discovered principles into the constitution template
+  - label: Run Site Audit
+    agent: devspark.site-audit
+    prompt: Audit the codebase against the new constitution
 ---
+
 ## Prompt Resolution
 
 Determine the current git user by running `git config user.name`.
@@ -12,8 +19,12 @@ Read and execute the instructions from the **first file that exists**:
 2. `.documentation/commands/devspark.discover-constitution.md` (team customization)
 3. `.devspark/defaults/commands/devspark.discover-constitution.md` (stock default)
 
+Where `{git-user}` is the normalized slug from step above.
+
 ## User Input
 
-{{input}}
+```text
+$ARGUMENTS
+```
 
 Pass the user input above to the resolved prompt.

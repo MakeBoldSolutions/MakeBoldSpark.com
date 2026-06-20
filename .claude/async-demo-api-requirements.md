@@ -1,8 +1,8 @@
 # AsyncDemo API — Requirements Document
 
-> **Purpose:** Full specification for reimplementing the AsyncSpark async/concurrency/weather/mock APIs in the ApiSpark project.
+> **Purpose:** Full specification for reimplementing the AsyncSpark async/concurrency/weather/mock APIs in the MakeBoldSpark project.
 > **Source repo:** `c:\GitHub\MarkHazleton\AsyncSpark`
-> **Target repo:** `c:\GitHub\MarkHazleton\ApiSpark`
+> **Target repo:** `c:\GitHub\MarkHazleton\MakeBoldSpark`
 > **Date:** 2026-05-17
 
 ---
@@ -20,7 +20,7 @@
 9. [Supporting Services](#supporting-services)
 10. [Configuration](#configuration)
 11. [Middleware](#middleware)
-12. [OpenAPI / Scalar Documentation](#openapi--scalar-documentation)
+12. [OpenAPI / API Test Spark Documentation](#openapi--api-test-spark-documentation)
 13. [NuGet Dependencies](#nuget-dependencies)
 14. [Non-Functional Requirements](#non-functional-requirements)
 15. [Out of Scope](#out-of-scope)
@@ -29,9 +29,9 @@
 
 ## Overview
 
-The AsyncSpark project is an ASP.NET Core 10 educational web application demonstrating async/await, cancellation, concurrency, and resilience patterns. The web-facing UI (Razor views, Bootswatch themes, Markdown pages) stays in AsyncSpark. Only the **API surface** moves to ApiSpark as a new feature group.
+The AsyncSpark project is an ASP.NET Core 10 educational web application demonstrating async/await, cancellation, concurrency, and resilience patterns. The web-facing UI (Razor views, Bootswatch themes, Markdown pages) stays in AsyncSpark. Only the **API surface** moves to MakeBoldSpark as a new feature group.
 
-In ApiSpark, these endpoints will live under a new route group `/api/async-demo`, following the existing minimal-API / feature-folder pattern already in use. No authentication is required (matching the source — all endpoints are anonymous).
+In MakeBoldSpark, these endpoints will live under a new route group `/api/async-demo`, following the existing minimal-API / feature-folder pattern already in use. No authentication is required (matching the source — all endpoints are anonymous).
 
 ---
 
@@ -40,7 +40,7 @@ In ApiSpark, these endpoints will live under a new route group `/api/async-demo`
 ### File layout (new files to create)
 
 ```
-src/ApiSpark.Api/
+src/MakeBoldSpark.Api/
   Features/
     AsyncDemo/
       Models/
@@ -550,7 +550,7 @@ Runs all three modes and returns side-by-side metrics.
 **Tag:** `"Async Demo: Resilience & Timeouts"`
 **Source:** `AsyncSpark.Web/Controllers/Api/RemoteController.cs`
 
-This endpoint simulates a slow or timing-out downstream server. The PollyController in AsyncSpark calls this endpoint to demonstrate retry logic; in ApiSpark, both the caller (demo page) and this mock endpoint can coexist.
+This endpoint simulates a slow or timing-out downstream server. The PollyController in AsyncSpark calls this endpoint to demonstrate retry logic; in MakeBoldSpark, both the caller (demo page) and this mock endpoint can coexist.
 
 ### Endpoints
 
@@ -714,7 +714,7 @@ Uses `IMemoryCache` for 30-second caching.
 
 ## Configuration
 
-Add the following sections to `appsettings.json` in ApiSpark:
+Add the following sections to `appsettings.json` in MakeBoldSpark:
 
 ```json
 {
@@ -742,7 +742,7 @@ builder.Services.AddHttpClient("weather", client =>
 
 ### IMemoryCache
 
-Already registered by the existing ApiSpark `Program.cs` — verify `builder.Services.AddMemoryCache()` is present.
+Already registered by the existing MakeBoldSpark `Program.cs` — verify `builder.Services.AddMemoryCache()` is present.
 
 ### Service registrations
 
@@ -757,7 +757,7 @@ builder.Services.AddScoped<RemoteMockService>();
 
 ### RequestLoggingMiddleware
 
-ApiSpark already has `Infrastructure/Observability/RequestLoggingMiddleware.cs`. Verify it:
+MakeBoldSpark already has `Infrastructure/Observability/RequestLoggingMiddleware.cs`. Verify it:
 - Generates a unique request ID (Guid).
 - Logs method + path + remote IP at start (Information).
 - Logs status code + elapsed ms at completion.
@@ -768,7 +768,7 @@ No additional middleware is needed.
 
 ---
 
-## OpenAPI / Scalar Documentation
+## OpenAPI / API Test Spark Documentation
 
 All new endpoints must include:
 
@@ -778,7 +778,7 @@ All new endpoints must include:
 - `.Produces<T>(200)` / `.Produces(408)` etc. for all response types
 - `.AllowAnonymous()` — no auth required
 
-The existing `MapScalarApiReference()` in `Program.cs` will automatically surface these endpoints. No changes to `CustomScalarExtensions` are required.
+The existing `MapApiTestSpark()` in `Program.cs` will automatically surface these endpoints at `/api-test-spark/`. No additional configuration is required.
 
 ---
 
@@ -788,9 +788,9 @@ The existing `MapScalarApiReference()` in `Program.cs` will automatically surfac
 |---|---|---|
 | `Polly` | 8.x | Retry / timeout policies in `WeatherPatternsEndpoints` and `RemoteMockEndpoints` |
 | `Microsoft.AspNetCore.OpenApi` | 10.x | Already present |
-| `Scalar.AspNetCore` | 2.x | Already present |
+| `ApiTestSpark` | 1.x | Already present |
 
-Add `Polly` to `ApiSpark.Api.csproj`:
+Add `Polly` to `MakeBoldSpark.Api.csproj`:
 
 ```xml
 <PackageReference Include="Polly" Version="8.6.6" />
@@ -813,20 +813,20 @@ No other new packages are required. `IMemoryCache`, `IHttpClientFactory`, and `S
 | Thread safety | No shared mutable state; semaphore usage is per-request |
 | Cancellation | All operations that can be cancelled must accept and honour `CancellationToken` |
 | Status codes | Follow the source exactly: 200, 400, 408 (timeout), 499 (client disconnect), 500 |
-| Tests | Add integration tests in `ApiSpark.Api.Tests` for at least: health, sequential, parallel, no-cancellation, remote-mock timeout |
+| Tests | Add integration tests in `MakeBoldSpark.Api.Tests` for at least: health, sequential, parallel, no-cancellation, remote-mock timeout |
 
 ---
 
 ## Out of Scope
 
-The following from AsyncSpark are **not** being moved to ApiSpark:
+The following from AsyncSpark are **not** being moved to MakeBoldSpark:
 
 - Razor Views / MVC controllers (`HomeController`, `OpenWeatherController`, `PollyController`, `BulkCallsController`)
-- Bootswatch theme switcher (`WebSpark.Bootswatch`)
+- Bootswatch theme switcher (`MakeBoldSpark.Bootswatch`)
 - Westwind Markdown rendering
 - Session-based state
 - `BulkCallsController` / `IHttpGetCallService` (HTTP bulk GET orchestration — UI-only demo)
 - `AsyncSpark.Weather` forecast endpoints (not surfaced via API in the source)
-- Security headers middleware (already handled in ApiSpark via CORS setup)
+- Security headers middleware (already handled in MakeBoldSpark via CORS setup)
 - `EncodingMiddleware` (MVC-specific, not needed in a pure API project)
 - `ConfigurationValidationService` / `ConfigurationHealthCheck` as standalone services (validation logic can be inlined into startup)
