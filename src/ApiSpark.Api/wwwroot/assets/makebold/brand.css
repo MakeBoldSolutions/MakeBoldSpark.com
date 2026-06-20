@@ -141,6 +141,15 @@ footer a:hover {
   position: relative;
 }
 
+.compact-hero {
+  min-height: 78vh;
+}
+
+.page-hero {
+  min-height: 46vh;
+  padding-bottom: 3rem;
+}
+
 .hero::before {
   background:
     linear-gradient(90deg, rgba(152, 36, 7, 0.08) 1px, transparent 1px),
@@ -177,6 +186,10 @@ footer a:hover {
   display: grid;
   gap: 2.5rem;
   grid-template-columns: minmax(0, 1fr) 22rem;
+}
+
+.hero-inner.single {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .hero-copy {
@@ -217,6 +230,11 @@ h1 {
   line-height: 0.92;
   margin: 1rem 0 1.35rem;
   max-width: 10ch;
+}
+
+.page-hero h1,
+.compact-hero h1 {
+  max-width: 13ch;
 }
 
 h1 em {
@@ -448,6 +466,48 @@ h1 em {
   padding: 1.35rem;
 }
 
+.system-card,
+.article-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  min-height: 17rem;
+}
+
+.article-card h3 a,
+.card h3 a {
+  text-decoration: none;
+}
+
+.article-card h3 a:hover,
+.card h3 a:hover {
+  color: var(--mb-red);
+}
+
+.article-date {
+  color: var(--mb-muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+  margin-top: auto;
+}
+
+.system-purpose {
+  border-top: 1px solid var(--mb-line);
+  color: var(--mb-muted);
+  font-size: 0.9rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+}
+
+.system-purpose strong {
+  color: var(--mb-black);
+}
+
+.link-stack {
+  align-content: start;
+  display: grid;
+}
+
 .flow-inline {
   align-items: center;
   display: flex;
@@ -607,6 +667,53 @@ footer {
   padding: 3.5rem clamp(1.25rem, 4vw, 3rem);
 }
 
+.article {
+  margin: 0 auto;
+  max-width: 58rem;
+  padding: 8.5rem clamp(1.25rem, 4vw, 3rem) 4rem;
+}
+
+.article-header {
+  border-bottom: 1px solid var(--mb-line);
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+}
+
+.article-header h1 {
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  max-width: 14ch;
+}
+
+.article-body {
+  color: var(--mb-ink);
+  font-size: 1.08rem;
+}
+
+.article-body p,
+.article-body ol {
+  margin: 0 0 1.35rem;
+}
+
+.article-body ol {
+  padding-left: 1.5rem;
+}
+
+.article-body h2 {
+  color: var(--mb-black);
+  font-size: 1.8rem;
+  line-height: 1.15;
+  margin: 2.25rem 0 0.8rem;
+}
+
+.article-footer {
+  border-top: 1px solid var(--mb-line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+}
+
 .footer-inner {
   align-items: start;
   display: flex;
@@ -698,6 +805,10 @@ footer p {
     padding-top: 7rem;
   }
 
+  .page-hero {
+    padding-bottom: 2rem;
+  }
+
   .hero::after {
     clip-path: polygon(82% 0, 100% 0, 100% 34%, 90% 30%);
   }
@@ -712,6 +823,10 @@ footer p {
   .footer-inner,
   .category-header {
     display: block;
+  }
+
+  .article {
+    padding-top: 7rem;
   }
 
   .footer-links {
@@ -736,5 +851,364 @@ footer p {
 
   .stat:not(:last-child) {
     border-bottom: 1px solid var(--mb-line);
+  }
+}
+
+/*
+  Mobile-first layout layer. The earlier brand rules define the visual system;
+  this layer makes the default experience fit small screens first, then adds
+  space and columns as the viewport grows.
+*/
+.site-nav {
+  align-items: stretch;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 0.7rem 1rem;
+}
+
+.brand-logo {
+  height: 2.2rem;
+}
+
+.brand-name {
+  font-size: 0.98rem;
+}
+
+.brand-byline {
+  font-size: 0.62rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 0.75rem;
+  margin: 0 -1rem;
+  overflow-x: auto;
+  padding: 0 1rem 0.2rem;
+  scrollbar-width: none;
+  width: calc(100% + 2rem);
+}
+
+.nav-links::-webkit-scrollbar {
+  display: none;
+}
+
+.nav-links a {
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.hero {
+  min-height: auto;
+  padding: 8.5rem 1rem 3rem;
+}
+
+.compact-hero,
+.page-hero {
+  min-height: auto;
+}
+
+.page-hero {
+  padding-bottom: 2.5rem;
+}
+
+.hero::after {
+  clip-path: polygon(84% 0, 100% 0, 100% 26%, 91% 23%);
+}
+
+.hero-inner,
+.hero-inner.single,
+.split,
+.flagship {
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+.hero-mark {
+  justify-self: start;
+  max-width: 13rem;
+  padding: 1rem;
+}
+
+h1,
+.article-header h1 {
+  font-size: clamp(2.45rem, 11vw, 4.2rem);
+  line-height: 0.96;
+  max-width: 13ch;
+}
+
+.hero-sub,
+.lead {
+  font-size: 1.03rem;
+  line-height: 1.65;
+}
+
+.section,
+.band-inner {
+  padding: 3.5rem 1rem;
+}
+
+.section-title {
+  font-size: clamp(1.85rem, 9vw, 2.55rem);
+  max-width: 13ch;
+}
+
+.section-desc {
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.hero-actions,
+.actions,
+.action-row {
+  width: 100%;
+}
+
+.btn {
+  min-height: 3rem;
+  width: 100%;
+}
+
+.stats-bar,
+.api-grid,
+.grid {
+  grid-template-columns: 1fr;
+}
+
+.stat,
+.stat:nth-child(2) {
+  border-right: 0;
+}
+
+.stat:not(:last-child) {
+  border-bottom: 1px solid var(--mb-line);
+}
+
+.category-header {
+  display: block;
+}
+
+.category-header p {
+  margin-top: 0.4rem;
+}
+
+.card-top {
+  align-items: flex-start;
+}
+
+.flow-inline {
+  align-items: stretch;
+  display: grid;
+}
+
+.flow-inline b {
+  display: none;
+}
+
+.footer-inner {
+  display: block;
+}
+
+.footer-links {
+  justify-content: flex-start;
+  margin-top: 1.5rem;
+}
+
+.article {
+  padding: 8.5rem 1rem 3rem;
+}
+
+.article-body {
+  font-size: 1.02rem;
+}
+
+.article-footer .btn {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .site-nav {
+    align-items: center;
+    flex-direction: row;
+    gap: 1.25rem;
+  }
+
+  .nav-links {
+    justify-content: flex-end;
+    margin: 0;
+    padding: 0;
+    width: auto;
+  }
+
+  .btn,
+  .article-footer .btn {
+    width: auto;
+  }
+
+  .api-grid,
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stats-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stat:nth-child(odd) {
+    border-right: 1px solid var(--mb-line);
+  }
+
+  .stat:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--mb-line);
+  }
+
+  .stat:nth-child(n + 3) {
+    border-bottom: 0;
+  }
+
+  .footer-inner {
+    display: flex;
+  }
+
+  .footer-links {
+    justify-content: flex-end;
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 900px) {
+  .site-nav {
+    padding: 0.8rem clamp(1rem, 4vw, 2.5rem);
+  }
+
+  .brand-logo {
+    height: 2.6rem;
+  }
+
+  .brand-name {
+    font-size: 1.02rem;
+  }
+
+  .brand-byline {
+    font-size: 0.68rem;
+  }
+
+  .nav-links {
+    gap: 1.35rem;
+  }
+
+  .hero {
+    min-height: 92vh;
+    padding: 8.5rem clamp(1.25rem, 4vw, 3rem) 4rem;
+  }
+
+  .compact-hero {
+    min-height: 78vh;
+  }
+
+  .page-hero {
+    min-height: 46vh;
+    padding-bottom: 3rem;
+  }
+
+  .hero::after {
+    clip-path: polygon(74% 0, 100% 0, 100% 58%, 84% 50%);
+  }
+
+  .hero-inner {
+    gap: 2.5rem;
+    grid-template-columns: minmax(0, 1fr) 22rem;
+  }
+
+  .hero-inner.single {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .split,
+  .flagship {
+    gap: 3rem;
+    grid-template-columns: 0.9fr 1.1fr;
+  }
+
+  .hero-mark {
+    max-width: none;
+    padding: 2rem;
+  }
+
+  h1 {
+    font-size: clamp(3.4rem, 8vw, 6.9rem);
+    line-height: 0.92;
+    max-width: 10ch;
+  }
+
+  .page-hero h1,
+  .compact-hero h1 {
+    max-width: 13ch;
+  }
+
+  .hero-sub,
+  .lead {
+    font-size: clamp(1.08rem, 2vw, 1.32rem);
+    line-height: 1.75;
+  }
+
+  .section,
+  .band-inner {
+    padding: 5.5rem clamp(1.25rem, 4vw, 3rem);
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 4.4vw, 3.4rem);
+    max-width: 14ch;
+  }
+
+  .stats-bar {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .stat,
+  .stat:nth-child(2),
+  .stat:nth-child(odd) {
+    border-right: 1px solid var(--mb-line);
+  }
+
+  .stat:last-child {
+    border-right: 0;
+  }
+
+  .stat,
+  .stat:nth-child(-n + 2),
+  .stat:not(:last-child) {
+    border-bottom: 0;
+  }
+
+  .api-grid,
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  }
+
+  .category-header {
+    display: flex;
+  }
+
+  .flow-inline {
+    align-items: center;
+    display: flex;
+  }
+
+  .flow-inline b {
+    display: inline;
+  }
+
+  .article {
+    padding: 8.5rem clamp(1.25rem, 4vw, 3rem) 4rem;
+  }
+
+  .article-header h1 {
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    max-width: 14ch;
+  }
+
+  .article-body {
+    font-size: 1.08rem;
   }
 }
