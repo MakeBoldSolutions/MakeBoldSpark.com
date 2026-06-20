@@ -431,7 +431,7 @@ FodyWeavers.xsd
 # DevSpark — personal overrides (never commit)
 .documentation/*/commands/
 
-# ApiSpark — SQLite databases (NEVER commit production or local .db files)
+# MakeBoldSpark — SQLite databases (NEVER commit production or local .db files)
 *.db
 *.db-shm
 *.db-wal
@@ -439,9 +439,9 @@ data/*.db
 data/*.db-shm
 data/*.db-wal
 
-# ApiSpark — deployment artifacts
+# MakeBoldSpark — deployment artifacts
 publish/
 
-# ApiSpark uses .slnx format (default for .NET 10 dotnet new sln)
+# MakeBoldSpark uses .slnx format (default for .NET 10 dotnet new sln)
 # Do NOT add *.slnx here — it is the canonical solution file
 
