@@ -148,7 +148,7 @@
       </p>
       <div class="action-row" style="margin-top: 1.5rem">
         <a class="btn btn-primary" href="/ecosystem.html">Explore the Ecosystem</a>
-        <a class="btn btn-outline" href="https://github.com/MarkHazleton/MakeBoldSpark"
+        <a class="btn btn-outline" href="https://github.com/MakeBoldSolutions/MakeBoldSpark.com"
           >View the MakeBoldSpark Repository</a
         >
       </div>
@@ -173,7 +173,13 @@
         <ul class="footer-links">
           <li><a href="/">Home</a></li>
           <li><a href="/ecosystem.html">Ecosystem</a></li>
-          <li><a href="https://github.com/MarkHazleton/MakeBoldSpark">GitHub</a></li>
+          <li><a href="https://github.com/MakeBoldSolutions/MakeBoldSpark.com">GitHub</a></li>
+          <li>
+            <a href="/api-test-spark/" data-api-docs-link style="display: none"
+              >API Docs</a
+            >
+          </li>
+          <li><a href="/api/health">Health</a></li>
         </ul>
       </div>
       <p class="copyright">
@@ -181,5 +187,29 @@
         Solutions initiative.
       </p>
     </footer>
+
+    <script>
+      async function updateApiDocsLinks() {
+        const links = document.querySelectorAll("[data-api-docs-link]");
+
+        try {
+          const response = await fetch("/openapi/v1.json", {
+            cache: "no-store",
+            headers: { Accept: "application/json" },
+          });
+
+          const isApiDocsEnabled = response.ok;
+          links.forEach((link) => {
+            link.style.display = isApiDocsEnabled ? "" : "none";
+          });
+        } catch {
+          links.forEach((link) => {
+            link.style.display = "none";
+          });
+        }
+      }
+
+      updateApiDocsLinks();
+    </script>
   </body>
 </html>
