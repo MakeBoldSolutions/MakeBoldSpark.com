@@ -1,0 +1,10 @@
+---
+layout: layouts/base.njk
+title: "Systems | Make Bold Spark"
+description: "Explore Make Bold Spark systems, from the curated core systems to the full ecosystem inventory."
+permalink: "/systems/index.html"
+---
+{% block content %}
+<header class="hero page-hero"><div class="hero-inner single"><div class="hero-copy"><p class="eyebrow">Systems</p><h1>Make Bold Spark ecosystem</h1><p class="hero-sub">A structured catalog of development process systems, working platforms, API references, and practical AI-assisted development patterns.</p></div></div></header>
+<section class="section"><p class="section-label">Inventory</p><h2 class="section-title">Different systems, different jobs</h2><p class="section-desc">Each system has a distinct role in the Make Bold Spark ecosystem.</p><div class="grid">{% for system in systems %}<article class="card system-card"><h3 class="name">{{ system.name }}</h3><div class="meta-row"><span class="tag">{{ system.status }}</span><span class="tag">{{ system.role }}</span></div><p>{{ system.summary }}</p><p class="system-purpose"><strong>Purpose:</strong> {{ system.purpose }}</p><div class="links"><a href="/systems/{{ system.id }}/">Explore {{ system.name }}</a><a href="{{ system.githubUrl }}">GitHub</a><a href="/insights/{{ system.id }}/">Related Insights</a></div></article>{% endfor %}</div></section>
+{% endblock %}

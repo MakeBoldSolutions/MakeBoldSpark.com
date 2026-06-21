@@ -1,0 +1,18 @@
+{
+  "name": "makeboldspark-web",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build-and-swap.mjs",
+    "build:test": "node scripts/build-and-swap.mjs --output-root test/output",
+    "serve": "npx @11ty/eleventy --serve",
+    "verify:live-reload": "node scripts/verify-live-reload.mjs",
+    "test": "node scripts/verify-build.mjs"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.6"
+  }
+}

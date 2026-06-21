@@ -1,0 +1,26 @@
+---
+permalink: "/assets/makebold/catalog.json"
+eleventyExcludeFromCollections: true
+---
+{
+  "site": {
+    "name": "Make Bold Spark",
+    "tagline": "Spec-Driven Systems. Real Applications. Practical AI.",
+    "description": "Make Bold Spark is an ecosystem of open-source tools, reference implementations, and practical development patterns for building better software with AI-assisted workflows.",
+    "githubUrl": "https://github.com/MakeBoldSolutions/MakeBoldSpark.com"
+  },
+  "systems": {{ systems | json | safe }},
+  "articles": [{% for article in collections.articles %}{
+    "title": {{ article.data.title | json | safe }},
+    "slug": {{ article.fileSlug | json | safe }},
+    "summary": {{ article.data.summary | json | safe }},
+    "published": {{ article.data.published | json | safe }},
+    "updated": {{ article.data.updated | default(article.data.published) | json | safe }},
+    "system": {{ article.data.system | json | safe }},
+    "category": {{ article.data.category | json | safe }},
+    "tags": {{ article.data.tags | json | safe }},
+    "featured": {{ article.data.featured | json | safe }},
+    "url": {{ article.url | json | safe }}
+  }{% if not loop.last %},{% endif %}{% endfor %}],
+  "topics": []
+}
