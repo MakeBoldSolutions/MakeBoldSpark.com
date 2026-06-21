@@ -7,17 +7,17 @@ Updated: 2026-06-15
 
 This guide defines the visual identity, messaging, content strategy, information architecture, and implementation standards for every project within the Make Bold Spark ecosystem.
 
-**Primary Positioning**
+### Primary Positioning
 
 > Spec-Driven Systems. Real Applications. Practical AI.
 
-**Supporting Description**
+### Supporting Description
 
 > Make Bold Spark is an ecosystem of open-source tools, reference implementations, and practical AI-assisted development patterns for building better software.
 
 ---
 
-# Ecosystem Architecture
+## Ecosystem Architecture
 
 ```text
 Make Bold Spark
@@ -40,6 +40,7 @@ Make Bold Spark
 ### makeboldspark.com
 
 Purpose:
+
 - Discovery
 - Product positioning
 - SEO
@@ -48,6 +49,7 @@ Purpose:
 - Release announcements
 
 Content:
+
 - /systems/*
 - /insights/*
 - /releases/*
@@ -55,11 +57,13 @@ Content:
 ### Project Subdomains
 
 Examples:
+
 - dev.makeboldspark.com
 - apitestspark.makeboldspark.com
 - webspark.makeboldspark.com
 
 Purpose:
+
 - Documentation
 - Tutorials
 - Examples
@@ -73,7 +77,7 @@ Rule:
 
 ---
 
-# Project Identity
+## Project Identity
 
 Every Spark Project must define:
 
@@ -95,7 +99,7 @@ Every Spark Project must define:
 
 ---
 
-# Information Architecture
+## Information Architecture
 
 ## Systems
 
@@ -141,7 +145,7 @@ Examples:
 
 ---
 
-# Markdown Publishing Standard
+## Markdown Publishing Standard
 
 Markdown is the preferred content format.
 
@@ -199,7 +203,7 @@ source: "makeboldspark"
 
 ---
 
-# Voice and Tone
+## Voice and Tone
 
 Spark Projects should be:
 
@@ -230,7 +234,7 @@ Avoid:
 
 ---
 
-# Brand Governance
+## Brand Governance
 
 Projects may customize:
 
@@ -249,7 +253,7 @@ Projects may NOT customize:
 
 ---
 
-# SEO and Migration
+## SEO and Migration
 
 When migrating content from markhazleton.com:
 
@@ -275,7 +279,7 @@ Avoid date-based URLs.
 
 ---
 
-# Repository Standards
+## Repository Standards
 
 Every repository should contain:
 
@@ -296,7 +300,7 @@ Recommended:
 
 ---
 
-# Success Criteria
+## Success Criteria
 
 A Spark Project is compliant when:
 

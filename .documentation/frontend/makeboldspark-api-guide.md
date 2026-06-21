@@ -55,7 +55,7 @@ All entities share a `BaseEntity` with `id`, `createdDate`, `updatedDate`, `crea
 
 ## Entity Hierarchy
 
-```
+```text
 WebSite (Domain)
 ├── Menu[]          ← hierarchical; parentId self-reference
 │   └── Keyword[]  ← many-to-many
@@ -436,7 +436,7 @@ function PostContent({ html }: { html: string }) {
 ### Categories
 
 **`GET /api/public/makeboldspark/categories`** — all categories ordered by `content` (the
-category name field — see Gotchas). 
+category name field — see Gotchas).
 
 ```typescript
 export const getCategories = () =>
@@ -673,7 +673,7 @@ const aboutMe = await getContentPartByTitle('About Me');
 All `POST`, `PUT`, `DELETE` routes under `/api/admin/makeboldspark/*` and all
 `GET /api/admin/makeboldspark/subscribers`, `newsletters`, `mail-settings` require:
 
-```
+```text
 Authorization: Bearer <token>   (Admin role)
 ```
 
@@ -1007,6 +1007,7 @@ await domains.update(token, 1, { ...current, title: 'New Title' });
 
 The API does not return structured validation errors for constraint violations. A 500
 from a create or delete operation almost always means:
+
 - **Create**: a required FK field points to a non-existent parent record
 - **Delete**: the record has child records that prevent deletion
 

@@ -17,8 +17,6 @@ originalUrl: ""
 canonicalUrl: "https://makeboldspark.com/insights/devspark/spec-driven-development-harness/"
 ---
 
-# DevSpark as a Spec-Driven Development Harness
-
 DevSpark is the flagship Make Bold Spark system for turning ideas into structured implementation workflows. It is designed to be agent-agnostic: the value is not tied to a single coding assistant, editor, or model. The value comes from shaping the work before implementation begins.
 
 The core pattern is simple:

@@ -1,0 +1,14 @@
+config:
+  default: true
+  MD013: false
+  MD060: false
+
+globs:
+  - "README.md"
+  - "CHANGELOG.md"
+  - "content/**/*.md"
+  - ".documentation/**/*.md"
+  - "src/**/*.md"
+  - "!**/node_modules/**"
+  - "!.documentation/releases/**/specs/**"
+  - "!.documentation/specs/pr-review/**"

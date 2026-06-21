@@ -180,6 +180,7 @@ This constitution is authoritative over all development practices in this reposi
 Amendments require documentation of the change, author approval, and a migration plan for any affected workflows.
 
 Version increments follow semantic versioning:
+
 - **MAJOR**: Backward-incompatible governance or principle removals/redefinitions.
 - **MINOR**: New principle or section added, or materially expanded guidance.
 - **PATCH**: Clarifications, wording fixes, non-semantic refinements.

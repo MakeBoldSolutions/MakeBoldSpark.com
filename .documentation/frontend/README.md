@@ -29,7 +29,7 @@ Azure App Service settings — source code does not need to change.
 
 Protected routes require a JWT Bearer token:
 
-```
+```text
 Authorization: Bearer <your-jwt-token>
 ```
 
@@ -62,7 +62,7 @@ Web Apps with long cache TTLs. Use live API calls only for:
 
 A versioned manifest pattern is used when static generation is in play:
 
-```
+```text
 GET /data/manifest.json          → { "recipesVersion": 42 }   (short TTL)
 GET /data/recipes.v42.json       → [ ... ]                     (long TTL, immutable)
 ```

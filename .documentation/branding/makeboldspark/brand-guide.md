@@ -340,4 +340,3 @@ For every Make Bold Spark website or project:
 - Verify color contrast for small text.
 - Include Open Graph metadata and the social share image.
 - Keep logo clear space intact.
-

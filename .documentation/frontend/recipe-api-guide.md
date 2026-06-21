@@ -14,7 +14,7 @@
 4. [Public Endpoints](#public-endpoints)
    - [List Approved Recipes](#get-apipublicrecipes)
    - [Get Recipe by ID](#get-apipublicrecipesid)
-   - [List Recipe Categories](#get-apipublicrecipiescategories)
+   - [List Recipe Categories](#get-apipublicrecipescategories)
 5. [Publisher Endpoints](#publisher-endpoints)
    - [Create Recipe](#post-apipublishrecipes)
    - [Update Recipe](#put-apipublishrecipesid)
@@ -233,6 +233,7 @@ Use the categories endpoint if you need the full category→recipe tree.
 ### `GET /api/public/recipes/{id}`
 
 Returns a single recipe. Returns **404** if:
+
 - The ID does not exist
 - The recipe exists but `isApproved === false`
 
@@ -351,7 +352,7 @@ const filtered = recipes.filter(r => r.recipeCategoryID === selectedCategoryId);
 
 All `/api/publish/recipes/*` routes require a JWT token with `Admin` or `Publisher` role.
 
-```
+```text
 Authorization: Bearer <token>
 ```
 
