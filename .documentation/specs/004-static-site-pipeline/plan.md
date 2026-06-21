@@ -102,7 +102,7 @@ src/
     package.json                           (single dependency: @11ty/eleventy; "engines": { "node": ">=20" })
     package-lock.json                       (committed — required by `npm ci` in the API build hook)
     .nvmrc                                  (pins the Node major version; critic-007)
-    .gitignore                              (excludes node_modules/ and generated test/output/ only)
+    .gitignore                              (excludes node_modules/, generated _site/, and generated test/output/ only)
     eleventy.config.js                     (input/output dirs, permalinks, validation hook, Nunjucks as template language — research.md Topic 9)
     scripts/
       build-and-swap.mjs                    (builds into a temp dir; only on a successful build does it replace the complete generated output set — wwwroot/insights/, wwwroot/systems/, and wwwroot/assets/makebold/catalog.json — while failures preserve the prior set; accepts an isolated test output root so pre-migration validation cannot replace hand-authored pages)

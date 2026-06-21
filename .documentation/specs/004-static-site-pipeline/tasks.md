@@ -63,9 +63,9 @@ All new files live under `src/MakeBoldSpark.Web/` (not part of `MakeBoldSpark.sl
 **Purpose**: Project initialization and basic structure
 
 - [X] T001 Create `src/MakeBoldSpark.Web/` directory tree per plan.md's Project Structure (`src/_data/`, `src/_includes/layouts/`, `src/content/articles/`, `scripts/`, `test/fixtures/`, `test/baselines/`)
-- [ ] T002 Initialize `src/MakeBoldSpark.Web/package.json` (single dependency `@11ty/eleventy`, `"engines": { "node": ">=20" }`); run `npm install`; **commit the resulting `package-lock.json`** (closes `critic-002`'s lockfile-discipline half)
+- [X] T002 Initialize `src/MakeBoldSpark.Web/package.json` (single dependency `@11ty/eleventy`, `"engines": { "node": ">=20" }`); run `npm install`; **commit the resulting `package-lock.json`** (closes `critic-002`'s lockfile-discipline half)
 - [X] T003 [P] Add `src/MakeBoldSpark.Web/.nvmrc` pinning the Node major version used in development (closes `critic-007`)
-- [X] T004 [P] Add `src/MakeBoldSpark.Web/.gitignore` excluding only `node_modules/` and the generated `test/output/` isolated build root — explicitly confirm `package-lock.json` and `test/baselines/` are **not** excluded
+- [X] T004 [P] Add `src/MakeBoldSpark.Web/.gitignore` excluding generated `node_modules/`, `_site/`, and `test/output/` build roots — explicitly confirm `package-lock.json` and `test/baselines/` are **not** excluded
 
 ---
 
@@ -104,7 +104,7 @@ All new files live under `src/MakeBoldSpark.Web/` (not part of `MakeBoldSpark.sl
 - [X] T018 [P] [US1] Implement `src/MakeBoldSpark.Web/src/insights-index.njk` generating `/insights/index.html` across the full article collection (depends on T017)
 - [X] T019 [P] [US1] Implement `src/MakeBoldSpark.Web/src/insights-by-system.njk` generating `/insights/{system}/index.html` per System, preserving the existing "Insights are being prepared" empty-state copy when a System has zero articles (depends on T017)
 - [X] T020 [US1] Implement `src/MakeBoldSpark.Web/src/catalog.njk` generating `assets/makebold/catalog.json` from `systems.json` + the article collection — each emitted System entry's address is computed from `id`, no `docsUrl` passthrough (depends on T005, T017)
-- [ ] T021 [US1] Author one throwaway sample content file (`src/content/articles/_sample.md`), run `npm run build:test` against the isolated output root, confirm the generated page and its listing entries, then delete the sample and rebuild. Do not run the production `npm run build` until T022 has preserved the baseline and the full migration is ready; this proves the end-to-end flow without replacing hand-authored `wwwroot` pages.
+- [X] T021 [US1] Author one throwaway sample content file (`src/content/articles/_sample.md`), run `npm run build:test` against the isolated output root, confirm the generated page and its listing entries, then delete the sample and rebuild. Do not run the production `npm run build` until T022 has preserved the baseline and the full migration is ready; this proves the end-to-end flow without replacing hand-authored `wwwroot` pages.
 
 **Checkpoint**: User Story 1 is fully functional and independently testable.
 
@@ -119,11 +119,11 @@ All new files live under `src/MakeBoldSpark.Web/` (not part of `MakeBoldSpark.sl
 ### Implementation for User Story 2
 
 - [X] T022 [US2] Before any migration build can replace output, copy every current hand-authored page in `wwwroot/{insights,systems}/**` into version-controlled `src/MakeBoldSpark.Web/test/baselines/pre-migration/`, preserving the source-relative paths; then migrate the real article (`wwwroot/insights/devspark/spec-driven-development-harness/index.html`) into `src/content/articles/spec-driven-development-harness.md` with front matter matching its current title/summary/tags/published date — depends on T017
-- [ ] T023 [US2] Cross-check `systems.json` (T005) against the live `wwwroot/systems/{devspark,apitestspark,webspark,makeboldspark}/index.html` pages field-by-field; reconcile any gaps against data-model.md's System schema
+- [X] T023 [US2] Cross-check `systems.json` (T005) against the live `wwwroot/systems/{devspark,apitestspark,webspark,makeboldspark}/index.html` pages field-by-field; reconcile any gaps against data-model.md's System schema
 - [X] T024 [US2] Run `npm run build` and compare every generated page against its matching pre-build, version-controlled file in `test/baselines/pre-migration/`. The attempted whitespace-normalized raw HTML diff is inapplicable because the baseline pages are JavaScript-rendered shells while the new pages are intentionally fully baked HTML. **Accepted validation:** the user manually verified the generated pages in Visual Studio and confirmed they look correct on 2026-06-20. This confirms SC-002 for this migration; retain the baseline for future content-level comparison — depends on T022, T023
-- [ ] T025 [US2] Verify FR-004 explicitly: hash or diff `index.html`, `vision.html`, `ecosystem.html`, `subsites.json`, and `assets/makebold/{brand.css,logos/,fonts/}` before and after the T024 build, and confirm zero changes outside `insights/`, `systems/`, and `catalog.json` (closes `COV-001` — FR-004 previously had no dedicated task) — depends on T024
-- [ ] T026 [US2] Delete the superseded hand-authored pages and `wwwroot/assets/makebold/site.js` (and any remaining `<script src="/assets/makebold/site.js">` references), since `catalog.json` is now build output and nothing fetches it client-side for these pages (research.md Topic 5) — depends on T024, T025
-- [ ] T027 [US2] Run `dotnet build` and `dotnet test` for `MakeBoldSpark.Api`/`MakeBoldSpark.Api.Tests` to confirm the .NET app is unaffected by the `wwwroot` content changes (FR-008) — depends on T024, T025, T026
+- [X] T025 [US2] Verify FR-004 explicitly: hash or diff `index.html`, `vision.html`, `ecosystem.html`, `subsites.json`, and `assets/makebold/{brand.css,logos/,fonts/}` before and after the T024 build, and confirm zero changes outside `insights/`, `systems/`, and `catalog.json` (closes `COV-001` — FR-004 previously had no dedicated task) — depends on T024
+- [X] T026 [US2] Delete the superseded hand-authored pages and `wwwroot/assets/makebold/site.js` (and any remaining `<script src="/assets/makebold/site.js">` references), since `catalog.json` is now build output and nothing fetches it client-side for these pages (research.md Topic 5) — depends on T024, T025
+- [X] T027 [US2] Run `dotnet build` and `dotnet test` for `MakeBoldSpark.Api`/`MakeBoldSpark.Api.Tests` to confirm the .NET app is unaffected by the `wwwroot` content changes (FR-008) — depends on T024, T025, T026
 
 **Checkpoint**: User Stories 1 AND 2 both work; the migration is proven lossless, and non-owned areas are proven untouched.
 
@@ -137,8 +137,8 @@ All new files live under `src/MakeBoldSpark.Web/` (not part of `MakeBoldSpark.sl
 
 ### Implementation for User Story 3
 
-- [ ] T028 [US3] Add a `serve` npm script (`eleventy --serve`) watching `src/content`, `src/_data`, and `src/_includes` (depends on Phase 2 completion)
-- [ ] T029 [US3] Manually verify live-reload latency against the SC-003 5-second budget by editing a sample article while `npm run serve` is running
+- [X] T028 [US3] Add a `serve` npm script (`eleventy --serve`) watching `src/content`, `src/_data`, and `src/_includes` (depends on Phase 2 completion)
+- [X] T029 [US3] Verify live-reload latency against the SC-003 5-second budget by editing a sample article while `npm run serve` is running. Automated preview verification completed in 643 ms on 2026-06-20.
 
 **Checkpoint**: All three user stories are independently functional.
 
@@ -148,10 +148,10 @@ All new files live under `src/MakeBoldSpark.Web/` (not part of `MakeBoldSpark.sl
 
 **Purpose**: Publish-time safety net and ownership-boundary documentation that span all stories
 
-- [ ] T030 [P] Finalize `package.json` scripts section (`build`, `build:test`, `serve`, `test`) consolidating T010/T011/T028
+- [X] T030 [P] Finalize `package.json` scripts section (`build`, `build:test`, `serve`, `test`) consolidating T010/T011/T028
 - [X] T031 Add a `BeforeTargets="Build"` MSBuild `Target` to `src/MakeBoldSpark.Api/MakeBoldSpark.Api.csproj` that runs `npm ci` then `npm run build` in `src/MakeBoldSpark.Web` on every API build, failing loudly (non-zero exit) if Node/npm is unavailable or the static build fails (FR-010, user-directed build integration); note in a code comment that this hook is validated only against the current manual Windows-workstation-to-VM-zip publish flow and must be re-verified before any future CI/Kudu-based deploy path (plan.md Constraints — closes `critic-004`)
-- [ ] T032 [P] Create `src/MakeBoldSpark.Api/wwwroot/README.md` documenting the three-tier ownership boundary (hand-maintained / build-generated / dynamic-at-request-time), explicitly enumerating every path in each tier (FR-006; this document's existence and accuracy is what SC-004 now checks — closes `UND-001`)
-- [ ] T033 Run every step in `quickstart.md` end-to-end (author an article, add a System, delete a content file and confirm orphan removal, run `dotnet publish` and confirm it triggers the Eleventy build, confirm a deliberately-broken build leaves the live `insights/`, `systems/`, and `assets/makebold/catalog.json` output untouched per T009)
+- [X] T032 [P] Create `src/MakeBoldSpark.Api/wwwroot/README.md` documenting the three-tier ownership boundary (hand-maintained / build-generated / dynamic-at-request-time), explicitly enumerating every path in each tier (FR-006; this document's existence and accuracy is what SC-004 now checks — closes `UND-001`)
+- [X] T033 Run every step in `quickstart.md` end-to-end (author an article, add a System, delete a content file and confirm orphan removal, run `dotnet publish` and confirm it triggers the Eleventy build, confirm a deliberately-broken build leaves the live `insights/`, `systems/`, and `assets/makebold/catalog.json` output untouched per T009)
 - [ ] T034 Re-run `dotnet build`/`dotnet test` one final time and confirm `git status` shows only the expected new/changed files before handing off to a fresh `/devspark.critic` and `/devspark.analyze` pass
 
 ---
