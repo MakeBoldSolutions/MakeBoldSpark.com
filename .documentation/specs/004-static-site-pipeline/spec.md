@@ -12,7 +12,7 @@ required_gates: checklist, analyze, critic
 
 **Feature Branch**: `004-static-site-pipeline`
 **Created**: 2026-06-20
-**Status**: In Progress <!-- Valid: Draft | In Progress | Complete -->
+**Status**: Complete <!-- Valid: Draft | In Progress | Complete -->
 **Input**: User description: "Add a new src/MakeBoldSpark.Web project: a static site generator that authors articles and content in Markdown with frontmatter, and builds output directly into src/MakeBoldSpark.Api/wwwroot so the existing app continues to serve everything with no runtime changes."
 
 ## Rationale Summary
@@ -64,7 +64,7 @@ Focus review on: (1) whether the ownership boundary between hand-maintained, gen
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - Author a new article without hand-writing HTML (Priority: P1)
+### User Story 1 - Author a new article without hand-writing HTML (Priority: P1) ✅ Complete
 
 A content owner wants to publish a new article about one of the ecosystem's systems. Today they would have to copy an existing HTML file and hand-edit every section. Instead, they write a single content file with a title, summary, associated system, category, tags, and a publish date, plus the article body in plain prose formatting — and the corresponding page, plus any listing pages that reference it, appear automatically without further manual editing.
 
@@ -79,7 +79,7 @@ A content owner wants to publish a new article about one of the ecosystem's syst
 
 ---
 
-### User Story 2 - Migrate existing hand-authored content into the new model (Priority: P1)
+### User Story 2 - Migrate existing hand-authored content into the new model (Priority: P1) ✅ Complete
 
 The content owner wants the article and system pages that were just hand-authored (and which exposed the consistency-drift problem) to become the first real content migrated into the new authoring model, proving the new pipeline reproduces them faithfully before anything is deleted.
 
@@ -94,7 +94,7 @@ The content owner wants the article and system pages that were just hand-authore
 
 ---
 
-### User Story 3 - Regenerate content locally with fast feedback (Priority: P2)
+### User Story 3 - Regenerate content locally with fast feedback (Priority: P2) ✅ Complete
 
 The content owner wants to preview a new or edited article before it's considered final, with a short feedback loop, without needing to start the full backend application.
 

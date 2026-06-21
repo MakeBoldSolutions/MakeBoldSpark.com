@@ -67,6 +67,8 @@ All new files live under `src/MakeBoldSpark.Web/` (not part of `MakeBoldSpark.sl
 - [X] T003 [P] Add `src/MakeBoldSpark.Web/.nvmrc` pinning the Node major version used in development (closes `critic-007`)
 - [X] T004 [P] Add `src/MakeBoldSpark.Web/.gitignore` excluding generated `node_modules/`, `_site/`, and `test/output/` build roots — explicitly confirm `package-lock.json` and `test/baselines/` are **not** excluded
 
+**Checkpoint**: Phase complete — 2026-06-21
+
 ---
 
 ## Phase 2: Foundational (Blocking Prerequisites)
@@ -85,6 +87,8 @@ All new files live under `src/MakeBoldSpark.Web/` (not part of `MakeBoldSpark.sl
 - [X] T012 Run `npm ci` locally at least once (not just `npm install`) and confirm it succeeds against the committed `package-lock.json`, since the API build hook (T031) relies on `npm ci` specifically (closes `critic-002`'s remaining half) — depends on T002
 
 **Checkpoint**: Foundation ready, AND T011 has proven the two fail-loud cases and the safe-swap failure path — user story implementation can now begin.
+
+**Checkpoint**: Phase complete — 2026-06-21
 
 ---
 
@@ -108,6 +112,8 @@ All new files live under `src/MakeBoldSpark.Web/` (not part of `MakeBoldSpark.sl
 
 **Checkpoint**: User Story 1 is fully functional and independently testable.
 
+**Checkpoint**: Phase complete — 2026-06-21
+
 ---
 
 ## Phase 4: User Story 2 - Migrate existing hand-authored content into the new model (Priority: P1)
@@ -127,6 +133,8 @@ All new files live under `src/MakeBoldSpark.Web/` (not part of `MakeBoldSpark.sl
 
 **Checkpoint**: User Stories 1 AND 2 both work; the migration is proven lossless, and non-owned areas are proven untouched.
 
+**Checkpoint**: Phase complete — 2026-06-21
+
 ---
 
 ## Phase 5: User Story 3 - Regenerate content locally with fast feedback (Priority: P2)
@@ -142,6 +150,8 @@ All new files live under `src/MakeBoldSpark.Web/` (not part of `MakeBoldSpark.sl
 
 **Checkpoint**: All three user stories are independently functional.
 
+**Checkpoint**: Phase complete — 2026-06-21
+
 ---
 
 ## Phase 6: Polish & Cross-Cutting Concerns
@@ -152,7 +162,9 @@ All new files live under `src/MakeBoldSpark.Web/` (not part of `MakeBoldSpark.sl
 - [X] T031 Add a `BeforeTargets="Build"` MSBuild `Target` to `src/MakeBoldSpark.Api/MakeBoldSpark.Api.csproj` that runs `npm ci` then `npm run build` in `src/MakeBoldSpark.Web` on every API build, failing loudly (non-zero exit) if Node/npm is unavailable or the static build fails (FR-010, user-directed build integration); note in a code comment that this hook is validated only against the current manual Windows-workstation-to-VM-zip publish flow and must be re-verified before any future CI/Kudu-based deploy path (plan.md Constraints — closes `critic-004`)
 - [X] T032 [P] Create `src/MakeBoldSpark.Api/wwwroot/README.md` documenting the three-tier ownership boundary (hand-maintained / build-generated / dynamic-at-request-time), explicitly enumerating every path in each tier (FR-006; this document's existence and accuracy is what SC-004 now checks — closes `UND-001`)
 - [X] T033 Run every step in `quickstart.md` end-to-end (author an article, add a System, delete a content file and confirm orphan removal, run `dotnet publish` and confirm it triggers the Eleventy build, confirm a deliberately-broken build leaves the live `insights/`, `systems/`, and `assets/makebold/catalog.json` output untouched per T009)
-- [ ] T034 Re-run `dotnet build`/`dotnet test` one final time and confirm `git status` shows only the expected new/changed files before handing off to a fresh `/devspark.critic` and `/devspark.analyze` pass
+- [X] T034 Re-run `dotnet build`/`dotnet test` one final time and confirm `git status` shows only the expected new/changed files before handing off to a fresh `/devspark.critic` and `/devspark.analyze` pass
+
+**Checkpoint**: Phase complete — 2026-06-21
 
 ---
 
