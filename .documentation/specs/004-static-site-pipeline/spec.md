@@ -53,6 +53,14 @@ Introduce a content build step that lets articles and system pages be authored a
 
 Focus review on: (1) whether the ownership boundary between hand-maintained, generated, and dynamically-rendered content is unambiguous enough that a future contributor won't accidentally edit generated output, (2) whether the migration of the just-authored article and system pages into the new authoring format is lossless (no visual or content regression), and (3) whether the chosen build-trigger point (when content gets (re)generated relative to building/publishing the application) is practical for a solo maintainer's workflow.
 
+## Clarifications
+
+### Session 2026-06-20
+
+- Q: Should authoring a content file support a draft/unpublished state excluded from generated output until promoted, or does every authored file become public on the next build? → A: Always public on build — no separate draft/published status field; keeping unfinished work out of generated output is achieved by not running the build yet (or not yet adding the file), not by an in-file status flag.
+- Q: When a content file is renamed or removed from the authoring area, what must happen to the previously generated public page for it? → A: The build process MUST remove any previously-generated page that no longer has a corresponding content file, so generated output always exactly matches current authored content — no orphaned pages are left publicly reachable.
+- Q: How should a content item's public page address (URL path) be derived? → A: System-scoped, matching the convention already established by the one real existing migrated article (e.g. `/insights/{system}/{slug}/`) — the slug is derived from the content file, nested under its associated System.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Author a new article without hand-writing HTML (Priority: P1)
@@ -65,7 +73,7 @@ A content owner wants to publish a new article about one of the ecosystem's syst
 
 **Acceptance Scenarios**:
 
-1. **Given** a new content file with valid front matter (title, summary, associated system, category, tags, publish date) and a body, **When** the content build runs, **Then** a new page is generated reachable at a predictable, content-derived address, and it is visually consistent with existing pages (same navigation, footer, and page structure).
+1. **Given** a new content file with valid front matter (title, summary, associated system, category, tags, publish date) and a body, **When** the content build runs, **Then** a new page is generated reachable at an address scoped under its associated System (matching the existing `/insights/{system}/{slug}/` convention), and it is visually consistent with existing pages (same navigation, footer, and page structure).
 2. **Given** the new content file is associated with an existing system, **When** the content build runs, **Then** that system's listing of related content includes the new entry, and the site-wide content index includes it, without manually editing either listing page.
 
 ---
@@ -105,12 +113,13 @@ The content owner wants to preview a new or edited article before it's considere
 - What happens when two content files would generate pages at the same address? The build must fail loudly rather than silently overwriting one with the other.
 - What happens if someone hand-edits a generated output file directly? Their edit will be silently overwritten on the next build — this must be made obvious (e.g., clearly distinguishing generated areas from hand-maintained areas) so it doesn't happen by accident.
 - What happens to existing site areas that are populated dynamically at request time (not generated at build time) — must they be left untouched by this feature? Yes; this spec is scoped only to the areas that are currently hand-authored HTML, not to areas already populated dynamically.
+- What happens to a previously-generated page when its source content file is renamed or deleted? The build must remove the orphaned page so it is no longer publicly reachable, rather than leaving stale output behind.
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001**: Content owners MUST be able to author a new article as a single content file containing structured metadata (title, summary, associated system, category, tags, publish date, optional "featured" flag) and a body, without writing HTML directly.
+- **FR-001**: Content owners MUST be able to author a new article as a single content file containing structured metadata (title, summary, associated system, category, tags, publish date, optional "featured" flag) and a body, without writing HTML directly. A content file has no draft/unpublished status field — any content file present in the authoring area is included in the next build's output; keeping work-in-progress out of public output is achieved by not yet running the build (or not yet adding the file), not by an in-file status flag.
 - **FR-002**: The build process MUST generate a complete, navigable page for each authored content file, reusing the site's existing visual structure (navigation, footer, hero, and listing/card patterns) so generated pages are visually indistinguishable in style from hand-authored pages.
 - **FR-003**: The build process MUST generate or update any listing/index pages that are derived from the set of authored content (e.g., a full content index, and per-system content listings) without requiring manual edits to those listing pages.
 - **FR-004**: The build process MUST leave untouched any site areas that are not part of its generated output, including site areas that are populated dynamically at request time and any assets explicitly outside its ownership.
@@ -120,10 +129,11 @@ The content owner wants to preview a new or edited article before it's considere
 - **FR-008**: The build process MUST NOT alter the behavior of the running application — no new runtime routes, services, or request-time dependencies may be introduced as part of this feature.
 - **FR-009**: The existing hand-authored article and system pages (the ones that just exposed the consistency-drift problem) MUST be migrated into the new authoring format with no loss of visible content and with the previously-identified stale reference corrected, not reproduced.
 - **FR-010**: The maintainer MUST have a documented, repeatable way to (re)generate the site's content output before it is published, so generated output is never stale relative to authored content at publish time.
+- **FR-011**: The build process MUST remove any previously-generated page whose source content file has been renamed or deleted, so generated output never contains orphaned pages that no longer correspond to an authored content file.
 
 ### Key Entities
 
-- **Content Item**: A single authored piece of content (e.g., an article). Has a title, summary, an associated system identifier, a category, tags, a publish date, an optional update date, and an optional "featured" flag, plus a body.
+- **Content Item**: A single authored piece of content (e.g., an article). Has a title, summary, an associated system identifier, a category, tags, a publish date, an optional update date, and an optional "featured" flag, plus a body. Its public address is system-scoped — nested under its associated System using a slug derived from the content file, matching the existing `/insights/{system}/{slug}/` convention.
 - **System**: An existing structured entry describing one of the ecosystem's systems (name, status, category, summary, capabilities, related links). Content Items reference a System by identifier; this spec does not change how Systems themselves are defined, only how Content Items are authored and linked to them.
 - **Generated Page**: The HTML output produced from a Content Item or from a System, plus any listing page assembled from multiple Content Items or Systems.
 

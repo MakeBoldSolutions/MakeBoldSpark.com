@@ -1,4 +1,4 @@
-﻿# Project Guide
+# Project Guide
 
 ## DevSpark Commands
 
@@ -29,6 +29,7 @@ Read `.documentation/memory/constitution.md` before making changes — it define
 - C# / .NET (ASP.NET Core, Web API)
 - API-first: OpenAPI/Swagger contracts defined before implementation
 - Test-first: tests written before or alongside implementation
+- `src/MakeBoldSpark.Web/` — Eleventy (`@11ty/eleventy`) static content build, Node.js LTS. Build-time only; not a runtime dependency of `MakeBoldSpark.Api` and not part of `MakeBoldSpark.slnx`. Generates `MakeBoldSpark.Api/wwwroot/{insights,systems}/**` and `wwwroot/assets/makebold/catalog.json` (see spec `004-static-site-pipeline`).
 
 ## Upgrading DevSpark
 
