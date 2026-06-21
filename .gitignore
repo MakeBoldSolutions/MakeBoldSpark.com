@@ -442,6 +442,10 @@ data/*.db-wal
 # MakeBoldSpark — deployment artifacts
 publish/
 
+# Versioned documentation releases are source-controlled records, not build output.
+!.documentation/releases/
+!.documentation/releases/**
+
 # MakeBoldSpark uses .slnx format (default for .NET 10 dotnet new sln)
 # Do NOT add *.slnx here — it is the canonical solution file
 

@@ -1,0 +1,34 @@
+{
+  "version": "1.0.0",
+  "releaseDate": "2026-06-21",
+  "release": {
+    "from": null,
+    "to": "2026-06-21"
+  },
+  "commitRange": {
+    "baseRef": null,
+    "baseSha": null,
+    "headRef": "HEAD",
+    "headSha": "e5896be4cce5029b52cb4c19b716b388323f38c1",
+    "rangeSpec": "initial..HEAD"
+  },
+  "previousVersion": null,
+  "features": {
+    "completed": 2,
+    "deferred": 2
+  },
+  "quickfixes": 0,
+  "pullRequests": {
+    "merged": 2,
+    "numbers": [1, 2],
+    "filesChanged": 0,
+    "testsAdded": 0,
+    "breakingChanges": 0,
+    "resolvedHighFindings": 0
+  },
+  "adrs": 1,
+  "commits": 54,
+  "contributors": 2,
+  "specs": ["001-makeboldspark-foundation", "004-static-site-pipeline"],
+  "timestamp": "2026-06-21T15:02:01Z"
+}
