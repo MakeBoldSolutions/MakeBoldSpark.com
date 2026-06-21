@@ -38,9 +38,9 @@ Edit `src/MakeBoldSpark.Web/src/_data/systems.json` directly — this file is ha
 | Command | Effect |
 |---|---|
 | `npm install` | One-time setup; installs `@11ty/eleventy` |
-| `npm run build` | Clean + full rebuild of `wwwroot/insights/**`, `wwwroot/systems/**`, `wwwroot/assets/makebold/catalog.json` |
+| `npm run build` | Builds to a temporary directory, then replaces `wwwroot/insights/**`, `wwwroot/systems/**`, and `wwwroot/assets/makebold/catalog.json` only after success; a failed build leaves all three targets unchanged |
 | `npm run serve` | Same build, plus a local dev server with live reload (FR-007 / SC-003) |
-| `npm test` | Asserts the build succeeds, and that a deliberately-broken fixture (unknown `system` reference) makes the build fail — regression test for FR-005 |
+| `npm test` | Asserts a normal build succeeds; unknown-system and duplicate-output fixtures fail; and a failed build preserves the complete generated output set — regression test for FR-005 and safe delivery |
 
 ## 4. What this contract does NOT cover
 

@@ -1,0 +1,10 @@
+---
+layout: layouts/base.njk
+title: "Insights | Make Bold Spark"
+description: "Make Bold Spark insights grouped by featured articles, systems, and topics."
+permalink: "/insights/index.html"
+---
+{% block content %}
+<header class="hero page-hero"><div class="hero-inner single"><div class="hero-copy"><p class="eyebrow">Insights</p><h1>Articles with structure</h1><p class="hero-sub">Featured writing, system-specific collections, topic groups, and recent articles without reducing the site to a chronological blog.</p></div></div></header>
+<main class="section"><section class="category"><div class="category-header"><h3>Featured Articles</h3><p>Selected writing for new visitors.</p></div><div class="grid">{% for article in collections.articles %}{% if article.data.featured %}<article class="card article-card"><h3><a href="{{ article.url }}">{{ article.data.title }}</a></h3><p>{{ article.data.summary }}</p></article>{% endif %}{% endfor %}</div></section><section class="category"><div class="category-header"><h3>By System</h3><p>Follow the articles connected to each Make Bold Spark system.</p></div><div class="grid">{% for system in systems %}<article class="card"><h3><a href="/insights/{{ system.id }}/">{{ system.name }}</a></h3><p>{{ system.summary }}</p><div class="links"><a href="/insights/{{ system.id }}/">Open {{ system.name }} Insights</a></div></article>{% endfor %}</div></section><section class="category"><div class="category-header"><h3>Recent Articles</h3><p>Newest published insights, without making chronology the whole experience.</p></div><div class="grid">{% for article in collections.articles %}<article class="card article-card"><h3><a href="{{ article.url }}">{{ article.data.title }}</a></h3><p>{{ article.data.summary }}</p><div class="article-date">{{ article.data.published | displayDate }}</div></article>{% endfor %}</div></section></main>
+{% endblock %}

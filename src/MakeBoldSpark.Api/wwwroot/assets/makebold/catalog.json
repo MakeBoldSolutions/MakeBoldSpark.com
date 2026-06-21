@@ -6,118 +6,102 @@
     "githubUrl": "https://github.com/MakeBoldSolutions/MakeBoldSpark.com"
   },
   "systems": [
-    {
-      "id": "devspark",
-      "name": "DevSpark",
-      "status": "active",
-      "category": "AI-assisted development",
-      "role": "Development process system",
-      "purpose": "Turn ideas into structured implementation workflows.",
-      "summary": "A spec-driven, agent-agnostic development harness for moving from intent to implementation-ready plans, tasks, and reviewable context.",
-      "valueProposition": "DevSpark helps teams turn fuzzy ideas into precise, agent-ready implementation workflows.",
-      "githubUrl": "https://github.com/MarkHazleton/DevSpark",
-      "docsUrl": "/systems/devspark/",
-      "capabilities": [
-        "Specification-first feature shaping",
-        "Agent-agnostic planning and task context",
-        "Implementation workflow templates",
-        "Reviewable handoffs from idea to code"
-      ],
-      "philosophy": "DevSpark treats AI-assisted development as a systems problem. Better outputs come from clearer specifications, explicit constraints, and workflow context that can be reviewed before code is produced.",
-      "whatItIs": "DevSpark is the flagship Make Bold Spark system for spec-driven development workflows.",
-      "whyItExists": "It exists to make AI-assisted software delivery more deliberate, inspectable, and repeatable."
-    },
-    {
-      "id": "apitestspark",
-      "name": "ApiTestSpark",
-      "status": "evolving",
-      "category": "API engineering",
-      "role": "Development process system",
-      "purpose": "Explore APIs and validate repeatable request workflows.",
-      "summary": "A system for OpenAPI-driven exploration, API testing, and repeatable workflow validation.",
-      "valueProposition": "ApiTestSpark turns API contracts and live behavior into practical testing and implementation context.",
-      "githubUrl": "https://github.com/MarkHazleton/ApiTestSpark",
-      "docsUrl": "/systems/apitestspark/",
-      "capabilities": [
-        "OpenAPI-driven endpoint exploration",
-        "Repeatable API workflow validation",
-        "Remote API profiles",
-        "Request and response context capture"
-      ],
-      "philosophy": "ApiTestSpark starts from the contract, then grounds the work in concrete request behavior so documentation, tests, and clients stay close to reality.",
-      "whatItIs": "ApiTestSpark is the Make Bold Spark system for API exploration and workflow testing.",
-      "whyItExists": "It exists because reliable API work needs more than static documentation; it needs repeatable examples and observable behavior."
-    },
-    {
-      "id": "webspark",
-      "name": "WebSpark",
-      "status": "active",
-      "category": "web platform",
-      "role": "Working platform system",
-      "purpose": "Capture the long-running web platform lineage behind Make Bold Spark.",
-      "summary": "A web platform and reference implementation lineage for content, publishing, recipes, and reusable application patterns.",
-      "valueProposition": "WebSpark provides the practical web application foundation that informs the Make Bold Spark ecosystem.",
-      "githubUrl": "https://github.com/MarkHazleton/WebSpark",
-      "docsUrl": "/systems/webspark/",
-      "capabilities": [
-        "Content and publishing patterns",
-        "Recipe and structured content models",
-        "Reusable ASP.NET application concepts",
-        "Reference implementation history"
-      ],
-      "philosophy": "WebSpark favors real application patterns over abstract demos, preserving the lessons that come from maintaining web systems over time.",
-      "whatItIs": "WebSpark is the web platform and application lineage behind many Make Bold Spark reference systems.",
-      "whyItExists": "It exists to keep reusable web patterns grounded in working software."
-    },
-    {
-      "id": "makeboldspark",
-      "name": "MakeBoldSpark",
-      "status": "active",
-      "category": "reference implementation",
-      "role": "Working reference system",
-      "purpose": "Provide focused API examples, integration patterns, and reusable service implementations.",
-      "summary": "An API-focused reference system for small focused APIs, integration patterns, public content endpoints, and service examples.",
-      "valueProposition": "MakeBoldSpark demonstrates focused API design patterns that can be inspected, tested, and reused.",
-      "githubUrl": "https://github.com/MakeBoldSolutions/MakeBoldSpark.com",
-      "docsUrl": "/systems/makeboldspark/",
-      "capabilities": [
-        "ASP.NET Core Minimal API examples",
-        "OpenAPI metadata and ApiTestSpark-driven documentation",
-        "Public content and recipe endpoints",
-        "Health, auth, and async workflow examples"
-      ],
-      "philosophy": "MakeBoldSpark keeps API examples small enough to understand while still being real enough to validate architecture, testing, and integration choices.",
-      "whatItIs": "MakeBoldSpark is the API-focused reference implementation for the Make Bold Spark ecosystem.",
-      "whyItExists": "It exists to make API architecture and integration patterns concrete."
-    }
-  ],
-  "articles": [
-    {
-      "title": "DevSpark as a Spec-Driven Development Harness",
-      "slug": "spec-driven-development-harness",
-      "summary": "A practical introduction to positioning DevSpark as an agent-agnostic harness for turning intent into implementation-ready workflows.",
-      "published": "2026-06-15",
-      "updated": "2026-06-15",
-      "system": "devspark",
-      "category": "architecture",
-      "tags": [
-        "ai-assisted-development",
-        "spec-driven-development",
-        "architecture"
-      ],
-      "featured": true,
-      "status": "published",
-      "source": "makeboldspark.com",
-      "originalUrl": "",
-      "canonicalUrl": "https://makeboldspark.com/insights/devspark/spec-driven-development-harness/",
-      "url": "/insights/devspark/spec-driven-development-harness/"
-    }
-  ],
-  "topics": [
-    "architecture",
-    "ai-assisted-development",
-    "api-engineering",
-    "reference-implementation",
-    "spec-driven-development"
-  ]
+  {
+    "id": "devspark",
+    "name": "DevSpark",
+    "status": "active",
+    "category": "AI-assisted development",
+    "role": "Development process system",
+    "purpose": "Turn ideas into structured implementation workflows.",
+    "summary": "A spec-driven, agent-agnostic development harness for moving from intent to implementation-ready plans, tasks, and reviewable context.",
+    "valueProposition": "DevSpark helps teams turn fuzzy ideas into precise, agent-ready implementation workflows.",
+    "githubUrl": "https://github.com/MarkHazleton/DevSpark",
+    "capabilities": [
+      "Specification-first feature shaping",
+      "Agent-agnostic planning and task context",
+      "Implementation workflow templates",
+      "Reviewable handoffs from idea to code"
+    ],
+    "philosophy": "DevSpark treats AI-assisted development as a systems problem. Better outputs come from clearer specifications, explicit constraints, and workflow context that can be reviewed before code is produced.",
+    "whatItIs": "DevSpark is the flagship Make Bold Spark system for spec-driven development workflows.",
+    "whyItExists": "It exists to make AI-assisted software delivery more deliberate, inspectable, and repeatable."
+  },
+  {
+    "id": "apitestspark",
+    "name": "ApiTestSpark",
+    "status": "evolving",
+    "category": "API engineering",
+    "role": "Development process system",
+    "purpose": "Explore APIs and validate repeatable request workflows.",
+    "summary": "A system for OpenAPI-driven exploration, API testing, and repeatable workflow validation.",
+    "valueProposition": "ApiTestSpark turns API contracts and live behavior into practical testing and implementation context.",
+    "githubUrl": "https://github.com/MarkHazleton/ApiTestSpark",
+    "capabilities": [
+      "OpenAPI-driven endpoint exploration",
+      "Repeatable API workflow validation",
+      "Remote API profiles",
+      "Request and response context capture"
+    ],
+    "philosophy": "ApiTestSpark starts from the contract, then grounds the work in concrete request behavior so documentation, tests, and clients stay close to reality.",
+    "whatItIs": "ApiTestSpark is the Make Bold Spark system for API exploration and workflow testing.",
+    "whyItExists": "It exists because reliable API work needs more than static documentation; it needs repeatable examples and observable behavior."
+  },
+  {
+    "id": "webspark",
+    "name": "WebSpark",
+    "status": "active",
+    "category": "web platform",
+    "role": "Working platform system",
+    "purpose": "Capture the long-running web platform lineage behind Make Bold Spark.",
+    "summary": "A web platform and reference implementation lineage for content, publishing, recipes, and reusable application patterns.",
+    "valueProposition": "WebSpark provides the practical web application foundation that informs the Make Bold Spark ecosystem.",
+    "githubUrl": "https://github.com/MarkHazleton/WebSpark",
+    "capabilities": [
+      "Content and publishing patterns",
+      "Recipe and structured content models",
+      "Reusable ASP.NET application concepts",
+      "Reference implementation history"
+    ],
+    "philosophy": "WebSpark favors real application patterns over abstract demos, preserving the lessons that come from maintaining web systems over time.",
+    "whatItIs": "WebSpark is the web platform and application lineage behind many Make Bold Spark reference systems.",
+    "whyItExists": "It exists to keep reusable web patterns grounded in working software."
+  },
+  {
+    "id": "makeboldspark",
+    "name": "MakeBoldSpark",
+    "status": "active",
+    "category": "reference implementation",
+    "role": "Working reference system",
+    "purpose": "Provide focused API examples, integration patterns, and reusable service implementations.",
+    "summary": "An API-focused reference system for small focused APIs, integration patterns, public content endpoints, and service examples.",
+    "valueProposition": "MakeBoldSpark demonstrates focused API design patterns that can be inspected, tested, and reused.",
+    "githubUrl": "https://github.com/MakeBoldSolutions/MakeBoldSpark.com",
+    "capabilities": [
+      "ASP.NET Core Minimal API examples",
+      "OpenAPI metadata and ApiTestSpark-driven documentation",
+      "Public content and recipe endpoints",
+      "Health, auth, and async workflow examples"
+    ],
+    "philosophy": "MakeBoldSpark keeps API examples small enough to understand while still being real enough to validate architecture, testing, and integration choices.",
+    "whatItIs": "MakeBoldSpark is the API-focused reference implementation for small APIs, integration patterns, and reusable service implementations.",
+    "whyItExists": "It exists to make API architecture and integration patterns concrete."
+  }
+],
+  "articles": [{
+    "title": "DevSpark as a Spec-Driven Development Harness",
+    "slug": "spec-driven-development-harness",
+    "summary": "A practical introduction to positioning DevSpark as an agent-agnostic harness for turning intent into implementation-ready workflows.",
+    "published": "2026-06-15T00:00:00.000Z",
+    "updated": "2026-06-15T00:00:00.000Z",
+    "system": "devspark",
+    "category": "architecture",
+    "tags": [
+  "ai-assisted-development",
+  "spec-driven-development",
+  "architecture"
+],
+    "featured": true,
+    "url": "/insights/devspark/spec-driven-development-harness/"
+  }],
+  "topics": []
 }

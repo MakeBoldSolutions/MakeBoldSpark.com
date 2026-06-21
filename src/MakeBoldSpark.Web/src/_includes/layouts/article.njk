@@ -1,0 +1,14 @@
+{% extends "layouts/base.njk" %}
+{% block content %}
+{% set associatedSystem = systems | systemById(system) %}
+<article class="article">
+  <header class="article-header">
+    <p class="eyebrow">{{ associatedSystem.name }} · {{ category }} · {{ published | displayDate }}</p>
+    <h1>{{ title }}</h1>
+    <p class="hero-sub">{{ summary }}</p>
+    <div class="meta-row">{% for tag in tags %}<span class="tag">{{ tag }}</span>{% endfor %}</div>
+  </header>
+  <div class="article-body">{{ content | safe }}</div>
+  <footer class="article-footer"><a class="btn btn-primary" href="/insights/{{ system }}/">More {{ associatedSystem.name }} Insights</a><a class="btn btn-outline" href="/systems/{{ system }}/">Open {{ associatedSystem.name }}</a></footer>
+</article>
+{% endblock %}

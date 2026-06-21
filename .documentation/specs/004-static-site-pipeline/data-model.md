@@ -41,7 +41,6 @@ A structured entry describing one of the ecosystem's systems, read from `src/Mak
 | `summary` | string | yes | Card/listing summary |
 | `valueProposition` | string | yes | |
 | `githubUrl` | string (URL) | yes | |
-| `docsUrl` | string (path) | yes | Should equal the system's own generated address, `/systems/{id}/` |
 | `capabilities` | string[] | yes | |
 | `philosophy` | string | yes | |
 | `whatItIs` | string | yes | |
@@ -51,7 +50,7 @@ A structured entry describing one of the ecosystem's systems, read from `src/Mak
 
 **Lifecycle**: none — hand-edited directly in source control, not authored as Markdown (per spec Assumption, confirmed in research.md Topic 3).
 
-**Derived address**: `/systems/{id}/index.html`.
+**Derived address**: `/systems/{id}/index.html` — always computed from `id` at build time (in templates and in any "Docs" link), never stored as a separate hand-maintained field. An earlier draft of this schema included a `docsUrl` field meant to hold this same address; it was removed after `/devspark.analyze` (finding `INC-001`) flagged it as a redundant, driftable duplicate of the computed value.
 
 ## Generated Page
 

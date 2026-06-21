@@ -1,6 +1,7 @@
 ---
 classification: full-spec
 risk_level: medium
+risk_profile: internal
 target_workflow: specify-full
 required_artifacts: spec, plan, tasks
 recommended_next_step: plan
@@ -11,7 +12,7 @@ required_gates: checklist, analyze, critic
 
 **Feature Branch**: `004-static-site-pipeline`
 **Created**: 2026-06-20
-**Status**: Draft <!-- Valid: Draft | In Progress | Complete -->
+**Status**: In Progress <!-- Valid: Draft | In Progress | Complete -->
 **Input**: User description: "Add a new src/MakeBoldSpark.Web project: a static site generator that authors articles and content in Markdown with frontmatter, and builds output directly into src/MakeBoldSpark.Api/wwwroot so the existing app continues to serve everything with no runtime changes."
 
 ## Rationale Summary
@@ -110,7 +111,7 @@ The content owner wants to preview a new or edited article before it's considere
 ### Edge Cases
 
 - What happens when a new content file references a system that doesn't exist in the structured system data? The build must fail loudly (not silently produce a broken link or an empty listing) so the mistake is caught before publishing.
-- What happens when two content files would generate pages at the same address? The build must fail loudly rather than silently overwriting one with the other.
+- What happens when two content files would generate pages at the same address? The build must fail loudly rather than silently overwriting one with the other; this behavior must be exercised by an automated collision fixture before content migration begins.
 - What happens if someone hand-edits a generated output file directly? Their edit will be silently overwritten on the next build — this must be made obvious (e.g., clearly distinguishing generated areas from hand-maintained areas) so it doesn't happen by accident.
 - What happens to existing site areas that are populated dynamically at request time (not generated at build time) — must they be left untouched by this feature? Yes; this spec is scoped only to the areas that are currently hand-authored HTML, not to areas already populated dynamically.
 - What happens to a previously-generated page when its source content file is renamed or deleted? The build must remove the orphaned page so it is no longer publicly reachable, rather than leaving stale output behind.
@@ -123,7 +124,7 @@ The content owner wants to preview a new or edited article before it's considere
 - **FR-002**: The build process MUST generate a complete, navigable page for each authored content file, reusing the site's existing visual structure (navigation, footer, hero, and listing/card patterns) so generated pages are visually indistinguishable in style from hand-authored pages.
 - **FR-003**: The build process MUST generate or update any listing/index pages that are derived from the set of authored content (e.g., a full content index, and per-system content listings) without requiring manual edits to those listing pages.
 - **FR-004**: The build process MUST leave untouched any site areas that are not part of its generated output, including site areas that are populated dynamically at request time and any assets explicitly outside its ownership.
-- **FR-005**: The build process MUST fail with a clear error — rather than producing incorrect or silently broken output — when a content file references a system that does not exist, or when two content files would resolve to the same generated address.
+- **FR-005**: The build process MUST fail with a clear error — rather than producing incorrect or silently broken output — when a content file references a system that does not exist, or when two content files would resolve to the same generated address. The automated build test suite MUST exercise and assert a non-zero process exit for each failure mode.
 - **FR-006**: The repository MUST document, in a form a future contributor can find, which parts of the site's served output are hand-maintained, which are build-generated, and which are populated dynamically at request time.
 - **FR-007**: The content owner MUST be able to get a near-real-time preview of in-progress content changes without needing to start the full backend application.
 - **FR-008**: The build process MUST NOT alter the behavior of the running application — no new runtime routes, services, or request-time dependencies may be introduced as part of this feature.
@@ -142,9 +143,9 @@ The content owner wants to preview a new or edited article before it's considere
 ### Measurable Outcomes
 
 - **SC-001**: A content owner can publish a new article — from writing the content file to it being visible and correctly linked from all relevant listing pages — without hand-editing any file other than the one content file.
-- **SC-002**: 100% of the previously hand-authored articles and system pages are reproduced through the new authoring model with no visible content loss, and the one previously-identified stale reference does not reappear.
+- **SC-002**: 100% of the previously hand-authored articles and system pages are reproduced through the new authoring model with no visible content loss, and the one previously-identified stale reference does not reappear. This is verified with an automated, whitespace-normalized comparison against a version-controlled pre-build baseline captured before generated output replaces the hand-authored pages.
 - **SC-003**: A content edit is visible in a local preview within 5 seconds of saving, without re-running a multi-step manual process.
-- **SC-004**: Zero instances of generated output being hand-edited directly, verified by the documented ownership boundary being followed in subsequent content changes.
+- **SC-004**: A single, discoverable ownership-boundary document exists that explicitly enumerates every hand-maintained, build-generated, and dynamically-rendered path in the site — verifiable once, at completion, by confirming the document exists and accurately matches the actual paths (ongoing hand-edit avoidance is a process outcome this document enables, not something a one-time check can itself measure).
 
 ## Assumptions
 

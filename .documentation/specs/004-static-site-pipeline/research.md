@@ -48,11 +48,13 @@ The System catalog's **source of truth** moves from `wwwroot/assets/makebold/cat
 
 ## 4. Orphaned Output Removal (FR-011)
 
-**Decision**: Before every build, delete the entire `wwwroot/insights/` and `wwwroot/systems/` directory trees, then let Eleventy regenerate them fully from current content. No incremental diffing.
+**Decision**: Build into a temporary output directory first; only after Eleventy exits `0`, replace the complete generated output set — live `wwwroot/insights/`, `wwwroot/systems/`, and `wwwroot/assets/makebold/catalog.json` — with the freshly-built output. A failed build must leave every member of that output set untouched. No incremental diffing.
 
-**Rationale**: Eleventy does not delete pre-existing output files that a given build run no longer produces (it only ever adds/overwrites). At this site's scale (a handful of systems, low double-digit articles expected), a full clean-then-rebuild is well under the SC-003 5-second preview budget and is trivially correct — there is no stale-file bookkeeping to get wrong. This is implemented as a `prebuild` npm script (`rimraf` is unnecessary; Node's built-in `fs.rmSync(path, { recursive: true, force: true })` via a tiny script is sufficient and avoids adding a second dependency).
+**Rationale**: Eleventy does not delete pre-existing output files that a given build run no longer produces (it only ever adds/overwrites), so a full rebuild is still needed to guarantee no orphans. At this site's scale (a handful of systems, low double-digit articles expected), a full rebuild-into-temp-then-swap is well under the SC-003 5-second preview budget and is trivially correct — there is no stale-file bookkeeping to get wrong, and unlike a delete-in-place approach, a failed build never leaves the generated output set in a worse state than before the build started. Keeping `catalog.json` in that set prevents its derived data from drifting from the corresponding generated pages. Before the full migration is ready, tests and sample builds use an isolated output root; the production `wwwroot` target is not touched until the pre-migration baseline exists.
 
-**Alternatives considered**: Eleventy's `--incremental` flag — rejected for this use case; it optimizes rebuild speed during `--watch`/`--serve` sessions but does not solve cross-build orphan cleanup, which is what FR-011 actually requires.
+**Alternatives considered**:
+- Eleventy's `--incremental` flag — rejected for this use case; it optimizes rebuild speed during `--watch`/`--serve` sessions but does not solve cross-build orphan cleanup, which is what FR-011 actually requires.
+- Delete `wwwroot/insights/`/`wwwroot/systems/` *before* running Eleventy, then let it regenerate them in place — this was the original decision, but `/devspark.critic` (finding `critic-001`) correctly identified that it turns any build failure (a bad `systems.json` edit, a config bug, a transient `npm` failure) into a guaranteed live 404 outage for those paths, including when triggered automatically by the `dotnet publish` hook (Topic 6). Rejected in favor of the build-then-swap approach above, which makes a failed build a no-op instead of an outage.
 
 ## 5. Replacing Client-Side Rendering for Systems/Insights Pages
 
@@ -68,22 +70,22 @@ The System catalog's **source of truth** moves from `wwwroot/assets/makebold/cat
 
 **Decision**: Two complementary triggers, both documented in `quickstart.md`:
 1. **Manual, for authoring**: `npm run build` (or `npm run serve` for live preview) from `src/MakeBoldSpark.Web`, run by the content owner whenever content changes — this is the FR-010 "documented, repeatable way."
-2. **Automatic, for publish safety**: an MSBuild `Target` in `src/MakeBoldSpark.Api/MakeBoldSpark.Api.csproj` with `BeforeTargets="Publish"` that runs `npm ci && npm run build` in `src/MakeBoldSpark.Web`, failing the publish loudly (non-zero exit) if Node/npm is unavailable or the Eleventy build fails — so a maintainer can never publish a build with stale generated content (closing the loop on FR-010's "never stale ... at publish time").
+2. **Automatic, for build freshness**: an MSBuild `Target` in `src/MakeBoldSpark.Api/MakeBoldSpark.Api.csproj` with `BeforeTargets="Build"` that runs `npm ci` then `npm run build` in `src/MakeBoldSpark.Web`, failing the build loudly (non-zero exit) if Node/npm is unavailable or the Eleventy build fails — so generated content is refreshed for every API build and cannot be stale at publish time.
 
-The target is scoped to `BeforeTargets="Publish"` only, **not** `Build` or `Test` — routine `dotnet build`/`dotnet test` cycles during day-to-day .NET development stay fast and fully decoupled from Node tooling. Node only becomes a required tool at publish time, which is also the only time it's truly needed.
+The target is scoped to `BeforeTargets="Build"` by explicit user decision. Every API build now requires Node/npm and refreshes generated output; `dotnet test` remains decoupled unless it causes an API build.
 
 **Rationale**: No GitHub Actions workflow exists yet in this repository (deployment today is the manual `dotnet publish` + zip-artifact flow established earlier this session for the Windows VM target), so a CI-level trigger isn't available without first standing up CI/CD — explicitly Out of Scope for this spec. An MSBuild publish-hook gives the same "can't forget" guarantee a CI gate would, without requiring new CI infrastructure.
 
 **Alternatives considered**:
 - Manual-only (no MSBuild hook): rejected — leaves FR-010's "never stale at publish time" guarantee resting entirely on the maintainer's memory, which is the exact failure mode (forgotten manual step → drift) this feature exists to eliminate.
-- Hook into `BeforeTargets="Build"` instead of `Publish`: rejected — would force Node/npm to run on every local `dotnet build`/`dotnet test`, slowing the inner dev loop for changes that have nothing to do with content.
+- Hook into `BeforeTargets="Publish"` instead of `Build`: rejected after the user's explicit decision that static content must be rebuilt on every API build; the extra build-time cost is accepted to guarantee freshness throughout the development workflow.
 - Standing up a new GitHub Actions workflow as part of this feature: rejected — explicitly Out of Scope per spec; a larger, separate undertaking.
 
 ## 7. Validation / Fail-Loud Behavior (FR-005)
 
 **Decision**:
 - **Unknown system reference**: a small Eleventy `eleventy.before` (or per-collection computed-data check) validates every Content Item's `system` field against the `systems.json` collection at build start and throws an `Error` (non-zero exit, build fails) listing the offending file and the unknown system id if any reference doesn't resolve.
-- **Duplicate output address**: handled natively by Eleventy — when two templates compute the same output path, Eleventy's own build fails with a "duplicate output file" error. No custom code needed.
+- **Duplicate output address**: handled natively by Eleventy — when two templates compute the same output path, Eleventy's own build must fail with a "duplicate output file" error. `verify-build.mjs` exercises this contract with two colliding content fixtures and asserts a non-zero process exit; no custom duplicate-detection code is needed.
 
 **Rationale**: Matches the spec's edge-case requirement that mistakes fail loudly rather than silently producing a broken link or overwriting a page, using the least custom code possible (one validation hook; everything else is Eleventy's existing behavior).
 
@@ -96,3 +98,13 @@ The target is scoped to `BeforeTargets="Publish"` only, **not** `Build` or `Test
 **Rationale**: Reuses the field names already established in the current `catalog.json.articles[]` shape (read during the duplicate-fix work earlier this session), so no renaming/migration mapping is needed for the one real existing article.
 
 **Alternatives considered**: An explicit `slug` front-matter field instead of filename-derived: rejected as redundant — the filename already uniquely identifies the file in its directory; requiring both invites them to drift apart.
+
+## 9. Template Language Choice
+
+**Decision**: Nunjucks (`.njk`) for every layout and template (`base.njk`, `article.njk`, `system.njk`, and the listing/catalog templates).
+
+**Rationale**: Nunjucks is Eleventy's most widely-used non-JS template language, supports `{% extends %}` template inheritance (needed for every page to extend the shared `base.njk` nav/hero/footer layout), and its `{{ }}`/`{% %}` syntax sits close enough to plain HTML that migrating the existing hand-authored markup into templates is closer to copy-paste-and-annotate than a rewrite.
+
+**Alternatives considered**:
+- `11ty.js` (plain JavaScript template functions, returning template-literal strings) — rejected; would mean re-expressing every page's existing HTML-shaped markup as JS string concatenation, a bigger syntactic departure for a maintainer who currently edits HTML directly, for no capability this feature needs.
+- Liquid — rejected; functionally comparable to Nunjucks for this site's needs, but Nunjucks' template-inheritance ergonomics (`{% extends %}` + `{% block %}`) are a slightly better fit for the single shared-layout pattern this plan relies on everywhere.

@@ -14,7 +14,7 @@ npm install
 
 1. Create `src/content/articles/my-new-article.md` with front matter (see `contracts/content-frontmatter.md`).
 2. Run `npm run serve` and open the printed local URL to preview — edits to the file update the preview within a few seconds (SC-003), no need to run the .NET app.
-3. When satisfied, run `npm run build` once to produce the final output, then `npm test` to confirm the build is clean.
+3. When satisfied, run `npm test` to validate the isolated build path, then run `npm run build` once to produce the final output. During initial migration, do not run the production build until the pre-migration baseline is captured and all existing pages are ready to generate.
 4. Commit the new `.md` file. Nothing else needs to be hand-edited (SC-001) — the build regenerates `wwwroot/insights/index.html`, `wwwroot/insights/{system}/index.html`, and `wwwroot/assets/makebold/catalog.json` automatically.
 
 ## Add or update a System
@@ -25,9 +25,9 @@ npm install
 
 ## Verify nothing is stale before publishing
 
-`dotnet publish` on `MakeBoldSpark.Api` runs the Eleventy build automatically via the `BeforeTargets="Publish"` MSBuild target — you do not need to remember to run `npm run build` yourself before publishing. If Node/npm isn't installed or the build fails, `dotnet publish` fails loudly rather than shipping stale content.
+`dotnet build` on `MakeBoldSpark.Api` runs the Eleventy build automatically via the `BeforeTargets="Build"` MSBuild target — you do not need to remember to run `npm run build` yourself before building or publishing. If Node/npm isn't installed or the static build fails, `dotnet build` fails loudly rather than producing stale content.
 
-For everyday `dotnet build`/`dotnet test`, nothing changes — the Node toolchain is not invoked.
+Every API `dotnet build` invokes the Node toolchain and regenerates static content. `dotnet test` does not invoke it unless the test command first builds the API project.
 
 ## Removing content
 

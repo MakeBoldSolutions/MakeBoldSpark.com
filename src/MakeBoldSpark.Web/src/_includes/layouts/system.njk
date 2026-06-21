@@ -1,0 +1,10 @@
+{% extends "layouts/base.njk" %}
+{% block content %}
+<header class="hero page-hero"><div class="hero-inner single"><div class="hero-copy"><p class="eyebrow">{{ system.status | capitalize }} {{ system.role }}</p><h1>{{ system.name }}</h1><p class="hero-sub">{{ system.summary }}</p><div class="hero-actions"><a class="btn btn-primary" href="{{ system.githubUrl }}">GitHub</a><a class="btn btn-outline" href="/systems/{{ system.id }}/">Docs</a><a class="btn btn-outline" href="/insights/{{ system.id }}/">Related Insights</a></div></div></div></header>
+<main>
+  <section class="section split"><div><p class="section-label">What It Is</p><h2 class="section-title">{{ system.name }}</h2><p class="section-desc">{{ system.whatItIs }}</p></div><div class="brand-panel"><p>{{ system.whyItExists }}</p><div class="meta-row"><span class="tag">{{ system.status }}</span><span class="tag">{{ system.role }}</span><span class="tag">{{ system.category }}</span></div></div></section>
+  <div class="band"><section class="band-inner"><p class="section-label">Capabilities</p><h2 class="section-title">What {{ system.name }} supports</h2><div class="grid">{% for capability in system.capabilities %}<div class="pill">{{ capability }}</div>{% endfor %}</div></section></div>
+  <section class="section split"><div><p class="section-label">Design Philosophy</p><h2 class="section-title">Built for practical use</h2></div><div class="brand-panel"><p>{{ system.philosophy }}</p></div></section>
+  <section class="section"><p class="section-label">Related Articles</p><h2 class="section-title">Insights for {{ system.name }}</h2><div class="grid">{% set related = collections.articles | selectattr('data.system', 'equalto', system.id) | list %}{% if related.length %}{% for article in related %}<article class="card article-card"><h3><a href="{{ article.url }}">{{ article.data.title }}</a></h3><p>{{ article.data.summary }}</p></article>{% endfor %}{% else %}<article class="card"><h3>Articles coming soon</h3><p>Markdown articles related to {{ system.name }} will appear here after migration.</p></article>{% endif %}</div></section>
+</main>
+{% endblock %}
