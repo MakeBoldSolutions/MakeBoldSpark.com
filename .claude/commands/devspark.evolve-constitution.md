@@ -7,6 +7,9 @@ handoffs:
   - label: Review PRs
     agent: devspark.pr-review
     prompt: Review recent PRs to gather more data
+scripts:
+  sh: .devspark/scripts/bash/evolution-context.sh $ARGUMENTS --json
+  ps: .devspark/scripts/powershell/evolution-context.ps1 $ARGUMENTS -Json
 ---
 
 ## Prompt Resolution

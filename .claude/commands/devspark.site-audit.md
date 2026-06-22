@@ -4,6 +4,9 @@ handoffs:
   - label: View Audit History
     agent: devspark.site-audit
     prompt: Show me previous audit reports in .documentation/copilot/audit/
+scripts:
+  sh: .devspark/scripts/bash/site-audit.sh $ARGUMENTS --json
+  ps: .devspark/scripts/powershell/site-audit.ps1 $ARGUMENTS -Json
 ---
 
 ## Prompt Resolution

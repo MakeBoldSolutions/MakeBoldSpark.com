@@ -8,6 +8,9 @@ handoffs:
     agent: devspark.clarify
     prompt: Clarify specification requirements
     send: true
+scripts:
+  sh: .devspark/scripts/bash/create-new-feature.sh --json "{ARGS}"
+  ps: .devspark/scripts/powershell/create-new-feature.ps1 -Json "{ARGS}"
 ---
 
 ## Prompt Resolution

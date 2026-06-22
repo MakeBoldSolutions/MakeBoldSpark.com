@@ -1,4 +1,4 @@
-version: 2.4.0
-installed: 2026-06-20
-method: claude-quickstart
+version: 2.6.0
+installed: 2026-06-22
+method: copilot-quickstart
 migrated-from: fresh

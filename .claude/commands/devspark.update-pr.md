@@ -7,6 +7,9 @@ handoffs:
   - label: Create New PR
     agent: devspark.create-pr
     prompt: Create a new pull request for this branch
+scripts:
+  sh: .devspark/scripts/bash/get-pr-context.sh $ARGUMENTS --json
+  ps: .devspark/scripts/powershell/get-pr-context.ps1 $ARGUMENTS -Json
 ---
 
 ## Prompt Resolution

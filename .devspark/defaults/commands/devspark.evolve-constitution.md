@@ -353,6 +353,8 @@ Select one:
 - [ ] Evidence justifies the change
 - [ ] Impact assessment is realistic
 - [ ] Adoption plan is achievable
+- [ ] If the amendment adds, removes, or modifies a severity marker, `.documentation/memory/severity-registry.md` is updated in the same PR (FR-009)
+- [ ] Check whether the amendment implies new governance limitations; if so, update `.documentation/memory/known-limitations.md` in the same PR (FR-006)
 
 ## Voting Record
 

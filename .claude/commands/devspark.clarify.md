@@ -4,6 +4,9 @@ handoffs:
   - label: Build Technical Plan
     agent: devspark.plan
     prompt: Create a plan for the spec. I am building with...
+scripts:
+  sh: .devspark/scripts/bash/check-prerequisites.sh --json --paths-only
+  ps: .devspark/scripts/powershell/check-prerequisites.ps1 -Json -PathsOnly
 ---
 
 ## Prompt Resolution

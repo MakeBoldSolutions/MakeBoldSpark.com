@@ -4,6 +4,9 @@ handoffs:
   - label: View Past Stories
     agent: devspark.repo-story
     prompt: Show me previous repo stories in .documentation/repo-story/
+scripts:
+  sh: .devspark/scripts/bash/repo-story-context.sh $ARGUMENTS --stdout
+  ps: .devspark/scripts/powershell/repo-story-context.ps1 $ARGUMENTS -Stdout
 ---
 
 ## Prompt Resolution

@@ -1,4 +1,14 @@
-﻿# Implementation Plan: [FEATURE]
+---
+participants:
+  owner: human
+  planner: ai
+  implementer: ai
+  reviewer: human
+  critic: ai
+  scribe: ai
+---
+
+# Implementation Plan: [FEATURE]
 
 **Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
 **Input**: Feature specification from `/.documentation/specs/[###-feature-name]/spec.md`

@@ -4,6 +4,9 @@ handoffs:
   - label: Review Pull Request
     agent: devspark.pr-review
     prompt: Review the pull request for constitution compliance
+scripts:
+  sh: .devspark/scripts/bash/create-pr.sh --mode preflight --json $ARGUMENTS
+  ps: .devspark/scripts/powershell/create-pr.ps1 -Mode Preflight -Json $ARGUMENTS
 ---
 
 ## Prompt Resolution

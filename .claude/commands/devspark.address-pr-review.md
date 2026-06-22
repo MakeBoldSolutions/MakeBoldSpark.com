@@ -4,6 +4,9 @@ handoffs:
   - label: Re-Review Updated PR
     agent: devspark.pr-review
     prompt: Run /devspark.pr-review UPDATE for this PR after fixes are committed
+scripts:
+  sh: .devspark/scripts/bash/address-pr-review.sh --pr-id $ARGUMENTS --json
+  ps: .devspark/scripts/powershell/address-pr-review.ps1 -PrId $ARGUMENTS -Json
 ---
 
 ## Prompt Resolution

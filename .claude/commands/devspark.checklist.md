@@ -7,6 +7,9 @@ handoffs:
   - label: Run Analysis
     agent: devspark.analyze
     prompt: Analyze spec consistency after checklist review
+scripts:
+  sh: .devspark/scripts/bash/check-prerequisites.sh --json
+  ps: .devspark/scripts/powershell/check-prerequisites.ps1 -Json
 ---
 
 ## Prompt Resolution

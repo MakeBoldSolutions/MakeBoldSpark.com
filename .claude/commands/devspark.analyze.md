@@ -7,6 +7,9 @@ handoffs:
   - label: Revise Plan
     agent: devspark.plan
     prompt: Revise plan to address analysis findings
+scripts:
+  sh: .devspark/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks
+  ps: .devspark/scripts/powershell/check-prerequisites.ps1 -Json -RequireTasks -IncludeTasks
 ---
 
 ## Prompt Resolution

@@ -9,6 +9,9 @@ handoffs:
     agent: devspark.implement
     prompt: Start the implementation in phases
     send: true
+scripts:
+  sh: .devspark/scripts/bash/check-prerequisites.sh --json
+  ps: .devspark/scripts/powershell/check-prerequisites.ps1 -Json
 ---
 
 ## Prompt Resolution

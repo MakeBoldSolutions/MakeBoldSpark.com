@@ -7,6 +7,9 @@ handoffs:
   - label: Run Final Audit
     agent: devspark.site-audit
     prompt: Run a final site audit before release
+scripts:
+  sh: .devspark/scripts/bash/release-context.sh $ARGUMENTS --json
+  ps: .devspark/scripts/powershell/release-context.ps1 $ARGUMENTS -Json
 ---
 
 ## Prompt Resolution

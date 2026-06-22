@@ -13,6 +13,9 @@ handoffs:
     agent: devspark.tasks
     prompt: Regenerate tasks with missing operational items
     send: true
+scripts:
+  sh: .devspark/scripts/bash/check-prerequisites.sh --json --include-tasks
+  ps: .devspark/scripts/powershell/check-prerequisites.ps1 -Json -IncludeTasks
 ---
 
 ## Prompt Resolution

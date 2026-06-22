@@ -7,6 +7,9 @@ handoffs:
   - label: Run Release First
     agent: devspark.release
     prompt: Seal the release and archive completed specs before running harvest
+scripts:
+  sh: .devspark/scripts/bash/harvest.sh $ARGUMENTS --json
+  ps: .devspark/scripts/powershell/harvest.ps1 $ARGUMENTS -Json
 ---
 
 ## Prompt Resolution

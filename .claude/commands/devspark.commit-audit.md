@@ -7,6 +7,9 @@ handoffs:
   - label: View Harvest Report
     agent: devspark.harvest
     prompt: Review completed specs and stale documentation before archiving
+scripts:
+  sh: .devspark/scripts/bash/commit-audit.sh $ARGUMENTS --json
+  ps: .devspark/scripts/powershell/commit-audit.ps1 $ARGUMENTS -Json
 ---
 
 ## Prompt Resolution

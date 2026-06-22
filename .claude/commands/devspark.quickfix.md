@@ -7,6 +7,9 @@ handoffs:
   - label: Upgrade to Full Spec
     agent: devspark.specify
     prompt: Create a full specification for this change
+scripts:
+  sh: .devspark/scripts/bash/quickfix-context.sh $ARGUMENTS --json
+  ps: .devspark/scripts/powershell/quickfix-context.ps1 $ARGUMENTS -Json
 ---
 
 ## Prompt Resolution

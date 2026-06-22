@@ -1,4 +1,4 @@
-﻿{
+{
   "version": 1,
   "agents": [
     {
@@ -237,6 +237,19 @@
       "install_url": null,
       "release": {
         "commands_dir": ".bob/commands",
+        "extension": "md",
+        "arg_format": "$ARGUMENTS"
+      }
+    },
+    {
+      "key": "antigravity",
+      "name": "Antigravity",
+      "folder": ".gemini/",
+      "context_file": "ANTIGRAVITY.md",
+      "requires_cli": false,
+      "install_url": null,
+      "release": {
+        "commands_dir": ".gemini/commands",
         "extension": "md",
         "arg_format": "$ARGUMENTS"
       }

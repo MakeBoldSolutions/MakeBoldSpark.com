@@ -1,10 +1,17 @@
-﻿---
+---
 classification: quick-spec
 risk_level: medium
 target_workflow: specify-light
 required_artifacts: intent, action-plan
 recommended_next_step: plan
 required_gates: checklist
+participants:
+  owner: human
+  planner: ai
+  implementer: ai
+  reviewer: human
+  critic: ai
+  scribe: ai
 ---
 
 # Quick Specification: [FEATURE NAME]
