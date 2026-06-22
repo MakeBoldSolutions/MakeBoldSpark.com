@@ -134,7 +134,7 @@ describe('EntityCrudPage', () => {
     );
   });
 
-  it('renders a distinct message when save fails due to an invalid reference (FR-007)', async () => {
+  it('shows the server status when a save fails', async () => {
     const user = userEvent.setup();
     renderPage([baseRecord]);
 
@@ -144,7 +144,7 @@ describe('EntityCrudPage', () => {
     (globalThis.fetch as ReturnType<typeof vi.fn>).mockImplementationOnce(() => jsonResponse({}, 500));
     await user.click(screen.getByRole('button', { name: /save/i }));
 
-    expect(await screen.findByRole('alert')).toHaveTextContent('references a record that does not exist');
+    expect(await screen.findByRole('alert')).toHaveTextContent('could not save this record (HTTP 500)');
   });
 
   it('displays the record\'s updatedDate in the edit view', async () => {

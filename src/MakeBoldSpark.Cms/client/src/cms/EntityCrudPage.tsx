@@ -129,11 +129,12 @@ export function EntityCrudPage<T extends BaseEntity>({ config, listQuery, render
         markSessionExpired();
         return;
       }
-      // The API returns an undifferentiated 500 for any FK-constraint violation on
-      // create/update (see makeboldspark-api-guide.md's "500 usually means a FK constraint").
-      // There is no structured error to branch on, so the create/update path always renders
-      // the invalid-reference message — distinct from the dependent-record-delete message
-      // below, which only ever applies to the delete path (FR-007, gate finding analyze-E1).
+      if (err instanceof ApiError) {
+        setFormError(err.status === 415
+          ? 'The CMS could not send this save request. Refresh the page and try again.'
+          : `The server could not save this record (HTTP ${err.status}).`);
+        return;
+      }
       setFormError(INVALID_REFERENCE_MESSAGE);
     } finally {
       setSaving(false);

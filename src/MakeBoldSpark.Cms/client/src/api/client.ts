@@ -12,9 +12,12 @@ export class ApiError extends Error {
 export const SESSION_EXPIRED_EVENT = 'mbs-session-expired';
 
 export async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
+  // `authedFetch` supplies Authorization through options.headers. Separate it before spreading
+  // options so the authenticated write path cannot overwrite Content-Type and cause a 415.
+  const { headers: optionHeaders, ...requestOptions } = options;
   const res = await fetch(`${API_BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json', ...options.headers },
-    ...options,
+    ...requestOptions,
+    headers: { 'Content-Type': 'application/json', ...optionHeaders },
   });
   if (!res.ok) throw new ApiError(res.status, await res.text());
   if (res.status === 204) return undefined as T;
