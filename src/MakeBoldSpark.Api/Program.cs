@@ -18,11 +18,14 @@ using MakeBoldSpark.Api.Infrastructure.OpenApi;
 using ApiTestSpark;
 using Microsoft.EntityFrameworkCore;
 using MakeBoldSpark.Core.Data;
+using MakeBoldSpark.Core.Infrastructure.Logging;
 using MakeBoldSpark.Recipe.Data;
 using MakeBoldSpark.Recipe.Interfaces;
 using MakeBoldSpark.Recipe.Providers;
 
 var builder = WebApplication.CreateBuilder(args);
+
+LoggingUtility.ConfigureLogging(builder, "MakeBoldSpark.Api");
 
 builder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(15));
 
