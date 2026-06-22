@@ -20,14 +20,15 @@
    - [Categories](#categories)
    - [Menus](#menus)
    - [Keywords](#keywords)
-   - [Content Parts](#content-parts)
-6. [Admin Endpoints](#admin-endpoints)
+- [Content Parts](#content-parts)
+6. [Authentication](#authentication)
+7. [Admin Endpoints](#admin-endpoints)
    - [Subscribers](#subscribers)
    - [Newsletters](#newsletters)
    - [Mail Settings](#mail-settings)
    - [Admin CRUD for Public Entities](#admin-crud-for-public-entities)
-7. [Error Handling](#error-handling)
-8. [Patterns and Gotchas](#patterns-and-gotchas)
+8. [Error Handling](#error-handling)
+9. [Patterns and Gotchas](#patterns-and-gotchas)
 
 ---
 
@@ -231,6 +232,39 @@ function authedFetch<T>(token: string, path: string, options: RequestInit = {}) 
   });
 }
 ```
+
+---
+
+## Authentication
+
+**`POST /api/public/auth/login`** issues an access token for an existing administrator author.
+The route is anonymous only because it verifies credentials and issues the token; it never
+returns CMS data. Send the token as `Authorization: Bearer <accessToken>` on every
+`/api/admin/makeboldspark/*` call.
+
+```typescript
+interface LoginResponse {
+  accessToken: string;
+  expiresAt: string;
+  displayName: string;
+}
+
+export const login = (email: string, password: string) =>
+  apiFetch<LoginResponse>('/api/public/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+  });
+```
+
+A successful response is `200`. Every failure — unknown email, non-administrator account,
+wrong password, an overlong password, or the request throttle — is the same `401` response:
+
+```json
+{ "message": "Invalid email or password." }
+```
+
+Do not infer account status from the response. Store the access token only for the current
+session and clear it on sign-out or when an authenticated request returns `401`.
 
 ---
 

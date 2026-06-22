@@ -2,6 +2,7 @@ namespace MakeBoldSpark.Api.Infrastructure.OpenApi;
 
 internal static class MakeBoldSparkOpenApiTags
 {
+    public const string AuthSignIn = "Auth: Sign-In";
     public const string HealthDiagnostics = "Health: Diagnostics";
     public const string PublicContentArticles = "Public Content: Articles";
     public const string PublicContentTags = "Public Content: Tags";

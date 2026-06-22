@@ -431,6 +431,13 @@ FodyWeavers.xsd
 # DevSpark — personal overrides (never commit)
 .documentation/*/commands/
 
+# CMS client and .NET build artifacts
+dist/
+build/
+.env*
+bin/
+obj/
+
 # MakeBoldSpark — SQLite databases (NEVER commit production or local .db files)
 *.db
 *.db-shm

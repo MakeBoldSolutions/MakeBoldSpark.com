@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Authors>Mark Hazleton</Authors>
+    <Description>Embedded React admin SPA for MakeBoldSpark CMS content management.</Description>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.9" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <_SpaSentinel>$(IntermediateOutputPath)spa-built.sentinel</_SpaSentinel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <_SpaSources Include="$(MSBuildProjectDirectory)\client\**\*" Exclude="$(MSBuildProjectDirectory)\client\node_modules\**;$(MSBuildProjectDirectory)\build\**" />
+  </ItemGroup>
+
+  <!-- Runs npm as part of dotnet build, same as MakeBoldSpark.Api's BuildStaticContent target for MakeBoldSpark.Web; requires Node available in the build environment. -->
+  <Target Name="BuildReactSpa" BeforeTargets="Build" Inputs="@(_SpaSources)" Outputs="$(_SpaSentinel)">
+    <Exec Command="npm ci" WorkingDirectory="$(MSBuildProjectDirectory)\client" Condition="!Exists('$(MSBuildProjectDirectory)\client\node_modules')" />
+    <Exec Command="npm run build" WorkingDirectory="$(MSBuildProjectDirectory)\client" />
+    <Touch Files="$(_SpaSentinel)" AlwaysCreate="true" />
+  </Target>
+
+  <Target Name="ValidateSpaAssets" AfterTargets="BuildReactSpa">
+    <ItemGroup>
+      <_SpaBuildOutput Include="$(MSBuildProjectDirectory)\build\**\*" />
+    </ItemGroup>
+    <Error Condition="'@(_SpaBuildOutput)' == ''" Text="MakeBoldSpark.Cms: client SPA build produced no output in '$(MSBuildProjectDirectory)\build'. Check the BuildReactSpa target / npm run build output." />
+  </Target>
+
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildProjectDirectory)\build\**" Link="build\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>

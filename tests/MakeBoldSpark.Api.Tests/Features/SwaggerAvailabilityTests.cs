@@ -77,6 +77,7 @@ public class ApiDocsAvailabilityTests
     [TestMethod]
     public async Task ApiTestSparkUi_InProduction_ReturnsOk()
     {
+        using var _ = TestSigningKeyEnvironmentVariable.Set();
         await using var factory = new ProductionWebApplicationFactory();
         await factory.InitializeAsync();
         var client = factory.CreateClient();
@@ -89,12 +90,33 @@ public class ApiDocsAvailabilityTests
     [TestMethod]
     public async Task OpenApiJson_InProduction_ReturnsOk()
     {
+        using var _ = TestSigningKeyEnvironmentVariable.Set();
         await using var factory = new ProductionWebApplicationFactory();
         await factory.InitializeAsync();
         var client = factory.CreateClient();
         var response = await client.GetAsync("/openapi/v1.json");
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
     }
+}
+
+/// <summary>
+/// AuthorizationSetup.AddMakeBoldSparkAuth now fails fast without a signing key (tasks.md
+/// T009), and it reads configuration before WebApplicationFactory's ConfigureAppConfiguration
+/// hooks reliably apply to a minimal-hosting-model Program.cs. An environment variable, which
+/// WebApplication.CreateBuilder always reads as part of its default configuration sources, is
+/// the reliable way to supply a throwaway key to this availability-only test fixture.
+/// </summary>
+internal sealed class TestSigningKeyEnvironmentVariable : IDisposable
+{
+    private const string VariableName = "Jwt__SigningKey";
+
+    public static TestSigningKeyEnvironmentVariable Set()
+    {
+        Environment.SetEnvironmentVariable(VariableName, "swagger-availability-test-fixture-signing-key-0000");
+        return new TestSigningKeyEnvironmentVariable();
+    }
+
+    public void Dispose() => Environment.SetEnvironmentVariable(VariableName, null);
 }
 
 internal class ProductionWebApplicationFactory : MakeBoldSparkWebApplicationFactory

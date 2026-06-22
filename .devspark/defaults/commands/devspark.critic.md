@@ -13,6 +13,9 @@ handoffs:
     agent: devspark.tasks
     prompt: Regenerate tasks with missing operational items
     send: true
+scripts:
+  sh: .devspark/scripts/bash/check-prerequisites.sh --json --include-tasks
+  ps: .devspark/scripts/powershell/check-prerequisites.ps1 -Json -IncludeTasks
 ---
 
 ## User Input
@@ -59,9 +62,9 @@ Read YAML frontmatter from `spec.md`. Treat `classification`, `risk_level`, `ris
 
 ### 1. Initialize Analysis Context
 
-> **Script Resolution**: Before running `.devspark/scripts/powershell/check-prerequisites.ps1 -Json -IncludeTasks`, apply 2-tier override — if `.documentation/scripts/{powershell,bash}/<filename>` exists, run it instead. Team overrides in `.documentation/scripts/` take priority over `.devspark/scripts/`.
+> **Script Resolution**: Before running `{SCRIPT}`, apply 2-tier override — if `.documentation/scripts/{powershell,bash}/<filename>` exists, run it instead. Team overrides in `.documentation/scripts/` take priority over `.devspark/scripts/`.
 
-Run `.devspark/scripts/powershell/check-prerequisites.ps1 -Json -IncludeTasks` once from repo root, parse JSON for FEATURE_DIR and AVAILABLE_DOCS. Derive:
+Run `{SCRIPT}` once from repo root, parse JSON for FEATURE_DIR and AVAILABLE_DOCS. Derive:
 
 - SPEC = FEATURE_DIR/spec.md
 - PLAN = FEATURE_DIR/plan.md (optional)
@@ -416,7 +419,7 @@ If spec.md lacks `archetype`, `risk_profile`, or `change_type` frontmatter, the 
 
 ## Context
 
-$ARGUMENTS
+{ARGS}
 
 ## Shared Review Resolution Contract
 

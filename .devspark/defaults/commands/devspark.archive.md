@@ -7,6 +7,9 @@ handoffs:
   - label: Run Documentation Audit
     agent: devspark.site-audit
     prompt: Audit documentation quality and stale references before harvest
+scripts:
+  sh: .devspark/scripts/bash/harvest.sh $ARGUMENTS --json
+  ps: .devspark/scripts/powershell/harvest.ps1 $ARGUMENTS -Json
 ---
 
 ## User Input
