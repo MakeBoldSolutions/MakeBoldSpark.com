@@ -5,6 +5,7 @@ using MakeBoldSpark.Api.Features.AsyncDemo.ConcurrencyPatterns;
 using MakeBoldSpark.Api.Features.AsyncDemo.RemoteMock;
 using MakeBoldSpark.Api.Features.AsyncDemo.Status;
 using MakeBoldSpark.Api.Features.AsyncDemo.WeatherPatterns;
+using MakeBoldSpark.Api.Features.Auth;
 using MakeBoldSpark.Api.Features.Health;
 using MakeBoldSpark.Api.Features.PublicContent;
 using MakeBoldSpark.Api.Features.Recipe;
@@ -16,12 +17,119 @@ using MakeBoldSpark.Api.Infrastructure.Data.Repositories;
 using MakeBoldSpark.Api.Infrastructure.Observability;
 using MakeBoldSpark.Api.Infrastructure.OpenApi;
 using ApiTestSpark;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
+using MakeBoldSpark.Cms;
 using MakeBoldSpark.Core.Data;
 using MakeBoldSpark.Core.Infrastructure.Logging;
 using MakeBoldSpark.Recipe.Data;
 using MakeBoldSpark.Recipe.Interfaces;
 using MakeBoldSpark.Recipe.Providers;
+
+// Repeatable administrator-provisioning procedure (tasks.md T014, gate finding critic-007):
+//   dotnet run --project src/MakeBoldSpark.Api -- bootstrap-admin <email> <password> [displayName]
+// Hashes the password with the same PasswordHasher<Author> the login endpoint verifies
+// against, then inserts or updates that Author row with isAdmin = true, and exits — does not
+// start the host. Kept isolated from normal startup so it never runs unintentionally.
+if (args.Length > 0 && args[0] == "bootstrap-admin")
+{
+    if (args.Length < 3)
+    {
+        Console.Error.WriteLine("Usage: dotnet run --project src/MakeBoldSpark.Api -- bootstrap-admin <email> <password> [displayName]");
+        Environment.Exit(1);
+        return;
+    }
+
+    var bootstrapConfig = new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json", optional: true)
+        .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+        .AddUserSecrets<Program>(optional: true)
+        .AddEnvironmentVariables()
+        .Build();
+
+    var optionsBuilder = new DbContextOptionsBuilder<MakeBoldSparkCoreDbContext>()
+        .UseSqlite(bootstrapConfig.GetConnectionString("MakeBoldSparkConnection"));
+    using var bootstrapDb = new MakeBoldSparkCoreDbContext(optionsBuilder.Options);
+
+    var email = args[1];
+    var password = args[2];
+    var displayName = args.Length > 3 ? args[3] : email;
+
+    var existing = await bootstrapDb.Authors.SingleOrDefaultAsync(a => a.Email == email);
+    var author = existing ?? new Author { Email = email, Password = string.Empty, DisplayName = displayName, IsAdmin = true };
+    author.Password = new PasswordHasher<Author>().HashPassword(author, password);
+    author.IsAdmin = true;
+    author.DisplayName = displayName;
+
+    if (existing is null)
+    {
+        // Older deployed databases retain required DateCreated/DateUpdated columns from the
+        // pre-BaseEntity schema. They are no longer mapped by EF, so an ordinary insert leaves
+        // DateCreated null and makes the documented bootstrap command unusable. Detect that
+        // legacy shape and populate both audit-column generations until a dedicated migration
+        // removes the obsolete columns.
+        var connection = bootstrapDb.Database.GetDbConnection();
+        await connection.OpenAsync();
+        try
+        {
+            await using var legacyColumnCheck = connection.CreateCommand();
+            legacyColumnCheck.CommandText = "SELECT COUNT(*) FROM pragma_table_info('Authors') WHERE name IN ('DateCreated', 'DateUpdated');";
+            var hasLegacyAuditColumns = Convert.ToInt32(await legacyColumnCheck.ExecuteScalarAsync()) == 2;
+
+            if (hasLegacyAuditColumns)
+            {
+                var now = DateTime.UtcNow;
+                author.CreatedDate = now;
+                author.UpdatedDate = now;
+
+                await using var insert = connection.CreateCommand();
+                insert.CommandText = """
+                    INSERT INTO "Authors" ("Email", "Password", "DisplayName", "IsAdmin", "CreatedDate", "DateCreated", "DateUpdated", "UpdatedDate")
+                    VALUES ($email, $password, $displayName, $isAdmin, $createdDate, $dateCreated, $dateUpdated, $updatedDate);
+                    """;
+                void AddParameter(string name, object value)
+                {
+                    var parameter = insert.CreateParameter();
+                    parameter.ParameterName = name;
+                    parameter.Value = value;
+                    insert.Parameters.Add(parameter);
+                }
+
+                AddParameter("$email", author.Email);
+                AddParameter("$password", author.Password);
+                AddParameter("$displayName", author.DisplayName);
+                AddParameter("$isAdmin", author.IsAdmin);
+                AddParameter("$createdDate", author.CreatedDate);
+                AddParameter("$dateCreated", now);
+                AddParameter("$dateUpdated", now);
+                AddParameter("$updatedDate", author.UpdatedDate);
+                await insert.ExecuteNonQueryAsync();
+            }
+            else
+            {
+                bootstrapDb.Authors.Add(author);
+                await bootstrapDb.SaveChangesAsync();
+            }
+        }
+        finally
+        {
+            await connection.CloseAsync();
+        }
+
+        // The legacy insert runs outside EF tracking. Reload so the success message reports
+        // the generated identifier and future changes use the normal tracked entity.
+        author = await bootstrapDb.Authors.SingleAsync(a => a.Email == email);
+    }
+    else
+    {
+        await bootstrapDb.SaveChangesAsync();
+    }
+
+    Console.WriteLine($"Administrator credential set for '{email}' (Author Id {author.Id}).");
+    return;
+}
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +142,28 @@ builder.Services.AddMakeBoldSparkAuth(builder.Configuration, builder.Environment
 
 // CORS
 builder.Services.AddMakeBoldSparkCors(builder.Configuration, builder.Environment);
+
+// Login throttle (FR-014) — IP/global-keyed half of the dual-layer design (research.md);
+// the email-keyed half is applied explicitly inside AuthEndpoints.MapAuthApi. Either layer
+// being exceeded returns the same generic 401 the login endpoint uses for any other
+// rejection reason — never a distinguishable 429 (closes SC-006).
+builder.Services.AddRateLimiter(options =>
+{
+    options.OnRejected = async (context, token) =>
+    {
+        context.HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        await context.HttpContext.Response.WriteAsJsonAsync(new LoginErrorResponse(), cancellationToken: token);
+    };
+
+    options.AddPolicy("login-per-ip", httpContext => RateLimitPartition.GetFixedWindowLimiter(
+        partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+        factory: _ => new FixedWindowRateLimiterOptions
+        {
+            Window = TimeSpan.FromMinutes(1),
+            PermitLimit = 20,
+            QueueLimit = 0,
+        }));
+});
 
 // Resolve a SQLite "Data Source=<path>" against ContentRootPath so relative
 // paths work correctly under IIS (which sets a different working directory).
@@ -74,6 +204,8 @@ builder.Services.AddDbContext<MakeBoldSparkCoreDbContext>(options =>
     options.UseSqlite(ResolveSqliteConnStr(builder.Configuration.GetConnectionString("MakeBoldSparkConnection"), contentRoot))
            .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
 builder.Services.AddScoped<MakeBoldSparkService>();
+builder.Services.AddSingleton<IPasswordHasher<Author>, PasswordHasher<Author>>();
+builder.Services.AddScoped<AuthService>();
 
 // Named HttpClient for OpenWeatherMap
 builder.Services.AddHttpClient("weather", client =>
@@ -130,6 +262,7 @@ builder.Services.AddOpenApi(options =>
 
         document.Tags = new HashSet<OpenApiTag>
         {
+            new OpenApiTag { Name = MakeBoldSparkOpenApiTags.AuthSignIn, Description = "Signed JWT sign-in for CMS administrators under the dedicated anonymous /api/public/auth authorization category." },
             new OpenApiTag { Name = MakeBoldSparkOpenApiTags.HealthDiagnostics, Description = "Liveness and deep-health probes for the API and its dependencies." },
             new OpenApiTag { Name = MakeBoldSparkOpenApiTags.PublicContentArticles, Description = "Read-only access to published article summaries and detail pages." },
             new OpenApiTag { Name = MakeBoldSparkOpenApiTags.PublicContentTags, Description = "Taxonomy tags used to classify public content." },
@@ -190,6 +323,7 @@ app.UseDefaultFiles();   // serves wwwroot/index.html at "/"
 app.UseStaticFiles();    // serves wwwroot/**
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseRateLimiter();
 
 // OpenAPI served in all environments for this public demo API.
 // Restrict via network-level controls or the Environments setting below if needed.
@@ -200,6 +334,9 @@ var publicApi = app.MapGroup("/api/public");
 publicApi.MapPublicContentApi();
 publicApi.MapPublicRecipeApi();
 publicApi.MapGroup("/makeboldspark").MapPublicMakeBoldSparkApi();
+// Anonymous credential-verification route. Principle VIII reserves /api/public/auth/* for
+// credential verification and signed-token issuance only; it does not permit CMS-data access.
+publicApi.MapGroup("/auth").MapAuthApi();
 
 var adminApi = app.MapGroup("/api/admin")
     .RequireAuthorization("AdminOnly");
@@ -238,7 +375,7 @@ app.MapApiTestSpark(options =>
     });
 });
 
-
+app.MapMakeBoldSparkCms();
 
 // Warn if weather key is missing
 var startupLogger = app.Services.GetRequiredService<ILogger<Program>>();

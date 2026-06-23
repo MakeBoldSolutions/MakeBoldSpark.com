@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/MakeBoldSpark.Api/MakeBoldSpark.Api.csproj" />
+    <Project Path="src/MakeBoldSpark.Cms/MakeBoldSpark.Cms.csproj" />
     <Project Path="src/MakeBoldSpark.Core/MakeBoldSpark.Core.csproj" />
     <Project Path="src/MakeBoldSpark.Recipe/MakeBoldSpark.Recipe.csproj" />
   </Folder>

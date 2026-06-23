@@ -1,10 +1,10 @@
 <!--
 SYNC IMPACT REPORT
-Version change: 1.0.0 → 1.1.0
-Bump type: MINOR — four new principles added (VII–X), Platform Architecture section added, Technology Stack expanded.
+Version change: 1.1.0 → 1.2.0
+Bump type: MINOR — an explicit anonymous authentication route category was added to Principle VIII.
 Modified principles: None renamed or removed.
-Added principles: VII. Single Backend Platform, VIII. Clear Authorization Boundaries, IX. Relational-First Data Strategy, X. Zero Secrets in Source Control.
-Added sections: Platform Architecture (hosting model, static-first client model, feature structure).
+Added principles: None.
+Added sections: None.
 Removed sections: None.
 Templates reviewed:
   - .devspark/templates/plan-template.md: ✅ Constitution Check gate is generic and backs new principles correctly — no change required.
@@ -15,7 +15,7 @@ Deferred items: None.
 
 # MakeBoldSpark Constitution
 
-**Version**: 1.1.0 | **Ratified**: 2026-05-06 | **Last Amended**: 2026-05-06 | **Author**: Mark Hazleton
+**Version**: 1.2.0 | **Ratified**: 2026-05-06 | **Last Amended**: 2026-06-23 | **Author**: Mark Hazleton
 
 ## Core Principles
 
@@ -68,13 +68,16 @@ All routes MUST fall under one of the following defined authorization categories
 | Route Area | Access Model |
 |---|---|
 | `/api/public/*` | Anonymous, read-only |
+| `/api/public/auth/*` | Anonymous credential verification and token issuance only |
 | `/api/admin/*` | Authenticated admin only |
 | `/api/publish/*` | Publisher or admin |
 | `/api/integrations/*` | Admin or service token |
 | `/api/health` | Anonymous shallow health |
 | `/api/admin/health/deep` | Admin only |
 
-Public routes MUST NOT expose write operations or sensitive data.
+Public content routes MUST NOT expose write operations or sensitive data. Public authentication
+routes MAY accept credentials only to verify identity and issue a signed access token; they MUST
+NOT expose CMS data, accept CMS-data writes, or reveal credential-verification details.
 Admin, publishing, backup, and integration routes MUST require explicit ASP.NET Core policy-based authorization.
 
 ### IX. Relational-First Data Strategy (NON-NEGOTIABLE)
@@ -186,6 +189,6 @@ Version increments follow semantic versioning:
 - **PATCH**: Clarifications, wording fixes, non-semantic refinements.
 
 **Project**: MakeBoldSpark
-**Version**: 1.1.0
+**Version**: 1.2.0
 **Ratified**: 2026-05-06
-**Last Amended**: 2026-05-06
+**Last Amended**: 2026-06-23

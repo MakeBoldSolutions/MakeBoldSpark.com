@@ -1,3 +1,4 @@
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -12,7 +13,16 @@ public static class AuthorizationSetup
     {
         var jwtSection = configuration.GetSection("Jwt");
         var authority = jwtSection["Authority"];
-        var audience  = jwtSection["Audience"];
+        var audience = jwtSection["Audience"];
+        var signingKey = jwtSection["SigningKey"];
+
+        if (string.IsNullOrWhiteSpace(authority) && string.IsNullOrWhiteSpace(signingKey))
+        {
+            throw new InvalidOperationException(
+                "JWT authentication is not configured: neither 'Jwt:Authority' nor 'Jwt:SigningKey' is set. " +
+                "Set 'Jwt:SigningKey' via 'dotnet user-secrets' (local development) or an App Service application " +
+                "setting (deployed environments) before starting the API — see quickstart.md.");
+        }
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -26,24 +36,16 @@ public static class AuthorizationSetup
                 if (!string.IsNullOrWhiteSpace(audience))
                     options.Audience = audience;
 
-                // When no authority is configured (e.g. local dev without an IdP),
-                // disable signature and issuer validation so the app still starts,
-                // but log a warning at startup so it is never silently skipped in prod.
-                if (string.IsNullOrWhiteSpace(authority))
+                if (!string.IsNullOrWhiteSpace(signingKey))
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer           = false,
-                        ValidateAudience         = false,
-                        ValidateLifetime         = true,
-                        ValidateIssuerSigningKey = false,
-                        SignatureValidator       = (token, _) =>
-                        {
-                            // Accept any well-formed JWT; protected routes still require
-                            // a valid token structure and non-expired lifetime.
-                            var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-                            return handler.ReadToken(token);
-                        }
+                        ValidateIssuer = false,
+                        ValidateAudience = !string.IsNullOrWhiteSpace(audience),
+                        ValidAudience = audience,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey)),
                     };
                 }
 

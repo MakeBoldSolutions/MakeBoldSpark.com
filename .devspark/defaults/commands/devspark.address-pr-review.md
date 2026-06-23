@@ -4,6 +4,9 @@ handoffs:
   - label: Re-Review Updated PR
     agent: devspark.pr-review
     prompt: Run /devspark.pr-review UPDATE for this PR after fixes are committed
+scripts:
+  sh: .devspark/scripts/bash/address-pr-review.sh --pr-id $ARGUMENTS --json
+  ps: .devspark/scripts/powershell/address-pr-review.ps1 -PrId $ARGUMENTS -Json
 ---
 
 ## User Input
@@ -33,9 +36,9 @@ This command is the **author-side companion** to `/devspark.pr-review`. It helps
 
 ### Phase 0 — Load context
 
-> **Script Resolution**: Before running `.devspark/scripts/powershell/address-pr-review.ps1 -PrId $ARGUMENTS -Json`, apply the 2-tier override check — if `.documentation/scripts/powershell/address-pr-review.ps1` (PowerShell) or `.documentation/scripts/bash/address-pr-review.sh` (Bash) exists on disk, run that file instead, preserving all arguments. Team overrides in `.documentation/scripts/` always take priority over `.devspark/scripts/`.
+> **Script Resolution**: Before running `{SCRIPT}`, apply the 2-tier override check — if `.documentation/scripts/powershell/address-pr-review.ps1` (PowerShell) or `.documentation/scripts/bash/address-pr-review.sh` (Bash) exists on disk, run that file instead, preserving all arguments. Team overrides in `.documentation/scripts/` always take priority over `.devspark/scripts/`.
 
-1. Run `.devspark/scripts/powershell/address-pr-review.ps1 -PrId $ARGUMENTS -Json` with the PR id and JSON output enabled (`-PrId {PR_ID} -Json` on PowerShell, `--pr-id {PR_ID} --json` on Bash).
+1. Run `{SCRIPT}` with the PR id and JSON output enabled (`-PrId {PR_ID} -Json` on PowerShell, `--pr-id {PR_ID} --json` on Bash).
 2. Fail fast if `/.documentation/specs/pr-review/pr-{PR_ID}.md` is missing.
 3. Parse open findings from checklist lines matching:
    - `- [ ] **C-##**`

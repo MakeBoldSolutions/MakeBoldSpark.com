@@ -159,6 +159,9 @@ public partial class MakeBoldSparkCoreDbContext(DbContextOptions<MakeBoldSparkCo
         modelBuilder.Entity<Blog>().Property(b => b.UpdatedDate).HasDefaultValueSql(sql);
         modelBuilder.Entity<Post>().Property(p => p.UpdatedDate).HasDefaultValueSql(sql);
         modelBuilder.Entity<Author>().Property(a => a.UpdatedDate).HasDefaultValueSql(sql);
+        // Enforces, rather than merely assumes, the email-uniqueness invariant the CMS sign-in
+        // design depends on (tasks.md T054a, critic Questionable Assumption #1).
+        modelBuilder.Entity<Author>().HasIndex(a => a.Email).IsUnique();
         modelBuilder.Entity<Category>().Property(c => c.UpdatedDate).HasDefaultValueSql(sql);
         modelBuilder.Entity<Subscriber>().Property(s => s.UpdatedDate).HasDefaultValueSql(sql);
         modelBuilder.Entity<Newsletter>().Property(n => n.UpdatedDate).HasDefaultValueSql(sql);

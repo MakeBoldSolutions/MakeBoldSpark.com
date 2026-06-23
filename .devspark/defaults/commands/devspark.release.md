@@ -7,6 +7,9 @@ handoffs:
   - label: Run Final Audit
     agent: devspark.site-audit
     prompt: Run a final site audit before release
+scripts:
+  sh: .devspark/scripts/bash/release-context.sh $ARGUMENTS --json
+  ps: .devspark/scripts/powershell/release-context.ps1 $ARGUMENTS -Json
 ---
 
 ## User Input
@@ -53,9 +56,9 @@ Parse `$ARGUMENTS` for options:
 
 ### 1. Initialize Release Context
 
-> **Script Resolution**: Before running `.devspark/scripts/powershell/release-context.ps1 $ARGUMENTS -Json`, apply the 2-tier override check — if `.documentation/scripts/powershell/<filename>` (PowerShell) or `.documentation/scripts/bash/<filename>` (Bash) exists on disk, run that file instead, preserving all arguments. Team overrides in `.documentation/scripts/` always take priority over `.devspark/scripts/`.
+> **Script Resolution**: Before running `{SCRIPT}`, apply the 2-tier override check — if `.documentation/scripts/powershell/<filename>` (PowerShell) or `.documentation/scripts/bash/<filename>` (Bash) exists on disk, run that file instead, preserving all arguments. Team overrides in `.documentation/scripts/` always take priority over `.devspark/scripts/`.
 
-Run `.devspark/scripts/powershell/release-context.ps1 $ARGUMENTS -Json` to gather context and parse JSON output for:
+Run `{SCRIPT}` to gather context and parse JSON output for:
 
 - `REPO_ROOT`: Repository root path
 - `SPECS_DIR`: Path to specs directory
