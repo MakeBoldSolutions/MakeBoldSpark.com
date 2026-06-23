@@ -13,6 +13,7 @@ All 11 CMS entities already exist in `MakeBoldSpark.Core.Data` and are unchanged
 | `isAdmin` | boolean | **Sign-in gate.** Only authors with `isAdmin = true` may successfully sign in (FR-001a); `false` produces the same generic failure as a wrong password. |
 
 **Validation rules introduced by this feature**:
+
 - A login attempt MUST match exactly zero or one `Author` row by `email` (uniqueness precondition, now database-enforced — see `email` row above).
 - A login attempt against a matched row with `isAdmin = false`, OR against zero matched rows, OR with a password that fails hash verification, OR with a submitted password exceeding 256 characters, MUST all produce the identical response (FR-001a) — no branch in the implementation should produce a distinguishable response shape, status code, or meaningfully different timing for these cases.
 - A login attempt MUST be rejected by either of two independent rate limiters (per-email, per-IP/global) without a distinguishable response — see `contracts/auth-api.md`.

@@ -1,3 +1,5 @@
+# Analyze Gate
+
 ```yaml
 gate: analyze
 status: pass

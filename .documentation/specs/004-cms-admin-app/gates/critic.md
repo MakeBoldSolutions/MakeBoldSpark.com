@@ -1,3 +1,5 @@
+# Critic Gate
+
 ```yaml
 gate: critic
 status: pass

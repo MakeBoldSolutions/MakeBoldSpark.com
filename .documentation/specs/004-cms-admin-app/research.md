@@ -9,6 +9,7 @@ No `NEEDS CLARIFICATION` markers remained in Technical Context — this feature'
 **Rationale**: Verified directly in code (`AuthorizationSetup.cs:13-48`, `appsettings.json:11-14`) that `Jwt:Authority`/`Jwt:Audience` are empty everywhere — not just in dev — so signature validation is currently disabled unconditionally and any well-formed token is accepted. No `/login`, `/token`, or credential-checking endpoint exists anywhere in `Features/` or `Infrastructure/`. A client-side "generate an unsigned dev token" convenience (considered earlier in this feature's design) would have papered over this rather than fixing it, and would coexist insecurely once a real login screen existed. The `Author` entity already models `email`, `password`, and `isAdmin` (`.documentation/frontend/makeboldspark-api-guide.md` lines 116-123) — the natural credential store, confirmed unique by email per the resolved clarification.
 
 **Alternatives considered**:
+
 - Full ASP.NET Core Identity membership system — rejected, adds a parallel account system and Identity-specific tables on top of `Author`, which already has everything needed.
 - External OAuth/OIDC provider (e.g., Entra ID) — rejected for this iteration as disproportionate setup for a single-administrator tool; `AuthorizationSetup.cs` already supports pointing `Jwt:Authority` at one later without further code changes, so this path stays open without being built now.
 

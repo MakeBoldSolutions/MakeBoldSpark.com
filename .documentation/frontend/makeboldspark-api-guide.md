@@ -20,7 +20,7 @@
    - [Categories](#categories)
    - [Menus](#menus)
    - [Keywords](#keywords)
-- [Content Parts](#content-parts)
+   - [Content Parts](#content-parts)
 6. [Authentication](#authentication)
 7. [Admin Endpoints](#admin-endpoints)
    - [Subscribers](#subscribers)
