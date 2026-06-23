@@ -56,7 +56,7 @@ Build the admin UI as a new in-solution `.NET` project (`MakeBoldSpark.Cms`) who
 
 ### Reviewer Guidance
 
-Focus review on: (1) the `AuthorizationSetup.cs` change removing the insecure fallback, **and the deployment-ordering risk it introduces** — confirm the pre-deploy runbook check (T009a) actually runs before this ships anywhere beyond local dev; (2) the Constitution Waiver below for the new `/api/public/auth/login` route, which doesn't cleanly fit the existing authorization-boundary table; (3) the one-time bootstrapping step required to set a real password hash for at least one existing `Author` row before anyone can sign in, and its companion runbook entry (T014) for provisioning future administrators without re-deriving the steps.
+Focus review on: (1) the `AuthorizationSetup.cs` change removing the insecure fallback, **and the deployment-ordering risk it introduces** — confirm the pre-deploy runbook check (T009a) actually runs before this ships anywhere beyond local dev; (2) the constrained `/api/public/auth/*` authorization category for the new login route; and (3) the one-time bootstrapping step required to set a real password hash for at least one existing `Author` row before anyone can sign in, and its companion runbook entry (T014) for provisioning future administrators without re-deriving the steps.
 
 ### Gate Findings Resolved
 
@@ -172,4 +172,4 @@ tests/
 
 ## Complexity Tracking
 
-> No unjustified Constitution Check violations — the one deviation (Principle VIII) is documented as a Constitution Waiver above with a compensating control, not a Complexity Tracking entry.
+> No unjustified Constitution Check violations — the former Principle VIII deviation was resolved by the owner-ratified Constitution v1.2.0 amendment.
