@@ -3,36 +3,40 @@ import { EntityCrudPage, type EntityListRenderProps } from '../EntityCrudPage';
 import { menuConfig } from '../entityConfigs';
 import { buildMenuTree, type MenuNode } from './buildMenuTree';
 
-function MenuNodeRow({ node, depth, onEdit, onDelete }: {
+function MenuNodeRow({ node, depth, onEdit }: {
   node: MenuNode;
   depth: number;
   onEdit: (record: Menu) => void;
-  onDelete: (record: Menu) => void;
 }) {
   return (
     <>
-      <li style={{ marginLeft: depth * 20 }}>
+      <li
+        className="cms-editable-row"
+        style={{ marginLeft: depth * 20 }}
+        tabIndex={0}
+        onClick={() => onEdit(node)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            onEdit(node);
+          }
+        }}
+      >
         <span>{node.title}</span>
-        <button type="button" onClick={() => onEdit(node)}>
-          Edit
-        </button>
-        <button type="button" onClick={() => onDelete(node)}>
-          Delete
-        </button>
       </li>
       {node.children.map((child) => (
-        <MenuNodeRow key={child.id} node={child} depth={depth + 1} onEdit={onEdit} onDelete={onDelete} />
+        <MenuNodeRow key={child.id} node={child} depth={depth + 1} onEdit={onEdit} />
       ))}
     </>
   );
 }
 
-function MenuHierarchy({ records, onEdit, onDelete }: EntityListRenderProps<Menu>) {
+function MenuHierarchy({ records, onEdit }: EntityListRenderProps<Menu>) {
   const tree = buildMenuTree(records);
   return (
     <ul className="cms-menu-tree">
       {tree.map((node) => (
-        <MenuNodeRow key={node.id} node={node} depth={0} onEdit={onEdit} onDelete={onDelete} />
+        <MenuNodeRow key={node.id} node={node} depth={0} onEdit={onEdit} />
       ))}
     </ul>
   );

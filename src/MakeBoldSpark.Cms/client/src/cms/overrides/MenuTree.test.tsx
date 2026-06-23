@@ -86,7 +86,7 @@ describe('MenuTree', () => {
     );
 
     await waitFor(() => expect(screen.getByText('Nested Item')).toBeInTheDocument());
-    await user.click(screen.getAllByRole('button', { name: /^edit$/i })[1]);
+    await user.click(screen.getByText('Nested Item'));
 
     expect(screen.queryByLabelText('Site Id')).not.toBeInTheDocument();
     expect(screen.getByLabelText('Parent Page')).toHaveValue('1');

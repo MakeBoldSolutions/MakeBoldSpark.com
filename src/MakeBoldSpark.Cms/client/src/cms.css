@@ -208,6 +208,18 @@
   white-space: nowrap;
 }
 
+.cms-editable-row {
+  cursor: pointer;
+}
+
+.cms-editable-row:hover td,
+.cms-editable-row:focus td,
+.cms-menu-tree .cms-editable-row:hover,
+.cms-menu-tree .cms-editable-row:focus {
+  background: rgba(152, 36, 7, 0.08);
+  outline: none;
+}
+
 .cms-entity-list td button {
   font-size: 0.9rem;
   padding: 0.4rem 0.6rem;
@@ -237,6 +249,22 @@
 .cms-field--full,
 .cms-form-actions {
   grid-column: 1 / -1;
+}
+
+.cms-destructive-actions {
+  border-top: 1px solid var(--mb-line);
+  margin-top: 2rem;
+  max-width: 72rem;
+  padding-top: 1rem;
+}
+
+.cms-destructive-actions p {
+  color: var(--mb-muted);
+  margin: 0 0 0.75rem;
+}
+
+.cms-destructive-actions button {
+  background: #a91919;
 }
 
 .cms-field input,
@@ -331,7 +359,6 @@
   flex: 1;
 }
 
-.cms-menu-tree button,
 .cms-richtext-toolbar button {
   font-size: 0.85rem;
   padding: 0.35rem 0.55rem;

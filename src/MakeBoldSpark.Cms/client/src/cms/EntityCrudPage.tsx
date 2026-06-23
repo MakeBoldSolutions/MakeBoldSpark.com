@@ -146,6 +146,8 @@ export function EntityCrudPage<T extends BaseEntity>({ config, listQuery, render
     try {
       await crud.delete(token, record.id);
       setRecords((prev) => prev.filter((r) => r.id !== record.id));
+      setEditing(null);
+      setFormError(null);
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) {
         markSessionExpired();
@@ -161,10 +163,12 @@ export function EntityCrudPage<T extends BaseEntity>({ config, listQuery, render
   if (loading) return <p>Loading {config.label.toLowerCase()}…</p>;
 
   if (editing) {
+    const isExistingRecord = 'id' in editing && editing.id != null;
+
     return (
       <div className="cms-entity-form">
         <h2>{'id' in editing && editing.id != null ? `Edit ${config.label}` : `New ${config.label}`}</h2>
-        {'id' in editing && editing.id != null && 'updatedDate' in editing && (
+        {isExistingRecord && 'updatedDate' in editing && (
           <p className="cms-entity-meta">
             Last changed: {new Date((editing as T).updatedDate).toLocaleString()}
           </p>
@@ -203,6 +207,14 @@ export function EntityCrudPage<T extends BaseEntity>({ config, listQuery, render
             </button>
           </div>
         </form>
+        {isExistingRecord && config.allowDelete !== false && (
+          <div className="cms-destructive-actions">
+            <p>Deleting this record cannot be undone.</p>
+            <button type="button" onClick={() => handleDelete(editing as T)}>
+              Delete {config.label}
+            </button>
+          </div>
+        )}
       </div>
     );
   }
@@ -225,29 +237,37 @@ export function EntityCrudPage<T extends BaseEntity>({ config, listQuery, render
               {config.columns.map((col) => (
                 <th key={String(col.key)}>{col.label}</th>
               ))}
-              <th>Actions</th>
+              {config.allowEdit === false && <th>Actions</th>}
             </tr>
           </thead>
           <tbody>
             {records.map((record) => (
-              <tr key={record.id}>
+              <tr
+                key={record.id}
+                className={config.allowEdit !== false ? 'cms-editable-row' : undefined}
+                tabIndex={config.allowEdit !== false ? 0 : undefined}
+                onClick={config.allowEdit !== false ? () => startEdit(record) : undefined}
+                onKeyDown={config.allowEdit !== false ? (event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    startEdit(record);
+                  }
+                } : undefined}
+              >
                 {config.columns.map((col) => (
                   <td key={String(col.key)}>
                     {col.renderColumn ? col.renderColumn(record) : String((record as Record<string, unknown>)[col.key as string] ?? '')}
                   </td>
                 ))}
-                <td>
-                  {config.allowEdit !== false && (
-                    <button type="button" onClick={() => startEdit(record)}>
-                      Edit
-                    </button>
-                  )}
-                  {config.allowDelete !== false && (
+                {config.allowEdit === false && (
+                  <td>
+                    {config.allowDelete !== false && (
                     <button type="button" onClick={() => handleDelete(record)}>
                       Delete
                     </button>
-                  )}
-                </td>
+                    )}
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

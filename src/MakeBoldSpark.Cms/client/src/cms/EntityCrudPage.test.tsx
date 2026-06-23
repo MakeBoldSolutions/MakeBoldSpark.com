@@ -124,10 +124,11 @@ describe('EntityCrudPage', () => {
     renderPage([baseRecord]);
 
     await waitFor(() => expect(screen.getByText('First Thing')).toBeInTheDocument());
+    await user.click(screen.getByText('First Thing'));
 
     (globalThis.fetch as ReturnType<typeof vi.fn>).mockImplementationOnce(() => jsonResponse({}, 500));
 
-    await user.click(screen.getByRole('button', { name: /delete/i }));
+    await user.click(screen.getByRole('button', { name: /delete mock thing/i }));
 
     await waitFor(() =>
       expect(alertSpy).toHaveBeenCalledWith(expect.stringContaining('other records still depend on it')),
@@ -139,7 +140,7 @@ describe('EntityCrudPage', () => {
     renderPage([baseRecord]);
 
     await waitFor(() => expect(screen.getByText('First Thing')).toBeInTheDocument());
-    await user.click(screen.getByRole('button', { name: /edit/i }));
+    await user.click(screen.getByText('First Thing'));
 
     (globalThis.fetch as ReturnType<typeof vi.fn>).mockImplementationOnce(() => jsonResponse({}, 500));
     await user.click(screen.getByRole('button', { name: /save/i }));
@@ -152,7 +153,7 @@ describe('EntityCrudPage', () => {
     renderPage([baseRecord]);
 
     await waitFor(() => expect(screen.getByText('First Thing')).toBeInTheDocument());
-    await user.click(screen.getByRole('button', { name: /edit/i }));
+    await user.click(screen.getByText('First Thing'));
 
     expect(screen.getByText(/last changed/i)).toBeInTheDocument();
   });
@@ -162,7 +163,7 @@ describe('EntityCrudPage', () => {
     renderPage([baseRecord]);
 
     await waitFor(() => expect(screen.getByText('First Thing')).toBeInTheDocument());
-    await user.click(screen.getByRole('button', { name: /edit/i }));
+    await user.click(screen.getByText('First Thing'));
 
     const nameInput = screen.getByLabelText('Name');
     await user.clear(nameInput);
