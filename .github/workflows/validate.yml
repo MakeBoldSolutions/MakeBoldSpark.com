@@ -47,6 +47,8 @@ jobs:
         run: dotnet restore MakeBoldSpark.slnx
 
       - name: Test .NET solution
+        env:
+          Jwt__SigningKey: ci-test-signing-key-not-for-production-0123456789
         run: dotnet test MakeBoldSpark.slnx --no-restore
 
       - name: Verify npm audit threshold

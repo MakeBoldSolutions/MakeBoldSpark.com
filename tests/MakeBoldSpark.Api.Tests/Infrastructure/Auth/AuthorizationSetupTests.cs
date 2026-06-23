@@ -17,18 +17,29 @@ public class AuthorizationSetupTests
     [TestMethod]
     public void Startup_WithNoSigningConfiguration_ThrowsAtStartup()
     {
-        using var factory = new NoJwtConfigWebApplicationFactory();
+        const string signingKeyVariable = "Jwt__SigningKey";
+        var originalSigningKey = Environment.GetEnvironmentVariable(signingKeyVariable);
+        Environment.SetEnvironmentVariable(signingKeyVariable, string.Empty);
 
         try
         {
-            factory.CreateClient();
-            Assert.Fail("Expected host startup to throw InvalidOperationException when neither Jwt:Authority nor Jwt:SigningKey is configured.");
+            using var factory = new NoJwtConfigWebApplicationFactory();
+
+            try
+            {
+                factory.CreateClient();
+                Assert.Fail("Expected host startup to throw InvalidOperationException when neither Jwt:Authority nor Jwt:SigningKey is configured.");
+            }
+            catch (Exception ex)
+            {
+                var cause = ex;
+                while (cause.InnerException is not null) cause = cause.InnerException;
+                Assert.IsInstanceOfType<InvalidOperationException>(cause);
+            }
         }
-        catch (Exception ex)
+        finally
         {
-            var cause = ex;
-            while (cause.InnerException is not null) cause = cause.InnerException;
-            Assert.IsInstanceOfType<InvalidOperationException>(cause);
+            Environment.SetEnvironmentVariable(signingKeyVariable, originalSigningKey);
         }
     }
 
