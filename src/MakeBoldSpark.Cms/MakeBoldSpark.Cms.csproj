@@ -16,28 +16,27 @@
 
   <PropertyGroup>
     <_SpaSentinel>$(IntermediateOutputPath)spa-built.sentinel</_SpaSentinel>
+    <_SpaBuildDirectory>$(MSBuildProjectDirectory)/build</_SpaBuildDirectory>
+    <_SpaBuildIndex>$(_SpaBuildDirectory)/index.html</_SpaBuildIndex>
   </PropertyGroup>
 
   <ItemGroup>
-    <_SpaSources Include="$(MSBuildProjectDirectory)\client\**\*" Exclude="$(MSBuildProjectDirectory)\client\node_modules\**;$(MSBuildProjectDirectory)\build\**" />
+    <_SpaSources Include="$(MSBuildProjectDirectory)/client/**/*" Exclude="$(MSBuildProjectDirectory)/client/node_modules/**;$(_SpaBuildDirectory)/**" />
   </ItemGroup>
 
   <!-- Runs npm as part of dotnet build, same as MakeBoldSpark.Api's BuildStaticContent target for MakeBoldSpark.Web; requires Node available in the build environment. -->
-  <Target Name="BuildReactSpa" BeforeTargets="Build" Inputs="@(_SpaSources)" Outputs="$(_SpaSentinel)">
-    <Exec Command="npm ci" WorkingDirectory="$(MSBuildProjectDirectory)\client" Condition="!Exists('$(MSBuildProjectDirectory)\client\node_modules')" />
-    <Exec Command="npm run build" WorkingDirectory="$(MSBuildProjectDirectory)\client" />
+  <Target Name="BuildReactSpa" BeforeTargets="_CalculateEmbeddedFilesManifestInputs" Inputs="@(_SpaSources)" Outputs="$(_SpaSentinel);$(_SpaBuildIndex)">
+    <Exec Command="npm ci" WorkingDirectory="$(MSBuildProjectDirectory)/client" Condition="!Exists('$(MSBuildProjectDirectory)/client/node_modules')" />
+    <Exec Command="npm run build" WorkingDirectory="$(MSBuildProjectDirectory)/client" />
     <Touch Files="$(_SpaSentinel)" AlwaysCreate="true" />
   </Target>
 
-  <Target Name="ValidateSpaAssets" AfterTargets="BuildReactSpa">
+  <Target Name="ValidateSpaAssets" AfterTargets="BuildReactSpa" BeforeTargets="_CalculateEmbeddedFilesManifestInputs">
     <ItemGroup>
-      <_SpaBuildOutput Include="$(MSBuildProjectDirectory)\build\**\*" />
+      <_SpaBuildOutput Include="$(_SpaBuildDirectory)/**/*" />
+      <EmbeddedResource Include="@(_SpaBuildOutput)" Link="build\%(RecursiveDir)%(Filename)%(Extension)" />
     </ItemGroup>
-    <Error Condition="'@(_SpaBuildOutput)' == ''" Text="MakeBoldSpark.Cms: client SPA build produced no output in '$(MSBuildProjectDirectory)\build'. Check the BuildReactSpa target / npm run build output." />
+    <Error Condition="'@(_SpaBuildOutput)' == ''" Text="MakeBoldSpark.Cms: client SPA build produced no output in '$(_SpaBuildDirectory)'. Check the BuildReactSpa target / npm run build output." />
   </Target>
-
-  <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildProjectDirectory)\build\**" Link="build\%(RecursiveDir)%(Filename)%(Extension)" />
-  </ItemGroup>
 
 </Project>
