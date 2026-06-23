@@ -438,6 +438,10 @@ build/
 .env*
 bin/
 obj/
+src/MakeBoldSpark.Cms/client/.vite/
+src/MakeBoldSpark.Cms/client/*.tsbuildinfo
+src/MakeBoldSpark.Cms/client/vite.config.js
+src/MakeBoldSpark.Cms/client/vite.config.d.ts
 
 # MakeBoldSpark — SQLite databases (NEVER commit production or local .db files)
 *.db

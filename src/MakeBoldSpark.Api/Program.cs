@@ -204,6 +204,7 @@ builder.Services.AddDbContext<MakeBoldSparkCoreDbContext>(options =>
     options.UseSqlite(ResolveSqliteConnStr(builder.Configuration.GetConnectionString("MakeBoldSparkConnection"), contentRoot))
            .ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
 builder.Services.AddScoped<MakeBoldSparkService>();
+builder.Services.AddSingleton<IPasswordHasher<Author>, PasswordHasher<Author>>();
 builder.Services.AddScoped<AuthService>();
 
 // Named HttpClient for OpenWeatherMap
@@ -261,7 +262,7 @@ builder.Services.AddOpenApi(options =>
 
         document.Tags = new HashSet<OpenApiTag>
         {
-            new OpenApiTag { Name = MakeBoldSparkOpenApiTags.AuthSignIn, Description = "Self-issued JWT sign-in for CMS administrators. The only anonymous route under /api/public that issues a credential rather than reading content (see Constitution Waiver in plan.md)." },
+            new OpenApiTag { Name = MakeBoldSparkOpenApiTags.AuthSignIn, Description = "Signed JWT sign-in for CMS administrators under the dedicated anonymous /api/public/auth authorization category." },
             new OpenApiTag { Name = MakeBoldSparkOpenApiTags.HealthDiagnostics, Description = "Liveness and deep-health probes for the API and its dependencies." },
             new OpenApiTag { Name = MakeBoldSparkOpenApiTags.PublicContentArticles, Description = "Read-only access to published article summaries and detail pages." },
             new OpenApiTag { Name = MakeBoldSparkOpenApiTags.PublicContentTags, Description = "Taxonomy tags used to classify public content." },
@@ -333,9 +334,8 @@ var publicApi = app.MapGroup("/api/public");
 publicApi.MapPublicContentApi();
 publicApi.MapPublicRecipeApi();
 publicApi.MapGroup("/makeboldspark").MapPublicMakeBoldSparkApi();
-// Anonymous credential-verification route — see the Constitution Waiver comment in
-// AuthEndpoints.MapAuthApi (Principle VIII, plan.md) for why this lives under /api/public
-// despite issuing a token rather than reading content.
+// Anonymous credential-verification route. Principle VIII reserves /api/public/auth/* for
+// credential verification and signed-token issuance only; it does not permit CMS-data access.
 publicApi.MapGroup("/auth").MapAuthApi();
 
 var adminApi = app.MapGroup("/api/admin")

@@ -91,15 +91,16 @@ Add a self-issued, password-verified sign-in endpoint to `MakeBoldSpark.Api`, ti
 | V. Spec-Driven Development | PASS | specify → clarify → plan, in order |
 | VI. Ownership Boundary | PASS | No changes under `.devspark/` |
 | VII. Single Backend Platform (NON-NEGOTIABLE) | PASS | `MakeBoldSpark.Cms` is an in-solution `ProjectReference`, not a separate service/repo |
-| VIII. Clear Authorization Boundaries (NON-NEGOTIABLE) | **WAIVER** | See Constitution Waivers below — the existing table has no category for an anonymous credential-verification/token-issuance route |
+| VIII. Clear Authorization Boundaries (NON-NEGOTIABLE) | PASS | Constitution v1.2.0 explicitly permits `/api/public/auth/*` for anonymous credential verification and token issuance only |
 | IX. Relational-First Data Strategy (NON-NEGOTIABLE) | PASS | No new datastore; existing SQLite/EF Core `Author` table reused |
 | X. Zero Secrets in Source Control (NON-NEGOTIABLE) | PASS | Signing key sourced from `dotnet user-secrets` (dev) / Azure App Service settings (deployed); never in `appsettings*.json` |
 
-### Constitution Waivers
+### Constitution Waiver Resolution
 
-| Principle | Deviation | Reason | Compensating Control | Expiry |
-|---|---|---|---|---|
-| VIII. Clear Authorization Boundaries | Introduces `POST /api/public/auth/login` — an anonymous route under `/api/public/*`, which the constitution currently defines as "Anonymous, read-only" | A sign-in endpoint must be reachable without a token by definition (that's what it issues), but it is not a CMS-data read; the existing table has no category for "anonymous credential verification / token issuance" | The endpoint accepts only `email`+`password` and returns only a signed access token or one generic failure message — it never exposes CMS data and performs no CMS write. It is rate-limited (FR-014) and uses a constant response shape regardless of failure reason (FR-001a). | This waiver expires when the recommended follow-up constitution amendment (T054, via `/devspark.constitution`, requiring human ratification per Governance) adds an explicit `/api/public/auth/*` row to the Principle VIII table — not a calendar date, since the deviation is architectural rather than temporary. Until then, this table entry is the authoritative record of the carve-out. |
+The temporary Principle VIII waiver for `POST /api/public/auth/login` was resolved by the
+owner-ratified Constitution v1.2.0 amendment on 2026-06-23. The new `/api/public/auth/*`
+category permits anonymous credential verification and signed-token issuance only; it does not
+permit CMS-data disclosure or CMS-data writes.
 
 ## Project Structure
 

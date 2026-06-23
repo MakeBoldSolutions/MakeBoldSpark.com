@@ -1,7 +1,7 @@
 # Contract: Sign-In Endpoint
 
 **Route**: `POST /api/public/auth/login`
-**Authorization**: Anonymous (see Constitution Waiver in `plan.md` — this is the one anonymous route that doesn't fit the existing read-only `/api/public/*` definition)
+**Authorization**: Anonymous under Constitution Principle VIII's `/api/public/auth/*` credential-verification and token-issuance category
 **OpenAPI tag**: `Auth: Sign-In` (new tag, added alongside the existing `MakeBoldSparkOpenApiTags` constants per Principle I — API-First)
 
 ## Request

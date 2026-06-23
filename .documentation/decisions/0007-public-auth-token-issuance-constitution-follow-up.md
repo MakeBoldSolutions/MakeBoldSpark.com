@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed — requires human ratification.
+Ratified — Principle VIII was amended in Constitution v1.2.0 on 2026-06-23.
 
 ## Trigger
 
@@ -12,18 +12,12 @@ write. The current Constitution Principle VIII table defines `/api/public/*` as 
 read-only routes, so the feature records a controlled waiver in
 `004-cms-admin-app/plan.md`.
 
-## Required Follow-up
+## Resolution
 
-Run `/devspark.constitution` with the project owner to consider adding an explicit
-`/api/public/auth/*` authorization category to Principle VIII. The amendment must define:
-
-- anonymous access only for credential verification and token issuance;
-- no CMS data disclosure or CMS-data writes from this route area; and
-- security controls equivalent to the CMS login contract: generic failures, bounded input,
-  signed tokens, and throttling.
-
-Until the owner ratifies an amendment, the waiver in the CMS Admin App plan remains the
-authoritative record. This tracking note does not itself amend the Constitution.
+The owner ratified an explicit `/api/public/auth/*` authorization category in Principle VIII.
+It permits anonymous credential verification and signed-token issuance only; it does not permit
+CMS-data disclosure or CMS-data writes. The CMS login contract supplies the required generic
+failures, bounded input, signed tokens, and throttling.
 
 ## Source
 

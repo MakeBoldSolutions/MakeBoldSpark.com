@@ -24,10 +24,9 @@ public static class AuthEndpoints
     public static RouteGroupBuilder MapAuthApi(this RouteGroupBuilder group)
     {
         // Anonymous by necessity — a sign-in endpoint must be reachable without a token by
-        // definition. This is the documented Constitution Waiver for Principle VIII (Clear
-        // Authorization Boundaries) in plan.md; a follow-up /devspark.constitution amendment
-        // is recommended (tasks.md T054) to add an explicit /api/public/auth/* row to that
-        // table. The handler never logs the request body or submitted password — see
+        // definition. Principle VIII explicitly allows /api/public/auth/* for credential
+        // verification and token issuance only. The handler never logs the request body or
+        // submitted password — see
         // RequestLoggingMiddleware (logs only method/path/status/duration) and AuthService
         // (logs only the author id on success/failure).
         group.MapPost("/login", async (LoginRequest request, AuthService svc, CancellationToken ct) =>

@@ -8,10 +8,15 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MakeBoldSpark.Api.Features.Auth;
 
-public class AuthService(MakeBoldSparkCoreDbContext db, IConfiguration configuration, ILogger<AuthService> logger)
+public class AuthService(
+    MakeBoldSparkCoreDbContext db,
+    IConfiguration configuration,
+    ILogger<AuthService> logger,
+    IPasswordHasher<Author> passwordHasher)
 {
     private const int MaxPasswordLength = 256;
-    private static readonly PasswordHasher<Author> Hasher = new();
+    private static readonly PasswordHasher<Author> TimingSafeHasher = new();
+    private static readonly Author TimingSafeAuthor = CreateTimingSafeAuthor();
     private static readonly TimeSpan TokenLifetime = TimeSpan.FromHours(8);
 
     public async Task<LoginResponse?> LoginAsync(LoginRequest request, CancellationToken ct = default)
@@ -23,15 +28,18 @@ public class AuthService(MakeBoldSparkCoreDbContext db, IConfiguration configura
         }
 
         var author = await db.Authors.SingleOrDefaultAsync(a => a.Email == request.Email, ct);
-        if (author is null || !author.IsAdmin)
-        {
-            logger.LogInformation("Login rejected: no matching administrator account");
-            return null;
-        }
+        // Verify exactly one PBKDF2 hash for every normal rejection path. Without this dummy
+        // target, unknown/non-admin emails return before hashing while a wrong administrator
+        // password does not, exposing account eligibility through response timing.
+        var verificationTarget = author is { IsAdmin: true } ? author : TimingSafeAuthor;
+        var passwordMatches = passwordHasher.VerifyHashedPassword(
+            verificationTarget,
+            verificationTarget.Password,
+            request.Password) != PasswordVerificationResult.Failed;
 
-        if (Hasher.VerifyHashedPassword(author, author.Password, request.Password) == PasswordVerificationResult.Failed)
+        if (author is null || !author.IsAdmin || !passwordMatches)
         {
-            logger.LogInformation("Login rejected: password did not verify for author {AuthorId}", author.Id);
+            logger.LogInformation("Login rejected: credentials did not verify");
             return null;
         }
 
@@ -60,5 +68,18 @@ public class AuthService(MakeBoldSparkCoreDbContext db, IConfiguration configura
             ExpiresAt = expiresAt,
             DisplayName = author.DisplayName,
         };
+    }
+
+    private static Author CreateTimingSafeAuthor()
+    {
+        var author = new Author
+        {
+            Email = "timing-safe-placeholder@example.invalid",
+            Password = string.Empty,
+            DisplayName = "Timing-safe placeholder",
+            IsAdmin = false,
+        };
+        author.Password = TimingSafeHasher.HashPassword(author, "not-a-login-credential");
+        return author;
     }
 }
