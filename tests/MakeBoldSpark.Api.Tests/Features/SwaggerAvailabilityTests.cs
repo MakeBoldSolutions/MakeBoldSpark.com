@@ -110,13 +110,18 @@ internal sealed class TestSigningKeyEnvironmentVariable : IDisposable
 {
     private const string VariableName = "Jwt__SigningKey";
 
+    private TestSigningKeyEnvironmentVariable(string? originalValue) => OriginalValue = originalValue;
+
+    private string? OriginalValue { get; }
+
     public static TestSigningKeyEnvironmentVariable Set()
     {
+        var originalValue = Environment.GetEnvironmentVariable(VariableName);
         Environment.SetEnvironmentVariable(VariableName, "swagger-availability-test-fixture-signing-key-0000");
-        return new TestSigningKeyEnvironmentVariable();
+        return new TestSigningKeyEnvironmentVariable(originalValue);
     }
 
-    public void Dispose() => Environment.SetEnvironmentVariable(VariableName, null);
+    public void Dispose() => Environment.SetEnvironmentVariable(VariableName, OriginalValue);
 }
 
 internal class ProductionWebApplicationFactory : MakeBoldSparkWebApplicationFactory
