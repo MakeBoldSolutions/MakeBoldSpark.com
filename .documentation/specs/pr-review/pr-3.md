@@ -6,8 +6,8 @@
 - **Source Branch**: `004-cms-admin-app`
 - **Target Branch**: `main`
 - **Review Date**: 2026-06-23 12:34:33 UTC
-- **Last Updated**: 2026-06-23 13:00:22 UTC
-- **Reviewed Commit**: `82f3fb7`
+- **Last Updated**: 2026-06-23 13:02:16 UTC
+- **Reviewed Commit**: `521702eb7496f3a736ac9f7c0230265478b52b2a`
 - **Reviewer**: devspark.pr-review
 - **Constitution Version**: 1.1.0
 
@@ -17,6 +17,7 @@
 |-----|--------|------|----------|------|--------|-----|-----|--------------|--------|
 | 1 | `6dfc019` | 2026-06-23 | 2 | 0 | 1 | 0 | 0 | `npm test` (CMS client); scoped `dotnet test` for changed auth/CMS classes | pass: 16 client tests; 14 API tests |
 | 2 | `82f3fb7` | 2026-06-23 | 0 | 0 | 0 | 0 | 0 | `npm test` (CMS client); scoped `dotnet test` for changed auth/CMS classes | pass: 16 client tests; 15 API tests |
+| 3 | `521702e` | 2026-06-23 | 0 | 0 | 0 | 0 | 0 | Full CMS/static/.NET validation | pass: lint, 16 client tests, 125 .NET tests |
 
 ## PR Summary
 
@@ -31,30 +32,32 @@
 
 | Metric | Value |
 |--------|-------|
-| Files changed | 154 |
-| Lines added | +11,908 |
+| Files changed | 155 |
+| Lines added | +12,121 |
 | Lines removed | -3,194 |
-| Net lines | +8,714 |
-| Commit snapshot | `82f3fb7` |
+| Net lines | +8,927 |
+| Commit snapshot | `521702e` |
 
 ## Executive Summary
 
-- ❌ **Constitution Compliance**: FAIL (8/10 principles checked; two blocking deviations)
+- ✅ **Constitution Compliance**: PASS (10/10 principles checked)
 - 📋 **Spec Lifecycle**: Complete
 - 📝 **Task Completion**: 65/65 tasks complete
-- 🔒 **Security**: 1 timing-side-channel issue found
-- 📊 **Code Quality**: 1 recommendation
+- 🔒 **Security**: No open issues found
+- 📊 **Code Quality**: No open recommendations
 - 🧪 **Testing**: PASS (scoped tests)
-- 📝 **Documentation**: PARTIAL (the required Constitution amendment remains proposed)
+- 📝 **Documentation**: PASS
 - 🏛️ **Constitution Improvements**: 0
 
-**Overall Assessment**: The CMS embedding, client tests, credential hashing, JWT signature validation, throttling, and sanitized Markdown preview are solid. The login path still leaks whether an administrator account exists through password-hash timing, and the anonymous token-issuance route remains outside the Constitution's defined route categories.
+**Overall Assessment**: The focused re-review confirms that all prior findings are resolved. Login now performs a single password-hash verification for every normal rejection path, Constitution v1.2.0 defines the constrained authentication route category, and generated client artifacts no longer pollute the PR.
 
-**Approval Recommendation**: ❌ REJECT
+**Approval Recommendation**: ✅ APPROVE
 
 ## Action Items
 
 ### Immediate Actions (Blocking — must resolve before merge)
+
+All prior blocking findings are resolved.
 
 - [x] **C-01** `src/MakeBoldSpark.Api/Features/Auth/AuthService.cs:25` — Login failures have distinguishable timing. — *Fixed in `82f3fb7`: all normal rejection paths verify one password hash against either the eligible author or a timing-safe placeholder.*
   - **Broken code**:
@@ -99,8 +102,8 @@ None found.
 
 | ID | Status | Principle | File:Line | Issue | Fix |
 |----|--------|-----------|-----------|-------|-----|
-| C-01 | 🔴 Open | IV. Security by Default (`§IV.SHOWSTOPPER`) | `src/MakeBoldSpark.Api/Features/Auth/AuthService.cs:25` | The code returns before password-hash verification for unknown or non-admin emails, but verifies PBKDF2 for a wrong password on an administrator account. This conflicts with the contract's requirement that rejection timing be indistinguishable and enables administrator-account enumeration. | Verify against a constant dummy hash on all ineligible-account paths and test the three rejection paths. |
-| C-02 | 🔴 Open | VIII. Clear Authorization Boundaries (`§VIII.SHOWSTOPPER`) | `src/MakeBoldSpark.Api/Program.cs:339` | The Constitution requires every route to fall under a defined category and defines `/api/public/*` as anonymous, read-only. This anonymous token-issuance POST is neither. Decision 0007 states the amendment is only proposed. | Ratify and commit the explicit `/api/public/auth/*` category amendment before merging. |
+| C-01 | ✅ Resolved | IV. Security by Default (`§IV.SHOWSTOPPER`) | `src/MakeBoldSpark.Api/Features/Auth/AuthService.cs:34` | Every normal rejection path now verifies exactly one password hash against either the eligible author or a timing-safe placeholder. | Regression test verifies unknown and non-admin paths use the placeholder target. |
+| C-02 | ✅ Resolved | VIII. Clear Authorization Boundaries (`§VIII.SHOWSTOPPER`) | `.documentation/memory/constitution.md:71` | Constitution v1.2.0 defines `/api/public/auth/*` for anonymous credential verification and token issuance only. | Route and API documentation now reference the ratified category. |
 
 ### High Priority Issues
 
@@ -110,7 +113,7 @@ None found.
 
 | ID | Status | Principle | File:Line | Issue | Recommendation |
 |----|--------|-----------|-----------|-------|----------------|
-| M-01 | 🔴 Open | III. Simplicity (`§III.MEDIUM`) | `src/MakeBoldSpark.Cms/client/.vite/deps_temp_a5958e15/package.json:1` | Tool-generated caches and compiled outputs add unstable, non-authored files to the change set. | Remove generated files and extend `.gitignore` for `.vite/` and `*.tsbuildinfo`; keep source `vite.config.ts` only. |
+| M-01 | ✅ Resolved | III. Simplicity (`§III.MEDIUM`) | `.gitignore:441` | Generated Vite/TypeScript artifacts are removed from Git and ignored. | Source configuration and the lockfile remain tracked. |
 
 ### Low Priority Improvements
 
@@ -126,30 +129,30 @@ None found.
 |-----------|--------|----------|-------|
 | I. API-First | ✅ Pass | `contracts/auth-api.md`, OpenAPI metadata in `AuthEndpoints.cs` | Login request/response behavior is documented and tagged. |
 | II. Test-First | ✅ Pass | CMS and API tests added | Scoped tests pass. |
-| III. Simplicity | ⚠️ Partial | Generated client files committed | Remove build/cache artifacts. |
-| IV. Security by Default | ❌ Fail | `AuthService.cs:25-32` | Failure timing reveals whether an eligible administrator was found. |
+| III. Simplicity | ✅ Pass | Generated client files removed and ignored | No generated cache/config output remains in the PR diff. |
+| IV. Security by Default | ✅ Pass | `AuthService.cs:34-42`; `AuthServiceTests.cs` | Every normal login rejection performs one password-hash verification. |
 | V. Spec-Driven Development | ✅ Pass | Spec complete; 65/65 tasks complete | Full-compliance trust tier. |
 | VI. Ownership Boundary | ✅ Pass | No framework operation overwrites project-owned artifacts | Framework changes are separate from CMS implementation. |
 | VII. Single Backend Platform | ✅ Pass | `MakeBoldSpark.Cms` is an embedded client library referenced by the existing API | No service split introduced. |
-| VIII. Clear Authorization Boundaries | ❌ Fail | `Program.cs:339` | The required amendment is still proposed. |
+| VIII. Clear Authorization Boundaries | ✅ Pass | Constitution v1.2.0; `Program.cs:337` | The dedicated public-auth category is ratified and constrained. |
 | IX. Relational-First Data Strategy | ✅ Pass | EF Core/SQLite migration and DbContext use | No new non-relational default store. |
 | X. Zero Secrets in Source Control | ✅ Pass | Test-only strings do not provide production access; runtime key is configuration-driven | No production credential identified. |
 
 ## Security Checklist
 
 - [x] No production secrets or credentials committed
-- [ ] Input validation/timing handling complete for the sign-in path (C-01)
-- [ ] Authentication/authorization boundaries appropriate (C-02)
+- [x] Input validation and timing handling complete for the sign-in path
+- [x] Authentication/authorization boundaries appropriate
 - [x] No SQL injection introduced in reviewed paths
 - [x] Markdown/inline HTML preview sanitizes output and constrains embeds
 - [x] Dependencies use lockfiles; no production dependency vulnerability was identified during this review
 
 ## Testing Coverage
 
-**Status**: ADEQUATE, with one missing timing-side-channel regression test required by C-01.
+**Status**: ADEQUATE
 
 - `npm test` in `src/MakeBoldSpark.Cms/client`: 6 files, 16 tests passed.
-- Scoped API runs for changed authentication/CMS hosting/Swagger test classes: 14 tests passed.
+- Full .NET suite with the CI-equivalent signing-key environment: 125 tests passed.
 - GitHub Actions validation is currently passing for the reviewed branch.
 
 ## Test Inventory
@@ -163,30 +166,31 @@ None found.
 | `src/MakeBoldSpark.Cms/client/src/cms/overrides/MaskedCredentialField.test.tsx` | 1 | 0 | +1 | Credential masking |
 | `src/MakeBoldSpark.Cms/client/src/cms/overrides/MenuTree.test.tsx` | 2 | 0 | +2 | Menu hierarchy |
 | `tests/MakeBoldSpark.Api.Tests/Features/Auth/AuthEndpointsTests.cs` | 5 | 0 | +5 | Login behavior |
+| `tests/MakeBoldSpark.Api.Tests/Features/Auth/AuthServiceTests.cs` | 1 | 0 | +1 | Timing-safe password verification |
 | `tests/MakeBoldSpark.Api.Tests/Features/CmsHostingTests.cs` | 1 | 0 | +1 | Embedded CMS hosting |
 | `tests/MakeBoldSpark.Api.Tests/Features/SwaggerAvailabilityTests.cs` | 5 | 0 | +5 | OpenAPI availability |
 | `tests/MakeBoldSpark.Api.Tests/Infrastructure/Auth/AuthorizationSetupTests.cs` | 1 | 0 | +1 | Missing JWT configuration |
 | `tests/MakeBoldSpark.Api.Tests/Infrastructure/Auth/AuthorizationSignatureTests.cs` | 2 | 0 | +2 | JWT signature validation |
-| **Total** | **30** | **0** | **+30** | |
+| **Total** | **31** | **0** | **+31** | |
 
 No test removals detected.
 
 ## Documentation Status
 
-**Status**: PARTIAL
+**Status**: ADEQUATE
 
-The API contract, quickstart, data model, research, and decision record are present. The decision record deliberately leaves the required Principle VIII amendment for owner ratification; this is the blocking documentation/governance gap in C-02.
+The API contract, quickstart, data model, research, decision record, and Constitution are present. The decision record now records the owner-ratified Principle VIII amendment.
 
 ## Changed Files Summary
 
 | File/group | Tier | Changes | Type | Findings |
 |------------|------|---------|------|----------|
-| `src/MakeBoldSpark.Api/Features/Auth/*` | P0 | +146 -0 | Added | C-01 |
+| `src/MakeBoldSpark.Api/Features/Auth/*` | P0 | +146 -0 | Added/Modified | C-01 resolved |
 | `src/MakeBoldSpark.Api/Infrastructure/Auth/AuthorizationSetup.cs` | P0 | +18 -16 | Modified | None |
-| `src/MakeBoldSpark.Api/Program.cs` | P0 | +138 -1 | Modified | C-02 |
+| `src/MakeBoldSpark.Api/Program.cs` | P0 | +139 -1 | Modified | C-02 resolved |
 | `src/MakeBoldSpark.Cms/MakeBoldSparkCmsExtensions.cs` | P0 | +42 -0 | Added | None |
 | `src/MakeBoldSpark.Cms/client/src/*` | P1/P2 | +2,800+ | Added | None |
-| `src/MakeBoldSpark.Cms/client/.vite/*` and generated config/cache outputs | P2 | +9 files | Added | M-01 |
+| `src/MakeBoldSpark.Cms/client/.vite/*` and generated config/cache outputs | P2 | 6 files | Removed/ignored | M-01 resolved |
 | `.github/workflows/validate.yml` | P2 | +2 -0 | Modified | None |
 | `.documentation/specs/004-cms-admin-app/*` | P3 | +1,000+ | Added | C-02 evidence |
 
@@ -199,11 +203,11 @@ The API contract, quickstart, data model, research, and decision record are pres
 
 ## Approval Decision
 
-**Recommendation**: ❌ REJECT
+**Recommendation**: ✅ APPROVE
 
-**Reasoning**: The PR is well documented and tested, but it cannot be approved while login rejection timing leaks eligible administrator accounts and while the documented route-category waiver has not been ratified into the authoritative Constitution. Resolve C-01 and C-02, remove generated cache files (M-01), then request a re-review.
+**Reasoning**: The re-review verified all prior findings. The timing-safe password verification has focused regression coverage, the route category is ratified in the Constitution, generated artifacts are removed and ignored, and all validation commands pass.
 
-**Estimated Rework Time**: 2-4 hours plus owner ratification of the Constitution amendment.
+**Estimated Rework Time**: N/A
 
 ---
 
