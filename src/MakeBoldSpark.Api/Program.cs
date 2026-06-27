@@ -20,8 +20,10 @@ using ApiTestSpark;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.RateLimiting;
+using System.Security.Claims;
 using System.Threading.RateLimiting;
 using MakeBoldSpark.Cms;
+using MakeBoldSpark.Recipe.Client;
 using MakeBoldSpark.Core.Data;
 using MakeBoldSpark.Core.Infrastructure.Logging;
 using MakeBoldSpark.Recipe.Data;
@@ -151,8 +153,17 @@ builder.Services.AddRateLimiter(options =>
 {
     options.OnRejected = async (context, token) =>
     {
-        context.HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        await context.HttpContext.Response.WriteAsJsonAsync(new LoginErrorResponse(), cancellationToken: token);
+        if (context.HttpContext.Request.Path.StartsWithSegments("/api/public/auth"))
+        {
+            context.HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.HttpContext.Response.WriteAsJsonAsync(new LoginErrorResponse(), cancellationToken: token);
+            return;
+        }
+
+        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+        await context.HttpContext.Response.WriteAsJsonAsync(
+            new { message = "Too many publisher recipe operations. Retry shortly." },
+            cancellationToken: token);
     };
 
     options.AddPolicy("login-per-ip", httpContext => RateLimitPartition.GetFixedWindowLimiter(
@@ -161,6 +172,17 @@ builder.Services.AddRateLimiter(options =>
         {
             Window = TimeSpan.FromMinutes(1),
             PermitLimit = 20,
+            QueueLimit = 0,
+        }));
+
+    options.AddPolicy("publisher-recipe-mutation", httpContext => RateLimitPartition.GetFixedWindowLimiter(
+        partitionKey: httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? httpContext.Connection.RemoteIpAddress?.ToString()
+            ?? "anonymous-publisher",
+        factory: _ => new FixedWindowRateLimiterOptions
+        {
+            Window = TimeSpan.FromMinutes(1),
+            PermitLimit = 120,
             QueueLimit = 0,
         }));
 });
@@ -344,7 +366,7 @@ adminApi.MapAdminHealthApi();
 adminApi.MapGroup("/makeboldspark").MapAdminMakeBoldSparkApi();
 
 var publishApi = app.MapGroup("/api/publish").RequireAuthorization("Publisher");
-publishApi.MapPublishRecipeApi();
+publishApi.MapPublisherRecipeMaintenanceApi();
 
 app.MapGroup("/api/integrations").RequireAuthorization("ServiceOrAdmin");
 
@@ -376,6 +398,7 @@ app.MapApiTestSpark(options =>
 });
 
 app.MapMakeBoldSparkCms();
+app.MapMakeBoldSparkRecipeClient();
 
 // Warn if weather key is missing
 var startupLogger = app.Services.GetRequiredService<ILogger<Program>>();

@@ -1,5 +1,6 @@
 using MakeBoldSpark.Api.Infrastructure.Data;
 using MakeBoldSpark.Api.Infrastructure.OpenApi;
+using MakeBoldSpark.Recipe.Data;
 
 namespace MakeBoldSpark.Api.Features.Health;
 
@@ -7,7 +8,7 @@ public static class AdminHealthEndpoints
 {
     public static RouteGroupBuilder MapAdminHealthApi(this RouteGroupBuilder group)
     {
-        group.MapGet("/health/deep", async (MakeBoldSparkDbContext db, CancellationToken ct) =>
+        group.MapGet("/health/deep", async (MakeBoldSparkDbContext db, RecipeDbContext recipeDb, CancellationToken ct) =>
         {
             var checks = new Dictionary<string, string>();
             try
@@ -18,6 +19,16 @@ public static class AdminHealthEndpoints
             catch
             {
                 checks["database"] = "error";
+            }
+
+            try
+            {
+                var recipeCanConnect = await recipeDb.Database.CanConnectAsync(ct);
+                checks["recipeDatabase"] = recipeCanConnect ? "ok" : "unavailable";
+            }
+            catch
+            {
+                checks["recipeDatabase"] = "error";
             }
 
             var allOk = checks.Values.All(v => v == "ok");

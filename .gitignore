@@ -442,6 +442,10 @@ src/MakeBoldSpark.Cms/client/.vite/
 src/MakeBoldSpark.Cms/client/*.tsbuildinfo
 src/MakeBoldSpark.Cms/client/vite.config.js
 src/MakeBoldSpark.Cms/client/vite.config.d.ts
+src/MakeBoldSpark.Recipe.Client/client/.vite/
+src/MakeBoldSpark.Recipe.Client/client/*.tsbuildinfo
+src/MakeBoldSpark.Recipe.Client/client/vite.config.js
+src/MakeBoldSpark.Recipe.Client/client/vite.config.d.ts
 
 # MakeBoldSpark — SQLite databases (NEVER commit production or local .db files)
 *.db

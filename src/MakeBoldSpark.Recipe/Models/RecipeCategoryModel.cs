@@ -38,4 +38,5 @@ public class RecipeCategoryModel
     public string Url { get; set; } = string.Empty;
 
     public int DomainID { get; set; } = RecipeConstants.INT_MOM_DomainId;
+    public int Version { get; set; }
 }

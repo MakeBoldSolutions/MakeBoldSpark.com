@@ -26,7 +26,9 @@ public partial class RecipeDbContext(DbContextOptions<RecipeDbContext> options) 
             if (entityEntry.State == EntityState.Added)
             {
                 ((RecipeBaseEntity)entityEntry.Entity).CreatedDate = DateTime.UtcNow;
+                ((RecipeBaseEntity)entityEntry.Entity).Version = 1;
             }
+            else ((RecipeBaseEntity)entityEntry.Entity).Version++;
         }
     }
 
@@ -34,6 +36,8 @@ public partial class RecipeDbContext(DbContextOptions<RecipeDbContext> options) 
     {
         modelBuilder.Entity<Recipe>(entity =>
         {
+            entity.Property(e => e.Version).IsConcurrencyToken().HasDefaultValue(1);
+            entity.HasIndex(e => new { e.DomainId, e.Name });
             entity.Property(e => e.AuthorName)
                 .IsRequired()
                 .HasMaxLength(50);
@@ -54,6 +58,8 @@ public partial class RecipeDbContext(DbContextOptions<RecipeDbContext> options) 
 
         modelBuilder.Entity<RecipeCategory>(entity =>
         {
+            entity.Property(e => e.Version).IsConcurrencyToken().HasDefaultValue(1);
+            entity.HasIndex(e => new { e.DomainId, e.Name }).IsUnique();
             entity.Property(e => e.Comment).HasMaxLength(1500);
             entity.Property(e => e.Name)
                 .IsRequired()

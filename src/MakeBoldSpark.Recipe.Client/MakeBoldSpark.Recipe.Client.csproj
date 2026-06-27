@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Description>Embedded React publisher workspace for MakeBoldSpark recipe maintenance.</Description>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.9" />
+  </ItemGroup>
+  <PropertyGroup>
+    <_SpaSentinel>$(IntermediateOutputPath)spa-built.sentinel</_SpaSentinel>
+    <_SpaBuildDirectory>$(MSBuildProjectDirectory)/build</_SpaBuildDirectory>
+    <_SpaBuildIndex>$(_SpaBuildDirectory)/index.html</_SpaBuildIndex>
+  </PropertyGroup>
+  <ItemGroup>
+    <_SpaSources Include="$(MSBuildProjectDirectory)/client/**/*" Exclude="$(MSBuildProjectDirectory)/client/node_modules/**;$(_SpaBuildDirectory)/**" />
+  </ItemGroup>
+  <Target Name="BuildReactSpa" BeforeTargets="_CalculateEmbeddedFilesManifestInputs" Inputs="@(_SpaSources)" Outputs="$(_SpaSentinel);$(_SpaBuildIndex)">
+    <Exec Command="npm ci" WorkingDirectory="$(MSBuildProjectDirectory)/client" Condition="!Exists('$(MSBuildProjectDirectory)/client/node_modules')" />
+    <Exec Command="npm run build" WorkingDirectory="$(MSBuildProjectDirectory)/client" />
+    <Touch Files="$(_SpaSentinel)" AlwaysCreate="true" />
+  </Target>
+  <Target Name="ValidateSpaAssets" AfterTargets="BuildReactSpa" BeforeTargets="_CalculateEmbeddedFilesManifestInputs">
+    <ItemGroup><_SpaBuildOutput Include="$(_SpaBuildDirectory)/**/*" /><EmbeddedResource Include="@(_SpaBuildOutput)" Link="build\%(RecursiveDir)%(Filename)%(Extension)" /></ItemGroup>
+    <Error Condition="'@(_SpaBuildOutput)' == ''" Text="Recipe client SPA build produced no output." />
+  </Target>
+</Project>

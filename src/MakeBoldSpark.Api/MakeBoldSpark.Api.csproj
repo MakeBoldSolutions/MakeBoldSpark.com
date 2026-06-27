@@ -13,6 +13,7 @@
     <ProjectReference Include="..\MakeBoldSpark.Cms\MakeBoldSpark.Cms.csproj" />
     <ProjectReference Include="..\MakeBoldSpark.Core\MakeBoldSpark.Core.csproj" />
     <ProjectReference Include="..\MakeBoldSpark.Recipe\MakeBoldSpark.Recipe.csproj" />
+    <ProjectReference Include="..\MakeBoldSpark.Recipe.Client\MakeBoldSpark.Recipe.Client.csproj" />
   </ItemGroup>
 
   <ItemGroup>
