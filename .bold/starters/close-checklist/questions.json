@@ -1,0 +1,6 @@
+[
+  {"id":"close.period","prompt":"Close period?","type":"select","options":["monthly","quarterly"],"default":"monthly","maps_to":"core.close.period"},
+  {"id":"close.days_to_close","prompt":"Business days after period-end to have the close fully signed off?","type":"number","default":5,"maps_to":"core.close.days_to_close"},
+  {"id":"close.accounting_software","prompt":"Accounting software the close is performed in?","type":"select","options":["quickbooks_online","quickbooks_desktop","xero","spreadsheets","other"],"default":"quickbooks_online","maps_to":"core.close.accounting_software"},
+  {"id":"close.has_named_reviewer","prompt":"Is there a person other than the preparer who signs off on the close?","type":"boolean","default":false,"maps_to":"core.close.has_named_reviewer"}
+]

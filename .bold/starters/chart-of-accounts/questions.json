@@ -1,0 +1,6 @@
+[
+  {"id":"coa.accounting_method","prompt":"Accounting method?","type":"select","options":["cash","accrual","modified_cash"],"default":"accrual","maps_to":"core.coa.accounting_method"},
+  {"id":"coa.existing_software","prompt":"Existing accounting software?","type":"select","options":["quickbooks_online","quickbooks_desktop","xero","spreadsheets","none"],"default":"quickbooks_online","maps_to":"core.coa.existing_software"},
+  {"id":"coa.revenue_lines","prompt":"How many revenue lines need separate COGS tracking?","type":"number","default":1,"maps_to":"core.coa.revenue_lines"},
+  {"id":"coa.job_costing","prompt":"Does the business need job/project-level costing, not just revenue-line totals?","type":"boolean","default":false,"maps_to":"core.coa.job_costing"}
+]

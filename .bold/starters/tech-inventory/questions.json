@@ -1,0 +1,5 @@
+[
+  {"id":"tech.tool_count","prompt":"Rough count of distinct software tools/subscriptions in active use?","type":"number","default":5,"maps_to":"core.tech.tool_count"},
+  {"id":"tech.review_cadence","prompt":"How often should the inventory be reviewed going forward?","type":"select","options":["quarterly","semiannual","annual"],"default":"annual","maps_to":"core.tech.review_cadence"},
+  {"id":"tech.has_owner_per_tool","prompt":"Does each tool currently have a named internal owner?","type":"boolean","default":false,"maps_to":"core.tech.has_owner_per_tool"}
+]

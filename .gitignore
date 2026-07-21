@@ -428,9 +428,6 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
-# DevSpark — personal overrides (never commit)
-.documentation/*/commands/
-
 # CMS client and .NET build artifacts
 dist/
 build/
@@ -465,3 +462,4 @@ publish/
 # MakeBoldSpark uses .slnx format (default for .NET 10 dotnet new sln)
 # Do NOT add *.slnx here — it is the canonical solution file
 
+.bold/.backup/

@@ -1,0 +1,23 @@
+{
+  "project": "MakeBoldSpark",
+  "core": {
+    "runtime": { "value": ".NET 10 LTS", "source": "discovered" },
+    "framework": { "value": "ASP.NET Core (Minimal APIs)", "source": "discovered" },
+    "data_default": { "value": "EF Core + SQLite", "source": "discovered" },
+    "data_selective": { "value": "Azure Cosmos DB", "source": "discovered" },
+    "hosting": { "value": "Azure App Service Linux B1", "source": "discovered" },
+    "static_clients": { "value": "Azure Static Web Apps", "source": "discovered" },
+    "ci_cd": { "value": "GitHub Actions", "source": "discovered" },
+    "source_control": { "value": "Git / GitHub", "source": "discovered" }
+  },
+  "layer": {
+    "static_site_build": { "value": "Eleventy (@11ty/eleventy), Node.js LTS, build-time only", "source": "discovered" },
+    "testing": { "value": "xUnit / NUnit / MSTest, test-first discipline", "source": "discovered" },
+    "scripting": { "value": "PowerShell (primary), Bash (cross-platform fallback)", "source": "discovered" }
+  },
+  "migrated_from": {
+    "tool": "devspark",
+    "version": "2.6.0",
+    "migrated_at": "2026-07-21"
+  }
+}

@@ -1,0 +1,7 @@
+[
+  {"id":"company.legal_structure","prompt":"Legal structure?","type":"select","options":["sole_proprietor","llc","s_corp","c_corp","partnership"],"default":"llc","maps_to":"core.company.legal_structure"},
+  {"id":"company.industry","prompt":"Primary industry?","type":"text","default":"unspecified","maps_to":"core.company.industry"},
+  {"id":"company.revenue_lines","prompt":"How many distinct revenue lines does the business run?","type":"number","default":1,"maps_to":"core.company.revenue_lines"},
+  {"id":"company.roadmap_horizon","prompt":"Planning horizon for the roadmap?","type":"select","options":["90_days","6_months","12_months"],"default":"12_months","maps_to":"core.company.roadmap_horizon"},
+  {"id":"company.fractional_interest","prompt":"Is the owner already fractional-model-aware (has considered fractional CFO/COO/CTO help)?","type":"boolean","default":false,"maps_to":"core.company.fractional_interest"}
+]
