@@ -69,6 +69,7 @@ public static class DatabaseSetup
                 {
                     await PreMarkAppliedIfTablesExistAsync(recipeDb, logger, cancellationToken);
                     await recipeDb.Database.MigrateAsync(cancellationToken);
+                    await RepairRecipeConcurrencySchemaAsync(recipeDb, logger, cancellationToken);
                     await recipeDb.Database.ExecuteSqlRawAsync("PRAGMA journal_mode=WAL;", cancellationToken);
                     logger.LogInformation("Recipe database migrations applied");
                 }
@@ -76,6 +77,14 @@ public static class DatabaseSetup
             catch (Exception ex)
             {
                 logger.LogError(ex, "Recipe database initialization failed — startup continues in degraded mode");
+                try
+                {
+                    await RepairRecipeConcurrencySchemaAsync(recipeDb, logger, cancellationToken);
+                }
+                catch (Exception repairEx)
+                {
+                    logger.LogError(repairEx, "Recipe database concurrency schema repair failed — startup continues in degraded mode");
+                }
             }
 
             using var makeBoldSparkScope = app.Services.CreateScope();
@@ -169,5 +178,66 @@ public static class DatabaseSetup
                 cancellationToken);
         }
         logger.LogInformation("Database: {Count} pending migration(s) pre-marked as applied (tables already existed)", pending.Count);
+    }
+
+    private static async Task RepairRecipeConcurrencySchemaAsync(RecipeDbContext db, ILogger logger, CancellationToken cancellationToken)
+    {
+        var conn = db.Database.GetDbConnection();
+        var shouldClose = conn.State == System.Data.ConnectionState.Closed;
+        if (shouldClose)
+            await conn.OpenAsync(cancellationToken);
+
+        try
+        {
+            await EnsureColumnAsync(conn, "Recipe", "Version", "INTEGER NOT NULL DEFAULT 1", logger, cancellationToken);
+            await EnsureColumnAsync(conn, "RecipeCategory", "Version", "INTEGER NOT NULL DEFAULT 1", logger, cancellationToken);
+            await EnsureColumnAsync(conn, "RecipeImage", "Version", "INTEGER NOT NULL DEFAULT 0", logger, cancellationToken);
+            await EnsureColumnAsync(conn, "RecipeComment", "Version", "INTEGER NOT NULL DEFAULT 0", logger, cancellationToken);
+            await ExecuteNonQueryAsync(conn, "CREATE INDEX IF NOT EXISTS \"IX_Recipe_DomainId_Name\" ON \"Recipe\" (\"DomainId\", \"Name\");", cancellationToken);
+
+            try
+            {
+                await ExecuteNonQueryAsync(conn, "CREATE UNIQUE INDEX IF NOT EXISTS \"IX_RecipeCategory_DomainId_Name\" ON \"RecipeCategory\" (\"DomainId\", \"Name\");", cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                logger.LogWarning(ex, "Recipe category domain/name index could not be created; duplicate legacy categories may need cleanup");
+            }
+        }
+        finally
+        {
+            if (shouldClose)
+                await conn.CloseAsync();
+        }
+    }
+
+    private static async Task EnsureColumnAsync(System.Data.Common.DbConnection conn, string table, string column, string definition, ILogger logger, CancellationToken cancellationToken)
+    {
+        if (await ColumnExistsAsync(conn, table, column, cancellationToken))
+            return;
+
+        await ExecuteNonQueryAsync(conn, $"ALTER TABLE \"{table}\" ADD COLUMN \"{column}\" {definition};", cancellationToken);
+        logger.LogInformation("Recipe database schema repaired: added {Table}.{Column}", table, column);
+    }
+
+    private static async Task<bool> ColumnExistsAsync(System.Data.Common.DbConnection conn, string table, string column, CancellationToken cancellationToken)
+    {
+        await using var cmd = conn.CreateCommand();
+        cmd.CommandText = $"PRAGMA table_info('{table}');";
+        await using var reader = await cmd.ExecuteReaderAsync(cancellationToken);
+        while (await reader.ReadAsync(cancellationToken))
+        {
+            if (string.Equals(reader.GetString(1), column, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+
+        return false;
+    }
+
+    private static async Task ExecuteNonQueryAsync(System.Data.Common.DbConnection conn, string sql, CancellationToken cancellationToken)
+    {
+        await using var cmd = conn.CreateCommand();
+        cmd.CommandText = sql;
+        await cmd.ExecuteNonQueryAsync(cancellationToken);
     }
 }

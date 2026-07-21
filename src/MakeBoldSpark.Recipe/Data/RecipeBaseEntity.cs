@@ -10,4 +10,5 @@ public class RecipeBaseEntity
     public DateTime UpdatedDate { get; set; }
     public int? UpdatedID { get; set; }
     public int? CreatedID { get; set; }
+    public int Version { get; set; } = 1;
 }

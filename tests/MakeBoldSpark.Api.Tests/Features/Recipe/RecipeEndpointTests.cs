@@ -1,6 +1,8 @@
 using System.Net;
 using System.Net.Http.Json;
 using MakeBoldSpark.Api.Tests.Infrastructure;
+using MakeBoldSpark.Recipe.Data;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MakeBoldSpark.Api.Tests.Features.Recipe;
 
@@ -60,6 +62,38 @@ public class RecipeEndpointTests
     public async Task GetRecipeById_NonExistent_ReturnsNotFound()
     {
         var response = await _anonClient.GetAsync("/api/public/recipes/99999");
+        Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [TestMethod]
+    public async Task GetRecipeById_Anonymous_UnapprovedRecipeReturnsNotFound()
+    {
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<RecipeDbContext>();
+        var category = new RecipeCategory
+        {
+            Name = $"Unapproved category {Guid.NewGuid():N}",
+            DomainId = 1,
+        };
+        db.RecipeCategory.Add(category);
+        await db.SaveChangesAsync();
+
+        var recipe = new global::MakeBoldSpark.Recipe.Data.Recipe
+        {
+            Name = $"Unapproved recipe {Guid.NewGuid():N}",
+            AuthorName = "Test Author",
+            Description = "Not yet public",
+            Ingredients = "Ingredient",
+            Instructions = "Instruction",
+            IsApproved = false,
+            DomainId = 1,
+            RecipeCategory = category,
+        };
+        db.Recipe.Add(recipe);
+        await db.SaveChangesAsync();
+
+        var response = await _anonClient.GetAsync($"/api/public/recipes/{recipe.Id}");
+
         Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
     }
 

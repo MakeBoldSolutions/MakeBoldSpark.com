@@ -4,6 +4,7 @@
     <Project Path="src/MakeBoldSpark.Cms/MakeBoldSpark.Cms.csproj" />
     <Project Path="src/MakeBoldSpark.Core/MakeBoldSpark.Core.csproj" />
     <Project Path="src/MakeBoldSpark.Recipe/MakeBoldSpark.Recipe.csproj" />
+    <Project Path="src/MakeBoldSpark.Recipe.Client/MakeBoldSpark.Recipe.Client.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/MakeBoldSpark.Api.Tests/MakeBoldSpark.Api.Tests.csproj" />

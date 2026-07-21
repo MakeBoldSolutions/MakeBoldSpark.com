@@ -66,4 +66,19 @@ public class HealthEndpointTests
         sw.Stop();
         Assert.IsTrue(sw.ElapsedMilliseconds < 500, $"Health response exceeded 500ms: {sw.ElapsedMilliseconds}ms");
     }
+
+    [TestMethod]
+    public async Task GetDeepHealth_WithAdmin_IncludesRecipeDatabaseReadiness()
+    {
+        var adminClient = _factory.CreateAdminClient();
+
+        var response = await adminClient.GetAsync("/api/admin/health/deep");
+
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        var json = await response.Content.ReadAsStringAsync();
+        using var doc = JsonDocument.Parse(json);
+        var checks = doc.RootElement.GetProperty("checks");
+        Assert.AreEqual("ok", checks.GetProperty("database").GetString());
+        Assert.AreEqual("ok", checks.GetProperty("recipeDatabase").GetString());
+    }
 }

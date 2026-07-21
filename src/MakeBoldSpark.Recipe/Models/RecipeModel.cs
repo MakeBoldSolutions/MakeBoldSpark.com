@@ -80,4 +80,5 @@ public class RecipeModel
     public int DomainID { get; set; } = RecipeConstants.INT_MOM_DomainId;
 
     public string SEO_Keywords { get; set; } = string.Empty;
+    public int Version { get; set; }
 }

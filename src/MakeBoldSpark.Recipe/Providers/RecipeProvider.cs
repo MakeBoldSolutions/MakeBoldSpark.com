@@ -51,6 +51,7 @@ public class RecipeProvider(RecipeDbContext dbContext) : IRecipeService, IDispos
             ViewCount = recipe.ViewCount,
             LastViewDT = recipe.LastViewDt,
             ModifiedDT = recipe.UpdatedDate,
+            Version = recipe.Version,
         };
     }
 
@@ -81,6 +82,7 @@ public class RecipeProvider(RecipeDbContext dbContext) : IRecipeService, IDispos
             Servings = recipe.Servings,
             CreatedDate = DateTime.UtcNow,
             UpdatedDate = DateTime.UtcNow,
+            Version = recipe.Version,
         };
     }
 
@@ -93,7 +95,9 @@ public class RecipeProvider(RecipeDbContext dbContext) : IRecipeService, IDispos
             IsActive = s.IsActive,
             Comment = s.Name,
             Id = s.Id,
-            Name = s.Name
+            Name = s.Name,
+            DomainId = s.DomainID,
+            Version = s.Version
         };
     }
 
@@ -134,6 +138,7 @@ public class RecipeProvider(RecipeDbContext dbContext) : IRecipeService, IDispos
             Id = rc.Id,
             Name = rc.Name,
             Url = RecipeUrlHelper.GetRecipeCategoryURL(rc.Name),
+            Version = rc.Version,
             Recipes = loadRecipes ? Create(rc.Recipe?.ToList()) : []
         };
     }

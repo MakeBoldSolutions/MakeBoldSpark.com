@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Net;
+using System.Net.Http.Json;
 using MakeBoldSpark.Api.Tests.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -126,6 +127,30 @@ public class RequestLoggingMiddlewareTests
         var response = await _client.GetAsync("/api/health");
         Assert.IsTrue(response.Headers.Contains("X-Correlation-ID"),
             "Response should echo X-Correlation-ID header");
+    }
+
+    [TestMethod]
+    public async Task RequestLogging_DoesNotCaptureAuthorizationHeaderOrRequestBody()
+    {
+        _factory.Capture.Messages.Clear();
+        var publisherClient = _factory.CreatePublisherClient();
+        publisherClient.DefaultRequestHeaders.Authorization = new("Bearer", "secret-token-value");
+
+        await publisherClient.PostAsJsonAsync("/api/publish/recipes?domainId=1", new
+        {
+            name = "SECRET_RECIPE_PAYLOAD",
+            authorName = "Tester",
+            ingredients = "SECRET_INGREDIENTS",
+            instructions = "Stir",
+            servings = 1,
+            recipeCategoryId = 999,
+            isApproved = false,
+        });
+
+        var logs = string.Join(Environment.NewLine, _factory.Capture.Messages);
+        Assert.IsFalse(logs.Contains("secret-token-value", StringComparison.OrdinalIgnoreCase));
+        Assert.IsFalse(logs.Contains("SECRET_RECIPE_PAYLOAD", StringComparison.OrdinalIgnoreCase));
+        Assert.IsFalse(logs.Contains("SECRET_INGREDIENTS", StringComparison.OrdinalIgnoreCase));
     }
 }
 
