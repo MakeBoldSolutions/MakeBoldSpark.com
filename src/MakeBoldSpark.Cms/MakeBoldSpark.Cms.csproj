@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.9" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.10" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -22,6 +22,10 @@
 
   <ItemGroup>
     <_SpaSources Include="$(MSBuildProjectDirectory)/client/**/*" Exclude="$(MSBuildProjectDirectory)/client/node_modules/**;$(_SpaBuildDirectory)/**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.4" />
   </ItemGroup>
 
   <!-- Runs npm as part of dotnet build, same as MakeBoldSpark.Api's BuildStaticContent target for MakeBoldSpark.Web; requires Node available in the build environment. -->
