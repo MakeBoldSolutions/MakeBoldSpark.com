@@ -1,4 +1,6 @@
 using System.Text;
+using MakeBoldSpark.Api.Features.Bold.Auth;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -59,7 +61,14 @@ public static class AuthorizationSetup
                         return Task.CompletedTask;
                     }
                 };
-            });
+            })
+            // Bold install-token scheme (ADR 0014): a dedicated, non-JWT bearer scheme fully
+            // isolated from JwtBearer above. Only requested by the "BoldInstallToken" policy below —
+            // AdminOnly/Publisher/ServiceOrAdmin never add it, so a valid install token is simply a
+            // malformed JWT to those policies (401), and a valid admin JWT never matches an
+            // install-token hash lookup (401) — see BoldAuthTests for the isolation proof.
+            .AddScheme<AuthenticationSchemeOptions, InstallTokenAuthenticationHandler>(
+                BoldInstallTokenDefaults.AuthenticationScheme, null);
 
         services.AddAuthorization(options =>
         {
@@ -80,6 +89,12 @@ public static class AuthorizationSetup
                 policy.RequireAssertion(ctx =>
                     ctx.User.IsInRole("Admin") ||
                     ctx.User.HasClaim("scope", "makeboldspark.publish"));
+            });
+
+            options.AddPolicy(BoldInstallTokenDefaults.PolicyName, policy =>
+            {
+                policy.AddAuthenticationSchemes(BoldInstallTokenDefaults.AuthenticationScheme);
+                policy.RequireAuthenticatedUser();
             });
         });
 

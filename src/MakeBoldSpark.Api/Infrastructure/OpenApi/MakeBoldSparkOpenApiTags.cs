@@ -33,4 +33,11 @@ internal static class MakeBoldSparkOpenApiTags
     public const string AsyncConcurrencyPatterns = "Async Demo: Concurrency & Parallelism";
     public const string AsyncResilienceTimeouts = "Async Demo: Resilience & Timeouts";
     public const string AsyncMonitoringHealth = "Async Demo: Monitoring & Health";
+    public const string BoldAdmin = "Bold: Admin Token Issuance";
+    public const string BoldHealth = "Bold: Health";
+    public const string BoldProviders = "Bold: Providers & Routing";
+    public const string BoldCompletions = "Bold: Completions";
+    public const string BoldEmbeddings = "Bold: Embeddings";
+    public const string BoldRuns = "Bold: Runs";
+    public const string BoldUsage = "Bold: Usage";
 }

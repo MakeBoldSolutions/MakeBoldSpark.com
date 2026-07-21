@@ -1,0 +1,426 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Bold API",
+    "version": "0.1.0",
+    "description": "Server-side gateway that executes frontier model calls (OpenAI, Anthropic) on behalf of Bold Desktop and the Bold CLI harness. Holds provider credentials, applies model-role routing, enforces rate limits, and records usage/run history so desktop clients never hold provider keys. This is the M1a deliverable in bold-docs/bold-desktop-hybrid-brief.md — build and test standalone before any client consumes it."
+  },
+  "servers": [
+    { "url": "https://api.makeboldspark.com/v1", "description": "Production" },
+    { "url": "http://localhost:8080/v1", "description": "Local development (M1a)" }
+  ],
+  "security": [{ "bearerAuth": [] }],
+  "tags": [
+    { "name": "health", "description": "Service liveness" },
+    { "name": "providers", "description": "Provider status and model-role routing visibility" },
+    { "name": "completions", "description": "Core model-execution endpoint behind plan/build/ship" },
+    { "name": "embeddings", "description": "Post-MVP: reference-pack retrieval (Phase 4)" },
+    { "name": "runs", "description": "Run history" },
+    { "name": "usage", "description": "Token/cost usage reporting" }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Liveness/readiness check",
+        "tags": ["health"],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HealthStatus" } } }
+          }
+        }
+      }
+    },
+    "/providers": {
+      "get": {
+        "summary": "List configured providers and their current health",
+        "description": "Backs `bold-desktop providers test` and the desktop Providers screen. Returns reachability, not credentials.",
+        "tags": ["providers"],
+        "responses": {
+          "200": {
+            "description": "Provider status list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["providers"],
+                  "properties": {
+                    "providers": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/ProviderStatus" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/model-roles": {
+      "get": {
+        "summary": "Current model-role routing configuration",
+        "description": "Read-only view of which provider/model each role (router, planner, reviewer, embedding) currently resolves to. Lets the server change model routing without a desktop app release.",
+        "tags": ["providers"],
+        "responses": {
+          "200": {
+            "description": "Role mapping",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["roles"],
+                  "properties": {
+                    "roles": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/ModelRoleMapping" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/completions": {
+      "post": {
+        "summary": "Execute a model-role completion",
+        "description": "Core endpoint behind plan/build/ship. Client sends a model role (not a raw provider/model name) plus messages and, optionally, a JSON schema the output must satisfy. Server resolves the role to a provider/model, executes the call, validates structured output, and retries on invalid output or a transient provider failure. Satisfies the plan's 'JSON response validation and retry policy' and 'clear halt reason on provider failure' acceptance criteria.",
+        "tags": ["completions"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CompletionRequest" } }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Completion result",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CompletionResponse" } } }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "422": {
+            "description": "Provider output failed schema validation after all retries",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+          },
+          "429": { "$ref": "#/components/responses/RateLimited" },
+          "502": {
+            "description": "Upstream provider failure (outage, invalid key, model unavailable)",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+          }
+        }
+      }
+    },
+    "/embeddings": {
+      "post": {
+        "summary": "Execute an embedding request",
+        "description": "Supports Phase 4 (reference packs and retrieval). Not required for the M1/M2 MVP — specified now so the contract doesn't need a breaking change when reference packs start.",
+        "tags": ["embeddings"],
+        "x-bold-phase": "post-mvp",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EmbeddingRequest" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Embedding vectors",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/EmbeddingResponse" } } }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/runs": {
+      "get": {
+        "summary": "List recent runs for the authenticated install",
+        "description": "Backs the desktop History view.",
+        "tags": ["runs"],
+        "parameters": [
+          { "name": "workspace_id", "in": "query", "schema": { "type": "string" } },
+          { "name": "workflow", "in": "query", "schema": { "$ref": "#/components/schemas/Workflow" } },
+          { "name": "since", "in": "query", "schema": { "type": "string", "format": "date-time" } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 50, "maximum": 200 } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Run history page",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "runs": { "type": "array", "items": { "$ref": "#/components/schemas/RunSummary" } },
+                    "next_cursor": { "type": ["string", "null"] }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/runs/{runId}": {
+      "get": {
+        "summary": "Fetch a single run record",
+        "tags": ["runs"],
+        "parameters": [
+          { "name": "runId", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Run record",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/RunSummary" } } }
+          },
+          "404": {
+            "description": "Run not found",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/usage": {
+      "get": {
+        "summary": "Usage and cost summary for the authenticated install",
+        "description": "Backs token/cost estimates shown in the desktop Providers and History screens.",
+        "tags": ["usage"],
+        "parameters": [
+          { "name": "since", "in": "query", "schema": { "type": "string", "format": "date-time" } },
+          { "name": "until", "in": "query", "schema": { "type": "string", "format": "date-time" } },
+          { "name": "group_by", "in": "query", "schema": { "type": "string", "enum": ["day", "provider", "model_role", "workflow"] } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usage summary",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UsageSummary" } } }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Per-install Bold API token (O10). Issued out-of-band for the MVP pilot (e.g. an admin script), not via a self-service endpoint."
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Missing or invalid install token",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+      },
+      "BadRequest": {
+        "description": "Malformed request",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+      },
+      "RateLimited": {
+        "description": "Rate limit exceeded; retry after the Retry-After header",
+        "headers": {
+          "Retry-After": { "schema": { "type": "integer" }, "description": "Seconds to wait before retrying" }
+        },
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+      }
+    },
+    "schemas": {
+      "HealthStatus": {
+        "type": "object",
+        "required": ["status", "version"],
+        "properties": {
+          "status": { "type": "string", "enum": ["ok", "degraded", "down"] },
+          "version": { "type": "string" },
+          "time": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Provider": {
+        "type": "string",
+        "enum": ["openai", "anthropic"]
+      },
+      "ModelRole": {
+        "type": "string",
+        "enum": ["router", "planner", "reviewer", "embedding"],
+        "description": "Bold routes by role, not raw model name, so provider/model choice can change server-side without a desktop app release."
+      },
+      "Workflow": {
+        "type": "string",
+        "enum": ["plan", "build", "ship"]
+      },
+      "ProviderStatus": {
+        "type": "object",
+        "required": ["provider", "reachable"],
+        "properties": {
+          "provider": { "$ref": "#/components/schemas/Provider" },
+          "reachable": { "type": "boolean" },
+          "latency_ms": { "type": ["integer", "null"] },
+          "last_checked": { "type": "string", "format": "date-time" },
+          "message": { "type": ["string", "null"], "description": "Human-readable status detail, e.g. rate-limited" }
+        }
+      },
+      "ModelRoleMapping": {
+        "type": "object",
+        "required": ["role", "provider", "model"],
+        "properties": {
+          "role": { "$ref": "#/components/schemas/ModelRole" },
+          "provider": { "$ref": "#/components/schemas/Provider" },
+          "model": { "type": "string", "examples": ["gpt-5.1"] }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "required": ["role", "content"],
+        "properties": {
+          "role": { "type": "string", "enum": ["system", "user", "assistant"] },
+          "content": { "type": "string" }
+        }
+      },
+      "ClientMetadata": {
+        "type": "object",
+        "description": "Correlates a completion with a Bold workspace/run for history and cost reporting.",
+        "properties": {
+          "workspace_id": { "type": "string" },
+          "workflow": { "$ref": "#/components/schemas/Workflow" },
+          "starter_id": { "type": "string", "examples": ["company-plan"] },
+          "run_label": { "type": ["string", "null"] }
+        }
+      },
+      "CompletionRequest": {
+        "type": "object",
+        "required": ["model_role", "messages"],
+        "properties": {
+          "model_role": { "$ref": "#/components/schemas/ModelRole" },
+          "provider": {
+            "$ref": "#/components/schemas/Provider",
+            "description": "Optional override of the server's default provider for this role."
+          },
+          "messages": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Message" },
+            "minItems": 1
+          },
+          "response_format": {
+            "type": "string",
+            "enum": ["text", "json"],
+            "default": "text"
+          },
+          "response_schema": {
+            "type": ["object", "null"],
+            "description": "JSON Schema the response content must satisfy when response_format is 'json'. Server validates and retries on failure."
+          },
+          "max_output_tokens": { "type": ["integer", "null"] },
+          "temperature": { "type": ["number", "null"] },
+          "client_metadata": { "$ref": "#/components/schemas/ClientMetadata" }
+        }
+      },
+      "Usage": {
+        "type": "object",
+        "properties": {
+          "input_tokens": { "type": "integer" },
+          "output_tokens": { "type": "integer" },
+          "estimated_cost_usd": { "type": "number" }
+        }
+      },
+      "CompletionResponse": {
+        "type": "object",
+        "required": ["run_id", "provider", "model", "model_role", "content", "usage", "created_at"],
+        "properties": {
+          "run_id": { "type": "string" },
+          "provider": { "$ref": "#/components/schemas/Provider" },
+          "model": { "type": "string" },
+          "model_role": { "$ref": "#/components/schemas/ModelRole" },
+          "content": { "type": "string", "description": "Raw text, or a JSON-encoded string when response_format was 'json'." },
+          "retries": { "type": "integer", "default": 0 },
+          "usage": { "$ref": "#/components/schemas/Usage" },
+          "provider_request_id": { "type": ["string", "null"] },
+          "created_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "EmbeddingRequest": {
+        "type": "object",
+        "required": ["input"],
+        "properties": {
+          "input": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
+          },
+          "client_metadata": { "$ref": "#/components/schemas/ClientMetadata" }
+        }
+      },
+      "EmbeddingResponse": {
+        "type": "object",
+        "required": ["model", "embeddings", "usage"],
+        "properties": {
+          "provider": { "$ref": "#/components/schemas/Provider" },
+          "model": { "type": "string" },
+          "embeddings": {
+            "type": "array",
+            "items": { "type": "array", "items": { "type": "number" } }
+          },
+          "usage": { "$ref": "#/components/schemas/Usage" }
+        }
+      },
+      "RunSummary": {
+        "type": "object",
+        "required": ["run_id", "provider", "model", "model_role", "created_at"],
+        "properties": {
+          "run_id": { "type": "string" },
+          "provider": { "$ref": "#/components/schemas/Provider" },
+          "model": { "type": "string" },
+          "model_role": { "$ref": "#/components/schemas/ModelRole" },
+          "workflow": { "$ref": "#/components/schemas/Workflow" },
+          "workspace_id": { "type": ["string", "null"] },
+          "status": { "type": "string", "enum": ["succeeded", "failed", "retried"] },
+          "usage": { "$ref": "#/components/schemas/Usage" },
+          "created_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "UsageSummary": {
+        "type": "object",
+        "properties": {
+          "range": {
+            "type": "object",
+            "properties": {
+              "since": { "type": "string", "format": "date-time" },
+              "until": { "type": "string", "format": "date-time" }
+            }
+          },
+          "totals": { "$ref": "#/components/schemas/Usage" },
+          "breakdown": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": { "type": "string", "description": "The day, provider, model_role, or workflow value being grouped by." },
+                "usage": { "$ref": "#/components/schemas/Usage" }
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": ["error"],
+        "properties": {
+          "error": {
+            "type": "object",
+            "required": ["code", "message", "retryable"],
+            "properties": {
+              "code": { "type": "string", "examples": ["provider_unavailable"] },
+              "message": { "type": "string" },
+              "retryable": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

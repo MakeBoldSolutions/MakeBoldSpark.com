@@ -7,6 +7,8 @@ public class MakeBoldSparkDbContext(DbContextOptions<MakeBoldSparkDbContext> opt
 {
     public DbSet<Article> Articles => Set<Article>();
     public DbSet<Tag> Tags => Set<Tag>();
+    public DbSet<BoldInstallToken> BoldInstallTokens => Set<BoldInstallToken>();
+    public DbSet<BoldRun> BoldRuns => Set<BoldRun>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,6 +34,40 @@ public class MakeBoldSparkDbContext(DbContextOptions<MakeBoldSparkDbContext> opt
             entity.HasKey(t => t.Id);
             entity.Property(t => t.Name).IsRequired().HasMaxLength(100);
             entity.HasIndex(t => t.Name).IsUnique();
+        });
+
+        modelBuilder.Entity<BoldInstallToken>(entity =>
+        {
+            entity.HasKey(t => t.Id);
+            entity.Property(t => t.Name).IsRequired().HasMaxLength(200);
+            entity.Property(t => t.TokenHash).IsRequired().HasMaxLength(128);
+            entity.HasIndex(t => t.TokenHash).IsUnique();
+            entity.Property(t => t.CreatedAt).IsRequired();
+        });
+
+        modelBuilder.Entity<BoldRun>(entity =>
+        {
+            entity.HasKey(r => r.Id);
+            entity.Property(r => r.RunId).IsRequired().HasMaxLength(64);
+            entity.HasIndex(r => r.RunId).IsUnique();
+            entity.Property(r => r.Provider).IsRequired().HasMaxLength(32);
+            entity.Property(r => r.Model).IsRequired().HasMaxLength(100);
+            entity.Property(r => r.ModelRole).IsRequired().HasMaxLength(32);
+            entity.Property(r => r.Workflow).HasMaxLength(16);
+            entity.Property(r => r.WorkspaceId).HasMaxLength(200);
+            entity.Property(r => r.StarterId).HasMaxLength(200);
+            entity.Property(r => r.RunLabel).HasMaxLength(200);
+            entity.Property(r => r.Status).IsRequired().HasMaxLength(16);
+            entity.Property(r => r.EstimatedCostUsd).HasColumnType("TEXT");
+            entity.Property(r => r.ErrorCode).HasMaxLength(64);
+            entity.Property(r => r.ErrorMessage).HasMaxLength(500);
+            entity.Property(r => r.ProviderRequestId).HasMaxLength(200);
+            entity.Property(r => r.CreatedAt).IsRequired();
+
+            entity.HasIndex(r => r.InstallTokenId);
+            entity.HasIndex(r => new { r.InstallTokenId, r.CreatedAt });
+            entity.HasIndex(r => new { r.InstallTokenId, r.WorkspaceId });
+            entity.HasIndex(r => new { r.InstallTokenId, r.Workflow });
         });
     }
 }

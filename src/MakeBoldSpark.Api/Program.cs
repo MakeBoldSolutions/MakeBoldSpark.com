@@ -6,6 +6,13 @@ using MakeBoldSpark.Api.Features.AsyncDemo.RemoteMock;
 using MakeBoldSpark.Api.Features.AsyncDemo.Status;
 using MakeBoldSpark.Api.Features.AsyncDemo.WeatherPatterns;
 using MakeBoldSpark.Api.Features.Auth;
+using MakeBoldSpark.Api.Features.Bold;
+using MakeBoldSpark.Api.Features.Bold.Auth;
+using MakeBoldSpark.Api.Features.Bold.Completions;
+using MakeBoldSpark.Api.Features.Bold.Embeddings;
+using MakeBoldSpark.Api.Features.Bold.Providers;
+using MakeBoldSpark.Api.Features.Bold.Runs;
+using MakeBoldSpark.Api.Features.Bold.Status;
 using MakeBoldSpark.Api.Features.Health;
 using MakeBoldSpark.Api.Features.PublicContent;
 using MakeBoldSpark.Api.Features.Recipe;
@@ -221,6 +228,33 @@ builder.Services.AddDbContext<RecipeDbContext>(options =>
 builder.Services.AddScoped<IRecipeService, RecipeProvider>();
 builder.Services.AddScoped<RecipeService>();
 
+// Bold API gateway configuration (no secrets in repo — provider keys come from Azure App Service
+// settings / user-secrets at the "Bold:OpenAi:ApiKey" / "Bold:Anthropic:ApiKey" paths).
+builder.Services.AddOptions<BoldOptions>()
+    .Bind(builder.Configuration.GetSection(BoldOptions.SectionName));
+
+var boldOptionsForStartup = builder.Configuration.GetSection(BoldOptions.SectionName).Get<BoldOptions>() ?? new BoldOptions();
+var boldProviderTimeout = TimeSpan.FromSeconds(boldOptionsForStartup.ProviderCall.TimeoutSeconds);
+
+builder.Services.AddHttpClient(OpenAiProviderClient.HttpClientName, client =>
+{
+    client.BaseAddress = new Uri(boldOptionsForStartup.OpenAi.BaseUrl);
+    client.Timeout = boldProviderTimeout;
+});
+builder.Services.AddHttpClient(AnthropicProviderClient.HttpClientName, client =>
+{
+    client.BaseAddress = new Uri(boldOptionsForStartup.Anthropic.BaseUrl);
+    client.Timeout = boldProviderTimeout;
+});
+builder.Services.AddScoped<IProviderClient, OpenAiProviderClient>();
+builder.Services.AddScoped<IProviderClient, AnthropicProviderClient>();
+
+builder.Services.AddScoped<CompletionRequestValidator>();
+builder.Services.AddScoped<CompletionService>();
+builder.Services.AddScoped<RunRecordingService>();
+builder.Services.AddSingleton<BoldRateLimiterState>();
+builder.Services.AddScoped<BoldLimitsFilter>();
+
 // MakeBoldSpark.Core data layer
 builder.Services.AddDbContext<MakeBoldSparkCoreDbContext>(options =>
     options.UseSqlite(ResolveSqliteConnStr(builder.Configuration.GetConnectionString("MakeBoldSparkConnection"), contentRoot))
@@ -315,6 +349,13 @@ builder.Services.AddOpenApi(options =>
             new OpenApiTag { Name = MakeBoldSparkOpenApiTags.AsyncConcurrencyPatterns, Description = "Compares sequential execution, unbounded Task.WhenAll, and SemaphoreSlim-throttled concurrency." },
             new OpenApiTag { Name = MakeBoldSparkOpenApiTags.AsyncResilienceTimeouts, Description = "Simulates a slow downstream service to exercise retry, timeout, and circuit-breaker patterns." },
             new OpenApiTag { Name = MakeBoldSparkOpenApiTags.AsyncMonitoringHealth, Description = "Application status, build metadata, and configuration diagnostics for the async demo feature set." },
+            new OpenApiTag { Name = MakeBoldSparkOpenApiTags.BoldAdmin, Description = "Admin-only issuance and revocation of Bold API install tokens." },
+            new OpenApiTag { Name = MakeBoldSparkOpenApiTags.BoldHealth, Description = "Anonymous, shallow liveness check for the Bold API gateway." },
+            new OpenApiTag { Name = MakeBoldSparkOpenApiTags.BoldProviders, Description = "Provider reachability and model-role routing visibility for Bold Desktop/CLI." },
+            new OpenApiTag { Name = MakeBoldSparkOpenApiTags.BoldCompletions, Description = "Model-role completion gateway behind Bold's plan/build/ship workflows." },
+            new OpenApiTag { Name = MakeBoldSparkOpenApiTags.BoldEmbeddings, Description = "Post-MVP embeddings endpoint; currently returns a stable not_implemented error." },
+            new OpenApiTag { Name = MakeBoldSparkOpenApiTags.BoldRuns, Description = "Run history for the authenticated Bold install." },
+            new OpenApiTag { Name = MakeBoldSparkOpenApiTags.BoldUsage, Description = "Token/cost usage reporting for the authenticated Bold install." },
         };
         return Task.CompletedTask;
     });
@@ -364,11 +405,22 @@ var adminApi = app.MapGroup("/api/admin")
     .RequireAuthorization("AdminOnly");
 adminApi.MapAdminHealthApi();
 adminApi.MapGroup("/makeboldspark").MapAdminMakeBoldSparkApi();
+// Bold install-token issuance (spec.md O10) — admin operation only, no self-service endpoint.
+adminApi.MapGroup("/bold").MapBoldTokenAdminApi();
 
 var publishApi = app.MapGroup("/api/publish").RequireAuthorization("Publisher");
 publishApi.MapPublisherRecipeMaintenanceApi();
 
-app.MapGroup("/api/integrations").RequireAuthorization("ServiceOrAdmin");
+// Bold API gateway (spec.md alignment decision 2): contract paths are /v1/* on
+// api.makeboldspark.com; internally mounted under /api/integrations/bold/v1/* (service-token
+// category, backbone VIII). Every route requires the BoldInstallToken policy except /health,
+// which is additionally anonymous per the contract.
+var boldApi = app.MapGroup("/api/integrations/bold/v1")
+    .RequireAuthorization(BoldInstallTokenDefaults.PolicyName);
+boldApi.MapBoldStatusApi();
+boldApi.MapBoldCompletionsApi();
+boldApi.MapBoldEmbeddingsApi();
+boldApi.MapBoldRunsApi();
 
 // AsyncDemo route group
 var asyncDemoApi = app.MapGroup("/api/async-demo");

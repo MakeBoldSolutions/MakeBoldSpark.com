@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+using MakeBoldSpark.Api.Features.Bold.Auth;
 using MakeBoldSpark.Api.Infrastructure.Data;
+using MakeBoldSpark.Api.Infrastructure.Data.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -90,8 +92,29 @@ public class MakeBoldSparkWebApplicationFactory : WebApplicationFactory<Program>
             // Replace JWT Bearer with test auth handler
             services.AddAuthentication("TestScheme")
                 .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("TestScheme", null);
+
+            // Replace the real provider HttpClients with fakes so Bold tests never hit the network
+            // (spec.md AC9: no live provider keys/calls in CI). Individual tests can point
+            // OpenAiHandler/AnthropicHandler at a scenario-specific response before issuing a
+            // request; both default to a generic success so unrelated tests (e.g. /providers) work
+            // without per-test setup.
+            // Named HttpClient configuration actions accumulate; registering
+            // ConfigurePrimaryHttpMessageHandler again for the same name replaces the handler
+            // factory used at build time, so no explicit removal of the Program.cs registration is
+            // needed here.
+            services.AddHttpClient(MakeBoldSpark.Api.Features.Bold.Providers.OpenAiProviderClient.HttpClientName)
+                .ConfigurePrimaryHttpMessageHandler(() => new DelegatingTestHandler(() => OpenAiHandler));
+
+            services.AddHttpClient(MakeBoldSpark.Api.Features.Bold.Providers.AnthropicProviderClient.HttpClientName)
+                .ConfigurePrimaryHttpMessageHandler(() => new DelegatingTestHandler(() => AnthropicHandler));
         });
     }
+
+    /// <summary>Per-test override for the fake OpenAI HttpClient response. Null = generic 200 OK.</summary>
+    public Func<HttpRequestMessage, HttpResponseMessage>? OpenAiHandler { get; set; }
+
+    /// <summary>Per-test override for the fake Anthropic HttpClient response. Null = generic 200 OK.</summary>
+    public Func<HttpRequestMessage, HttpResponseMessage>? AnthropicHandler { get; set; }
 
     public HttpClient CreateAdminClient()
     {
@@ -105,6 +128,44 @@ public class MakeBoldSparkWebApplicationFactory : WebApplicationFactory<Program>
         var client = CreateClient();
         client.DefaultRequestHeaders.Add("X-Test-Claims", "Publisher");
         return client;
+    }
+
+    /// <summary>
+    /// Seeds a Bold install token directly into the test database (bypassing the admin issuance
+    /// endpoint, since tests need the plaintext value) and returns an HttpClient carrying it as a
+    /// Bearer token.
+    /// </summary>
+    public async Task<(HttpClient Client, string PlaintextToken, int InstallTokenId)> CreateBoldClientAsync(string name = "test-install")
+    {
+        var plaintext = BoldTokenHasher.GenerateToken();
+        using (var scope = Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<MakeBoldSparkDbContext>();
+            var entity = new BoldInstallToken
+            {
+                Name = name,
+                TokenHash = BoldTokenHasher.Hash(plaintext),
+                CreatedAt = DateTimeOffset.UtcNow,
+            };
+            db.BoldInstallTokens.Add(entity);
+            await db.SaveChangesAsync();
+
+            var client = CreateClient();
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", plaintext);
+            return (client, plaintext, entity.Id);
+        }
+    }
+
+    public async Task RevokeBoldTokenAsync(int installTokenId)
+    {
+        using var scope = Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<MakeBoldSparkDbContext>();
+        var entity = await db.BoldInstallTokens.FindAsync(installTokenId);
+        if (entity is not null)
+        {
+            entity.RevokedAt = DateTimeOffset.UtcNow;
+            await db.SaveChangesAsync();
+        }
     }
 }
 
@@ -128,5 +189,25 @@ public class TestAuthHandler(
         var ticket = new AuthenticationTicket(principal, "TestScheme");
 
         return Task.FromResult(AuthenticateResult.Success(ticket));
+    }
+}
+
+/// <summary>
+/// Routes outgoing HTTP calls for a named provider client to a per-test override, defaulting to a
+/// generic 200 OK so tests that don't care about provider behavior (health checks, auth tests)
+/// don't need per-test setup.
+/// </summary>
+public class DelegatingTestHandler(Func<Func<HttpRequestMessage, HttpResponseMessage>?> resolveHandler) : HttpMessageHandler
+{
+    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+        var handler = resolveHandler();
+        var response = handler is not null
+            ? handler(request)
+            : new HttpResponseMessage(System.Net.HttpStatusCode.OK)
+            {
+                Content = new System.Net.Http.StringContent("{\"id\":\"fake\",\"output\":[],\"content\":[],\"usage\":{\"input_tokens\":0,\"output_tokens\":0}}", System.Text.Encoding.UTF8, "application/json"),
+            };
+        return Task.FromResult(response);
     }
 }
