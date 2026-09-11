@@ -1,7 +1,7 @@
 ---
 feature: 0005-bold-api
 tier: feature
-status: draft
+status: complete
 created: 2026-07-21
 branch: 0005-bold-api
 sources:
@@ -282,3 +282,19 @@ acceptance criterion each task traces to.
 - `tests/MakeBoldSpark.Api.Tests/Features/Bold/**` — new test suite.
 - `bold-docs/system/decisions/0012-*.md`, `0013-*.md` — placement + route-taxonomy
   decisions (written during build).
+
+
+## Review remediation — 2026-09-11
+
+All eight findings in `gates/review.md` were addressed in isolated fix commits. The full suite passes 201 tests, including 22 additional regression cases. See the review resolution table for per-finding evidence and commit IDs. A separate ship re-review and PR remain the next workflow steps.
+
+Operational details clarified by remediation:
+
+- Provider HTTP utility content logging is disabled; upstream diagnostic text is not persisted. The gateway retains safe status/code diagnostics and request metadata.
+- Retry usage and cost aggregate all known completed-attempt usage, including attempts that fail output validation. Unknown usage on a transport failure cannot be estimated from a provider response that was never received.
+- SQLite date filtering compares instants in .NET after install scoping in SQL. Runs stream rows in keyset order and stop at page+1 matches; usage filters its materialized install-scoped rows. This avoids a date-column migration, but date filtering can scan install history. Revisit query/storage optimization at the existing M3 scale/retention milestone.
+- Alternate provider models are configured under `Bold:ModelRoles:{role}:ProviderModels:{provider}` (environment syntax, for example: `Bold__ModelRoles__planner__ProviderModels__openai`). Default cross-provider choices are planner/openai -> `gpt-5.1`, router/anthropic -> `claude-sonnet-4-5`, and reviewer/anthropic -> `claude-sonnet-4-5`. The primary provider still uses that role's existing `Model`. An unconfigured alternate pair returns 400 `unsupported_provider` before making a provider call. Keep the static pricing table aligned when configuring an alternate model.
+- Transient-error retries wait 250 ms initially, double between retries, and cap each wait at five seconds. Waiting respects request cancellation. The existing configured retry count and per-attempt timeout still apply; schema-validation retries retain their existing behavior.
+- The request byte limit is checked during reading, including requests without Content-Length, before deserialization. OpenAPI explicitly declares the JSON completion request and typed status responses.
+
+No public contract deviation, new dependency, or database migration was introduced by the remediation. Production DNS/deployment and live-provider validation remain outside this milestone.
