@@ -299,4 +299,21 @@ public class BoldCompletionsTests
         var rawRun = runJson.GetRawText();
         Assert.IsFalse(rawRun.Contains("recorded output"));
     }
+    [TestMethod]
+    [DataRow("[null]")]
+    [DataRow("[{\"role\":\"user\",\"content\":\"fictional\"},null]")]
+    public async Task NullMessage_ReturnsContractErrorWithoutProviderCall(string messages)
+    {
+        var called = false;
+        _factory.OpenAiHandler = _ => { called = true; return TextResponse("unexpected"); };
+        var (client, _, _) = await _factory.CreateBoldClientAsync();
+        var response = await client.PostAsync("/api/integrations/bold/v1/completions",
+            new StringContent("{\"model_role\":\"router\",\"messages\":" + messages + "}", System.Text.Encoding.UTF8, "application/json"));
+        Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
+        var json = await response.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.AreEqual("invalid_request", json.GetProperty("error").GetProperty("code").GetString());
+        Assert.IsFalse(json.GetProperty("error").GetProperty("retryable").GetBoolean());
+        Assert.IsFalse(called);
+    }
+
 }

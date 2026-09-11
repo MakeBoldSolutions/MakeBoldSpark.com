@@ -37,6 +37,8 @@ public class CompletionRequestValidator(IOptions<BoldOptions> options)
 
         foreach (var message in request.Messages)
         {
+            if (message is null)
+                return ValidationOutcome.Fail("invalid_request", "Every message must be an object.");
             if (string.IsNullOrWhiteSpace(message.Role) || !ValidMessageRoles.Contains(message.Role))
                 return ValidationOutcome.Fail("invalid_request", $"Message role must be one of: {string.Join(", ", ValidMessageRoles)}.");
             if (message.Content is null)
