@@ -251,6 +251,7 @@ builder.Services.AddScoped<IProviderClient, AnthropicProviderClient>();
 
 builder.Services.AddScoped<CompletionRequestValidator>();
 builder.Services.AddScoped<CompletionService>();
+builder.Services.AddSingleton<CompletionRetryDelay>();
 builder.Services.AddScoped<RunRecordingService>();
 builder.Services.AddSingleton<BoldRateLimiterState>();
 builder.Services.AddScoped<BoldLimitsFilter>();

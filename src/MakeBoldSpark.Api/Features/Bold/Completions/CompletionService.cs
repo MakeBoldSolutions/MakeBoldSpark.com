@@ -33,7 +33,8 @@ public class CompletionService(
     IEnumerable<IProviderClient> providerClients,
     IOptions<BoldOptions> options,
     CompletionRequestValidator validator,
-    ILogger<CompletionService> logger)
+    ILogger<CompletionService> logger,
+    CompletionRetryDelay retryDelay)
 {
     public async Task<CompletionOutcome> ExecuteAsync(CompletionRequestDto request, CancellationToken cancellationToken)
     {
@@ -82,6 +83,7 @@ public class CompletionService(
                 {
                     retries++;
                     logger.LogWarning("Bold completion retry {Retries}/{MaxRetries} after provider error {Code}", retries, maxRetries, ex.Code);
+                    await retryDelay.WaitAsync(retries, cancellationToken);
                     continue;
                 }
 
