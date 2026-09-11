@@ -122,4 +122,27 @@ public class BoldRunsUsageTests
         var breakdown = json.GetProperty("breakdown");
         Assert.AreEqual(2, breakdown.GetArrayLength());
     }
+    [TestMethod]
+    public async Task DateFilters_UseInstantsAndPreservePaginationAndInstallScope()
+    {
+        var (client, _, id) = await _factory.CreateBoldClientAsync("date-range");
+        var (_, _, otherId) = await _factory.CreateBoldClientAsync("other-date-range");
+        var boundary = DateTimeOffset.Parse("2026-01-02T00:00:00Z");
+        await SeedRunAsync(id, "openai", "gpt-5.1", "router", null, null, 1, 1, 1m, boundary.AddDays(-1));
+        await SeedRunAsync(id, "openai", "gpt-5.1", "router", null, null, 2, 2, 2m, boundary.ToOffset(TimeSpan.FromHours(-6)));
+        await SeedRunAsync(id, "openai", "gpt-5.1", "router", null, null, 4, 4, 4m, boundary.AddDays(1));
+        await SeedRunAsync(otherId, "openai", "gpt-5.1", "router", null, null, 100, 100, 100m, boundary);
+        var first = await client.GetFromJsonAsync<JsonElement>("/api/integrations/bold/v1/runs?since=2026-01-02T00:00:00Z&limit=1");
+        Assert.AreEqual(4, first.GetProperty("runs")[0].GetProperty("usage").GetProperty("input_tokens").GetInt32());
+        var cursor = first.GetProperty("next_cursor").GetString();
+        Assert.IsNotNull(cursor);
+        var second = await client.GetFromJsonAsync<JsonElement>($"/api/integrations/bold/v1/runs?since=2026-01-02T00:00:00Z&limit=1&cursor={Uri.EscapeDataString(cursor)}");
+        Assert.AreEqual(2, second.GetProperty("runs")[0].GetProperty("usage").GetProperty("input_tokens").GetInt32());
+        Assert.AreEqual(JsonValueKind.Null, second.GetProperty("next_cursor").ValueKind);
+        var usage = await client.GetFromJsonAsync<JsonElement>("/api/integrations/bold/v1/usage?since=2026-01-02T00:00:00Z&until=2026-01-02T00:00:00Z");
+        Assert.AreEqual(2, usage.GetProperty("totals").GetProperty("input_tokens").GetInt32());
+        var empty = await client.GetFromJsonAsync<JsonElement>("/api/integrations/bold/v1/runs?since=2027-01-01T00:00:00Z");
+        Assert.AreEqual(0, empty.GetProperty("runs").GetArrayLength());
+    }
+
 }

@@ -93,8 +93,6 @@ public static class RunsEndpoints
             query = query.Where(r => r.WorkspaceId == workspace_id);
         if (!string.IsNullOrWhiteSpace(workflow))
             query = query.Where(r => r.Workflow == workflow);
-        if (since is not null)
-            query = query.Where(r => r.CreatedAt >= since);
 
         var decodedCursorId = RunsCursor.TryDecode(cursor);
         if (decodedCursorId is { } cursorId)
@@ -102,10 +100,15 @@ public static class RunsEndpoints
             query = query.Where(r => r.Id < cursorId);
         }
 
-        var page = await query
-            .OrderByDescending(r => r.Id)
-            .Take(pageSize + 1)
-            .ToListAsync(cancellationToken);
+        // SQLite cannot compare DateTimeOffset values. Stream the install-scoped rows in
+        // keyset order, compare instants in .NET, and stop after a page plus its lookahead.
+        var page = new List<BoldRun>();
+        await foreach (var row in query.OrderByDescending(r => r.Id).AsAsyncEnumerable().WithCancellation(cancellationToken))
+        {
+            if (since is not null && row.CreatedAt < since.Value) continue;
+            page.Add(row);
+            if (page.Count == pageSize + 1) break;
+        }
 
         var hasMore = page.Count > pageSize;
         var items = page.Take(pageSize).ToList();
@@ -142,10 +145,11 @@ public static class RunsEndpoints
         if (installTokenId is null) return BoldErrors.Unauthorized();
 
         var query = db.BoldRuns.AsNoTracking().Where(r => r.InstallTokenId == installTokenId);
-        if (since is not null) query = query.Where(r => r.CreatedAt >= since);
-        if (until is not null) query = query.Where(r => r.CreatedAt <= until);
-
-        var runs = await query.ToListAsync(cancellationToken);
+        // Keep the install predicate in SQL; compare offsets as instants after materialization.
+        var runs = (await query.ToListAsync(cancellationToken))
+            .Where(r => since is null || r.CreatedAt >= since.Value)
+            .Where(r => until is null || r.CreatedAt <= until.Value)
+            .ToList();
 
         var totals = new UsageDto(
             runs.Sum(r => r.InputTokens),
