@@ -15,6 +15,7 @@ public static class CompletionsEndpoints
     public static RouteGroupBuilder MapBoldCompletionsApi(this RouteGroupBuilder group)
     {
         group.MapPost("/completions", HandleAsync)
+            .Accepts<CompletionRequestDto>("application/json")
             .WithName("PostBoldCompletion")
             .WithTags(MakeBoldSparkOpenApiTags.BoldCompletions)
             .WithSummary("Execute a model-role completion")

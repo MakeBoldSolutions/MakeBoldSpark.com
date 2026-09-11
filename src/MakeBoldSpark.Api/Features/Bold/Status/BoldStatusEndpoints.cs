@@ -18,6 +18,9 @@ public record ProviderStatusDto(
     [property: JsonPropertyName("last_checked")] DateTimeOffset LastChecked,
     [property: JsonPropertyName("message")] string? Message);
 
+public record ProvidersResponseDto([property: JsonPropertyName("providers")] List<ProviderStatusDto> Providers);
+public record ModelRolesResponseDto([property: JsonPropertyName("roles")] List<ModelRoleMappingDto> Roles);
+
 public record ModelRoleMappingDto(
     [property: JsonPropertyName("role")] string Role,
     [property: JsonPropertyName("provider")] string Provider,
@@ -53,26 +56,26 @@ public static class BoldStatusEndpoints
                 var health = await client.CheckHealthAsync(ct);
                 statuses.Add(new ProviderStatusDto(client.Provider, health.Reachable, health.LatencyMs, DateTimeOffset.UtcNow, health.Message));
             }
-            return Results.Ok(new { providers = statuses });
+            return Results.Ok(new ProvidersResponseDto(statuses));
         })
         .WithName("GetBoldProviders")
         .WithTags(MakeBoldSparkOpenApiTags.BoldProviders)
         .WithSummary("List configured providers and their current health")
         .WithDescription("Returns reachability and latency, never credentials. Each check is bounded by the same per-attempt timeout as a completion call.")
-        .Produces(StatusCodes.Status200OK)
+        .Produces<ProvidersResponseDto>(StatusCodes.Status200OK)
         .Produces<ErrorResponseDto>(StatusCodes.Status401Unauthorized);
 
         group.MapGet("/model-roles", (IOptions<BoldOptions> options) =>
         {
             var roles = options.Value.ModelRoles
                 .Select(kv => new ModelRoleMappingDto(kv.Key, kv.Value.Provider, kv.Value.Model));
-            return Results.Ok(new { roles });
+            return Results.Ok(new ModelRolesResponseDto(roles.ToList()));
         })
         .WithName("GetBoldModelRoles")
         .WithTags(MakeBoldSparkOpenApiTags.BoldProviders)
         .WithSummary("Current model-role routing configuration")
         .WithDescription("Read-only view of which provider/model each role currently resolves to. Reflects the server's live BoldOptions configuration.")
-        .Produces(StatusCodes.Status200OK)
+        .Produces<ModelRolesResponseDto>(StatusCodes.Status200OK)
         .Produces<ErrorResponseDto>(StatusCodes.Status401Unauthorized);
 
         return group;
