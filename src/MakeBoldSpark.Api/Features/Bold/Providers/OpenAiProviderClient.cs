@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using MakeBoldSpark.Api.Features.Bold;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging.Abstractions;
 using WebSpark.HttpClientUtility.RequestResult;
 
 namespace MakeBoldSpark.Api.Features.Bold.Providers;
@@ -23,8 +24,7 @@ public sealed class OpenAiProviderClient : IProviderClient
     public OpenAiProviderClient(
         IHttpClientFactory httpClientFactory,
         IOptions<BoldOptions> options,
-        IConfiguration configuration,
-        ILogger<HttpRequestResultService> httpLogger)
+        IConfiguration configuration)
     {
         var boldOptions = options.Value;
         var client = httpClientFactory.CreateClient(HttpClientName);
@@ -33,7 +33,8 @@ public sealed class OpenAiProviderClient : IProviderClient
         if (!string.IsNullOrWhiteSpace(boldOptions.OpenAi.ApiKey) && client.DefaultRequestHeaders.Authorization is null)
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", boldOptions.OpenAi.ApiKey);
 
-        _http = new HttpRequestResultService(httpLogger, configuration, client);
+        // This utility logs curl bodies and upstream diagnostics. Never give it an application logger.
+        _http = new HttpRequestResultService(NullLogger<HttpRequestResultService>.Instance, configuration, client);
     }
 
     public string Provider => "openai";

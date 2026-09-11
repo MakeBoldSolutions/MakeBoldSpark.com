@@ -75,4 +75,46 @@ public class BoldContentPrivacyTests
         Assert.IsFalse(runJson.Contains(SecretUserMessage), "Run record must not contain the request message text.");
         Assert.IsFalse(runJson.Contains(SecretProviderOutput), "Run record must not contain the provider output text.");
     }
+    [TestMethod]
+    [DataRow("router", false)]
+    [DataRow("router", true)]
+    [DataRow("planner", false)]
+    [DataRow("planner", true)]
+    public async Task ProviderCalls_DoNotLogOrPersistContent(string role, bool failure)
+    {
+        await using var factory = new MakeBoldSparkWebApplicationFactory();
+        await factory.InitializeAsync();
+        HttpResponseMessage Reply(HttpRequestMessage _) => new(failure ? HttpStatusCode.BadRequest : HttpStatusCode.OK)
+        {
+            Content = new StringContent(JsonSerializer.Serialize(new
+            {
+                id = "fictional-privacy-response",
+                output = new[] { new { content = new[] { new { type = "output_text", text = SecretProviderOutput } } } },
+                content = new[] { new { type = "text", text = SecretProviderOutput } },
+                error = new { message = SecretUserMessage + SecretProviderOutput },
+                usage = new { input_tokens = 1, output_tokens = 1 }
+            }), System.Text.Encoding.UTF8, "application/json")
+        };
+        factory.OpenAiHandler = Reply;
+        factory.AnthropicHandler = Reply;
+        var (client, _, id) = await factory.CreateBoldClientAsync();
+        var response = await client.PostAsJsonAsync("/api/integrations/bold/v1/completions", new
+        {
+            model_role = role,
+            messages = new[] { new { role = "user", content = SecretUserMessage } }
+        });
+        Assert.AreEqual(failure ? HttpStatusCode.BadGateway : HttpStatusCode.OK, response.StatusCode);
+        using var scope = factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<MakeBoldSparkDbContext>();
+        var stored = JsonSerializer.Serialize(await db.BoldRuns.SingleAsync(r => r.InstallTokenId == id));
+        string logs;
+        lock (factory.CapturedLogs) logs = string.Join("\n", factory.CapturedLogs);
+        Assert.IsTrue(logs.Contains("RequestLoggingMiddleware"), "Capture must include the actual request pipeline.");
+        foreach (var secret in new[] { SecretUserMessage, SecretProviderOutput })
+        {
+            Assert.IsFalse(logs.Contains(secret), "Content reached application logging.");
+            Assert.IsFalse(stored.Contains(secret), "Content reached persisted metadata.");
+        }
+    }
+
 }

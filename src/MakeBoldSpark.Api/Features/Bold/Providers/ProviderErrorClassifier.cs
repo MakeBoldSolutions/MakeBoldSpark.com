@@ -10,9 +10,8 @@ public static class ProviderErrorClassifier
 {
     public static BoldProviderException Classify(string providerName, HttpStatusCode statusCode, string? providerMessage)
     {
-        var message = string.IsNullOrWhiteSpace(providerMessage)
-            ? $"{providerName} request failed with status {(int)statusCode}."
-            : providerMessage;
+        // Upstream diagnostics can echo prompts, output, or credentials. Persist only our own message.
+        var message = $"{providerName} request failed with status {(int)statusCode}.";
 
         return statusCode switch
         {

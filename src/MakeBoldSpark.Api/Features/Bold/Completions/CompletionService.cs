@@ -131,19 +131,15 @@ public class CompletionService(
             {
                 schema = JsonSchema.FromText(schemaElement.GetRawText());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return $"response_schema could not be parsed: {ex.Message}";
+                return "response_schema could not be parsed.";
             }
 
             var result = schema.Evaluate(instanceDoc.RootElement, new EvaluationOptions { OutputFormat = OutputFormat.List });
             if (result.IsValid) return null;
 
-            var firstError = (result.Details ?? [])
-                .SelectMany(d => d.Errors ?? new Dictionary<string, string>())
-                .Select(e => e.Value)
-                .FirstOrDefault();
-            return firstError ?? "Provider output did not satisfy response_schema.";
+            return "Provider output did not satisfy response_schema.";
         }
     }
 }

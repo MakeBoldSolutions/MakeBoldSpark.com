@@ -240,12 +240,12 @@ builder.Services.AddHttpClient(OpenAiProviderClient.HttpClientName, client =>
 {
     client.BaseAddress = new Uri(boldOptionsForStartup.OpenAi.BaseUrl);
     client.Timeout = boldProviderTimeout;
-});
+}).RedactLoggedHeaders(_ => true);
 builder.Services.AddHttpClient(AnthropicProviderClient.HttpClientName, client =>
 {
     client.BaseAddress = new Uri(boldOptionsForStartup.Anthropic.BaseUrl);
     client.Timeout = boldProviderTimeout;
-});
+}).RedactLoggedHeaders(_ => true);
 builder.Services.AddScoped<IProviderClient, OpenAiProviderClient>();
 builder.Services.AddScoped<IProviderClient, AnthropicProviderClient>();
 

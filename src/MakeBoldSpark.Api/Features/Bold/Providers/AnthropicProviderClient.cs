@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json;
 using MakeBoldSpark.Api.Features.Bold;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging.Abstractions;
 using WebSpark.HttpClientUtility.RequestResult;
 
 namespace MakeBoldSpark.Api.Features.Bold.Providers;
@@ -23,8 +24,7 @@ public sealed class AnthropicProviderClient : IProviderClient
     public AnthropicProviderClient(
         IHttpClientFactory httpClientFactory,
         IOptions<BoldOptions> options,
-        IConfiguration configuration,
-        ILogger<HttpRequestResultService> httpLogger)
+        IConfiguration configuration)
     {
         var boldOptions = options.Value;
         var client = httpClientFactory.CreateClient(HttpClientName);
@@ -35,7 +35,8 @@ public sealed class AnthropicProviderClient : IProviderClient
         if (!client.DefaultRequestHeaders.Contains("anthropic-version"))
             client.DefaultRequestHeaders.Add("anthropic-version", boldOptions.Anthropic.ApiVersion);
 
-        _http = new HttpRequestResultService(httpLogger, configuration, client);
+        // This utility logs curl bodies and upstream diagnostics. Never give it an application logger.
+        _http = new HttpRequestResultService(NullLogger<HttpRequestResultService>.Instance, configuration, client);
         _maxOutputTokensDefault = boldOptions.RequestBounds.MaxOutputTokensCeiling;
     }
 

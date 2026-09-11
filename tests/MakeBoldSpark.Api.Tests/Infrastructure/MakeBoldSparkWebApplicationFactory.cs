@@ -19,6 +19,8 @@ namespace MakeBoldSpark.Api.Tests.Infrastructure;
 
 public class MakeBoldSparkWebApplicationFactory : WebApplicationFactory<Program>
 {
+    public List<string> CapturedLogs { get; } = [];
+
     private SqliteConnection? _connection;
     private SqliteConnection? _recipeConnection;
     private SqliteConnection? _makeBoldSparkConnection;
@@ -70,6 +72,8 @@ public class MakeBoldSparkWebApplicationFactory : WebApplicationFactory<Program>
 
         builder.ConfigureServices(services =>
         {
+            services.AddLogging(b => b.AddProvider(new MakeBoldSpark.Api.Tests.Infrastructure.Auth.CapturingLoggerProvider(CapturedLogs)));
+
             // Replace MakeBoldSparkDbContext
             var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<MakeBoldSparkDbContext>));
             if (descriptor is not null) services.Remove(descriptor);
