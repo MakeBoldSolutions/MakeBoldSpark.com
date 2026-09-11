@@ -59,6 +59,8 @@ public class CompletionService(
 
         var sw = Stopwatch.StartNew();
         var retries = 0;
+        var totalInputTokens = 0;
+        var totalOutputTokens = 0;
 
         while (true)
         {
@@ -79,9 +81,12 @@ public class CompletionService(
                 }
 
                 sw.Stop();
-                return new CompletionOutcome(false, providerName, mapping.Model, request.ModelRole, "failed", retries, 0, 0, null, null, sw.ElapsedMilliseconds,
+                return new CompletionOutcome(false, providerName, mapping.Model, request.ModelRole, "failed", retries, totalInputTokens, totalOutputTokens, null, null, sw.ElapsedMilliseconds,
                     ex.Code, ex.Message, ex.Retryable, StatusCodes.Status502BadGateway);
             }
+
+            totalInputTokens += providerResult.InputTokens;
+            totalOutputTokens += providerResult.OutputTokens;
 
             if (wantsJson)
             {
@@ -97,7 +102,7 @@ public class CompletionService(
 
                     sw.Stop();
                     return new CompletionOutcome(false, providerName, mapping.Model, request.ModelRole,
-                        "failed", retries, providerResult.InputTokens, providerResult.OutputTokens, null,
+                        "failed", retries, totalInputTokens, totalOutputTokens, null,
                         providerResult.ProviderRequestId, sw.ElapsedMilliseconds,
                         "schema_validation_failed", $"Provider output failed schema validation after {retries} retries: {schemaError}", false,
                         StatusCodes.Status422UnprocessableEntity);
@@ -107,7 +112,7 @@ public class CompletionService(
             sw.Stop();
             var status = retries > 0 ? "retried" : "succeeded";
             return new CompletionOutcome(true, providerName, mapping.Model, request.ModelRole, status, retries,
-                providerResult.InputTokens, providerResult.OutputTokens, providerResult.Content, providerResult.ProviderRequestId,
+                totalInputTokens, totalOutputTokens, providerResult.Content, providerResult.ProviderRequestId,
                 sw.ElapsedMilliseconds, null, null, false, StatusCodes.Status200OK);
         }
     }
