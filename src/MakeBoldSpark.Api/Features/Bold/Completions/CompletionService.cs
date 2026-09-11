@@ -45,10 +45,15 @@ public class CompletionService(
         }
 
         var providerName = request.Provider ?? mapping.Provider;
+        var model = mapping.ResolveModel(providerName);
+        if (string.IsNullOrWhiteSpace(model))
+            return new CompletionOutcome(false, providerName, "unknown", request.ModelRole, "failed", 0, 0, 0, null, null, 0,
+                "unsupported_provider", "No model is configured for this role and provider.", false, StatusCodes.Status400BadRequest);
+
         var client = providerClients.FirstOrDefault(c => c.Provider == providerName);
         if (client is null)
         {
-            return new CompletionOutcome(false, providerName, mapping.Model, request.ModelRole, "failed", 0, 0, 0, null, null, 0,
+            return new CompletionOutcome(false, providerName, model, request.ModelRole, "failed", 0, 0, 0, null, null, 0,
                 "unsupported_provider", $"Provider '{providerName}' is not configured.", false, StatusCodes.Status400BadRequest);
         }
 
@@ -68,7 +73,7 @@ public class CompletionService(
             try
             {
                 providerResult = await client.CompleteAsync(
-                    new ProviderCompletionRequest(mapping.Model, providerMessages, effectiveMaxTokens, request.Temperature),
+                    new ProviderCompletionRequest(model, providerMessages, effectiveMaxTokens, request.Temperature),
                     cancellationToken);
             }
             catch (BoldProviderException ex)
@@ -81,7 +86,7 @@ public class CompletionService(
                 }
 
                 sw.Stop();
-                return new CompletionOutcome(false, providerName, mapping.Model, request.ModelRole, "failed", retries, totalInputTokens, totalOutputTokens, null, null, sw.ElapsedMilliseconds,
+                return new CompletionOutcome(false, providerName, model, request.ModelRole, "failed", retries, totalInputTokens, totalOutputTokens, null, null, sw.ElapsedMilliseconds,
                     ex.Code, ex.Message, ex.Retryable, StatusCodes.Status502BadGateway);
             }
 
@@ -101,7 +106,7 @@ public class CompletionService(
                     }
 
                     sw.Stop();
-                    return new CompletionOutcome(false, providerName, mapping.Model, request.ModelRole,
+                    return new CompletionOutcome(false, providerName, model, request.ModelRole,
                         "failed", retries, totalInputTokens, totalOutputTokens, null,
                         providerResult.ProviderRequestId, sw.ElapsedMilliseconds,
                         "schema_validation_failed", $"Provider output failed schema validation after {retries} retries: {schemaError}", false,
@@ -111,7 +116,7 @@ public class CompletionService(
 
             sw.Stop();
             var status = retries > 0 ? "retried" : "succeeded";
-            return new CompletionOutcome(true, providerName, mapping.Model, request.ModelRole, status, retries,
+            return new CompletionOutcome(true, providerName, model, request.ModelRole, status, retries,
                 totalInputTokens, totalOutputTokens, providerResult.Content, providerResult.ProviderRequestId,
                 sw.ElapsedMilliseconds, null, null, false, StatusCodes.Status200OK);
         }

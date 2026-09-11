@@ -13,9 +13,9 @@ public class BoldOptions
     /// <summary>model_role (router/planner/reviewer/embedding) -> provider/model mapping.</summary>
     public Dictionary<string, ModelRoleMapping> ModelRoles { get; set; } = new(StringComparer.OrdinalIgnoreCase)
     {
-        ["router"] = new ModelRoleMapping { Provider = "openai", Model = "gpt-5-mini" },
-        ["planner"] = new ModelRoleMapping { Provider = "anthropic", Model = "claude-sonnet-4-5" },
-        ["reviewer"] = new ModelRoleMapping { Provider = "openai", Model = "gpt-5.1" },
+        ["router"] = new ModelRoleMapping { Provider = "openai", Model = "gpt-5-mini", ProviderModels = new() { ["anthropic"] = "claude-sonnet-4-5" } },
+        ["planner"] = new ModelRoleMapping { Provider = "anthropic", Model = "claude-sonnet-4-5", ProviderModels = new() { ["openai"] = "gpt-5.1" } },
+        ["reviewer"] = new ModelRoleMapping { Provider = "openai", Model = "gpt-5.1", ProviderModels = new() { ["anthropic"] = "claude-sonnet-4-5" } },
     };
 
     /// <summary>Static per-model USD price table (input/output rate per million tokens).</summary>
@@ -49,6 +49,12 @@ public class ModelRoleMapping
 {
     public string Provider { get; set; } = string.Empty;
     public string Model { get; set; } = string.Empty;
+
+    /// <summary>Alternate provider models for this role (Bold:ModelRoles:{role}:ProviderModels:{provider}).</summary>
+    public Dictionary<string, string> ProviderModels { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+
+    public string? ResolveModel(string provider)
+        => provider == Provider ? Model : ProviderModels.GetValueOrDefault(provider);
 }
 
 public class ModelPricing

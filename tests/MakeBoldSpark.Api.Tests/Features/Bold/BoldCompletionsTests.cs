@@ -316,4 +316,30 @@ public class BoldCompletionsTests
         Assert.IsFalse(called);
     }
 
+    [TestMethod]
+    [DataRow("router", "anthropic", "claude-sonnet-4-5")]
+    [DataRow("planner", "openai", "gpt-5.1")]
+    [DataRow("reviewer", "anthropic", "claude-sonnet-4-5")]
+    public async Task ProviderOverride_SendsConfiguredModelForSelectedProvider(string role, string provider, string model)
+    {
+        string? actualModel = null;
+        HttpResponseMessage Reply(HttpRequestMessage request)
+        {
+            var body = JsonDocument.Parse(request.Content!.ReadAsStringAsync().GetAwaiter().GetResult()).RootElement;
+            actualModel = body.GetProperty("model").GetString();
+            return provider == "openai" ? TextResponse("fictional") : AnthropicTextResponse("fictional");
+        }
+        _factory.OpenAiHandler = Reply;
+        _factory.AnthropicHandler = Reply;
+        var (client, _, _) = await _factory.CreateBoldClientAsync();
+        var response = await client.PostAsJsonAsync("/api/integrations/bold/v1/completions", new
+        {
+            model_role = role, provider, messages = new[] { new { role = "user", content = "fictional" } }
+        });
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        Assert.AreEqual(model, actualModel, "Check the actual provider payload, not just which fake handler ran.");
+        var json = await response.Content.ReadFromJsonAsync<JsonElement>();
+        Assert.AreEqual(model, json.GetProperty("model").GetString());
+    }
+
 }
