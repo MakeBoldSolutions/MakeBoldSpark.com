@@ -2,7 +2,7 @@
 
 ## Product Owner TL;DR
 
-All eight findings have been addressed in separate fix commits and validated locally. The full suite now passes 201 tests (22 added regressions). Provider content logging is disabled, SQLite date filters work, retry usage is accumulated, malformed messages return 400, OpenAPI includes request/response shapes, overrides select compatible models, body reads are bounded, and transient retries back off. The remediation is ready for a separate ship re-review; no PR or deployment was created. Family Memories remains unstarted.
+All eight findings have been addressed in separate fix commits and validated locally. The full suite now passes 201 tests (22 added regressions). Provider content logging is disabled, SQLite date filters work, retry usage is accumulated, malformed messages return 400, OpenAPI includes request/response shapes, overrides select compatible models, body reads are bounded, and transient retries back off. The remediation re-review is complete with no new findings; no PR or deployment was created. Family Memories remains unstarted.
 
 Reviewed 2026-09-11 at commit `425a04c`, against freshly synchronized `origin/main`: 3 commits ahead, 0 behind. Tier: Feature. Review only; no implementation fixes applied.
 
@@ -83,6 +83,39 @@ Code fixes and this tracking update use disjoint file paths. All eight selected 
 
 ## Handoff
 
-Next command: `bold.ship review`, reviewing the remediation since `425a04c`, then `bold.ship` for the PR. No PR was present, so this work addressed the already-provided local feedback directly; no external review replies were posted.
+Next command: `bold.ship` for the PR; the remediation re-review is recorded below. No PR was present, so this work addressed the already-provided local feedback directly; no external review replies were posted.
 
 The spec's YAML status now agrees with its displayed Complete status. The pre-existing uncommitted deletion of `.claude/worktrees/agent-a434ff3cafc80bc4a` and collector-generated run-log changes were preserved and excluded from fix/tracking commits. Include the intended worktree cleanup when packaging the branch. No branch switch occurred.
+
+
+## Remediation re-review — 2026-09-11
+
+**Product Owner TL;DR:** No new actionable findings in the remediation diff. R1-R8 remain resolved. The branch is ready for PR preparation, including the existing uncommitted worktree cleanup and review/run-log artifacts.
+
+**Scope:** `425a04c..65fd841`. The branch-sync collector passed: 12 commits ahead of `origin/main`, zero behind. Re-reviewed only the remediation and relevant surrounding control flow, rather than restarting the original implementation review.
+
+| Prior finding | Re-review disposition |
+|---|---|
+| R1 | Resolved: both utility instances use NullLogger; HTTP headers are redacted; provider/schema diagnostics stored in run metadata use gateway-generated text. Reviewed success/failure log-capture tests for both providers. |
+| R2 | Resolved: date comparisons occur in .NET after SQL install scoping; pagination lookahead follows filtering, preserving inclusive boundaries and cross-install isolation. |
+| R3 | Resolved: all completed provider responses contribute usage before schema validation; success and exhausted/final-failure outcomes retain accumulated totals for run costs. |
+| R4 | Resolved: null message elements are rejected before accessing role/content; regression tests assert 400 and no provider call. |
+| R5 | Resolved: completion request metadata and typed status envelopes are declared; recursive contract tests cover nested field shapes and dates. Their documented semantic-equivalence limits remain. |
+| R6 | Resolved: default and alternate providers resolve their own configured model before execution; the resolved model also flows into results and accounting. Unconfigured alternate mappings fail before execution. |
+| R7 | Resolved: Content-Length is checked early and unknown-length reads stop at limit+1 without whole-request buffering; exact-limit and UTF-8 cases are covered. |
+| R8 | Resolved: transient retries await bounded exponential delays with cancellation; hard errors do not retry. The delay registration is compatible with its stateless singleton lifetime. |
+
+**Coverage:** Reviewed all production changes in the remediation, including input/trust boundaries, provider adapters, data query changes, accounting, configuration and host registration. Reviewed the added regression tests and documentation. No new enforced-backbone violations identified in this diff.
+
+**Validation:** The preceding full run passed 201/201 tests against the same code and test files; only documentation and collector logs have changed since that run. Reused that evidence instead of repeating unchanged tests. `git diff --check 425a04c..HEAD` passed. No live-provider, production-migration, deployment, or broader performance validation was performed. The documented install-history scan tradeoff remains appropriate to the scoped MVP and is not a new finding.
+
+**Result:** No new findings; no prior finding reopened. No implementation changes made during this re-review. Proceed to `bold.ship` for PR preparation. Existing working-tree cleanup remains uncommitted.
+
+
+## Shipping preparation — 2026-09-11
+
+The accidental agent-worktree gitlink has been removed in a dedicated cleanup commit. The re-review and collector records are being committed separately from implementation changes. No application or test code changed after the successful 201-test run.
+
+The publish collector rejects the historical ordering of analyze/critic/checklist: all three first appear in `e89fc36`, the same commit that introduced the implementation. The collector cannot establish that those gates preceded implementation from this history. Re-running a gate today cannot repair that historical fact. The existing backbone-waiver format is not a bypass for this collector check.
+
+A one-time exception to the gate-commit-order requirement for `0005-bold-api` is proposed, not yet ratified. Its basis is the completed gate artifacts, 23/23 checked tasks, eight separately committed review fixes, 201 passing tests, and a completed remediation re-review with no new findings. If approved, disclose the exception in the PR; retain the original commit history and leave framework checks unchanged. No exception is proposed for tests, authorization, branch synchronization, or unresolved review findings.
