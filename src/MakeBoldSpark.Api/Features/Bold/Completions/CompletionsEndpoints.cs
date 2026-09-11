@@ -1,5 +1,5 @@
-using System.Text;
 using System.Text.Json;
+using Microsoft.Extensions.Options;
 using MakeBoldSpark.Api.Features.Bold.Auth;
 using MakeBoldSpark.Api.Features.Bold.Runs;
 using MakeBoldSpark.Api.Infrastructure.OpenApi;
@@ -34,6 +34,7 @@ public static class CompletionsEndpoints
     private static async Task<IResult> HandleAsync(
         HttpContext httpContext,
         CompletionRequestValidator validator,
+        IOptions<BoldOptions> options,
         CompletionService completionService,
         RunRecordingService runRecording,
         CancellationToken cancellationToken)
@@ -42,10 +43,12 @@ public static class CompletionsEndpoints
         if (installTokenId is null)
             return BoldErrors.Unauthorized();
 
-        httpContext.Request.EnableBuffering();
-        using var reader = new StreamReader(httpContext.Request.Body, Encoding.UTF8, leaveOpen: true);
-        var rawBody = await reader.ReadToEndAsync(cancellationToken);
-        httpContext.Request.Body.Position = 0;
+        var limit = options.Value.RequestBounds.MaxRequestBytes;
+        if (httpContext.Request.ContentLength > limit)
+            return BoldErrors.BadRequest("request_too_large", $"Request body exceeds the maximum of {limit} bytes.");
+        var rawBody = await BoundedRequestBody.ReadAsync(httpContext.Request.Body, limit, cancellationToken);
+        if (rawBody is null)
+            return BoldErrors.BadRequest("request_too_large", $"Request body exceeds the maximum of {limit} bytes.");
 
         CompletionRequestDto? request;
         try
@@ -60,7 +63,7 @@ public static class CompletionsEndpoints
         if (request is null)
             return BoldErrors.BadRequest("invalid_request", "Request body must not be empty.");
 
-        var requestBytes = Encoding.UTF8.GetByteCount(rawBody);
+        var requestBytes = rawBody.Length;
         var validation = validator.Validate(request, requestBytes);
         if (!validation.IsValid)
             return BoldErrors.BadRequest(validation.ErrorCode!, validation.ErrorMessage!);
