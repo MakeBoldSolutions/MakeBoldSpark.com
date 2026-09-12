@@ -2,7 +2,7 @@
 
 ## Product Owner TL;DR
 
-All eight findings have been addressed in separate fix commits and validated locally. The full suite now passes 201 tests (22 added regressions). Provider content logging is disabled, SQLite date filters work, retry usage is accumulated, malformed messages return 400, OpenAPI includes request/response shapes, overrides select compatible models, body reads are bounded, and transient retries back off. The remediation re-review is complete with no new findings; no PR or deployment was created. Family Memories remains unstarted.
+All eight findings have been addressed in separate fix commits and validated locally. The full suite now passes 201 tests (22 added regressions). Provider content logging is disabled, SQLite date filters work, retry usage is accumulated, malformed messages return 400, OpenAPI includes request/response shapes, overrides select compatible models, body reads are bounded, and transient retries back off. The remediation re-review found no new code issues. Draft PR #8 is open. R9 has been fixed and passes local validation; the updated CI run is pending. No deployment was performed. Family Memories remains unstarted.
 
 Reviewed 2026-09-11 at commit `425a04c`, against freshly synchronized `origin/main`: 3 commits ahead, 0 behind. Tier: Feature. Review only; no implementation fixes applied.
 
@@ -126,3 +126,33 @@ A one-time exception to the gate-commit-order requirement for `0005-bold-api` is
 Mark Hazleton approved proceeding with the explicitly proposed one-time gate-history exception and draft PR creation by replying “continue” to the confirmation request. The exception applies only to the gate-commit-order check for `0005-bold-api`: analyze, critic, checklist, and implementation were first committed together in `e89fc36`. It does not claim that the automated publish collector passes. Original history and framework enforcement remain unchanged.
 
 Before publication, the working tree was clean and a fresh fetch showed zero commits behind `origin/main`. The existing 201-test passing result and completed remediation re-review apply to the unchanged application/test code. This authorization is for a draft PR, not merge or production deployment.
+
+
+## PR #8 review — 2026-09-12
+
+**Product Owner TL;DR:** Do not merge yet. R1-R8 remain resolved, and there are no additional application-code changes since the completed re-review. The PR's Validate workflow fails its npm security audit, which is not covered by the approved history exception.
+
+**Scope:** PR #8 at `003a463`, incremental review from `65fd841`. Changes are the accidental gitlink removal, re-review records, run log, and approved history exception. Branch-sync gate passed (15 ahead, zero behind origin/main). All changed files were inspected; this incremental diff contains no new auth, data-write, or application-code changes. No GitHub reviews or inline review comments were present when checked.
+
+### R9 — P1: CI fails the static-site dependency security gate
+
+Locations: `src/MakeBoldSpark.Web/package-lock.json` (dependency entries at lines 465, 1044, 1273, 1370, 1390, 1493, 1533, 2611), `src/MakeBoldSpark.Web/package.json:18`.
+
+[Validate run 34694818789](https://github.com/MakeBoldSolutions/MakeBoldSpark.com/actions/runs/34694818789) fails `Verify npm audit threshold`: `npm audit --audit-level=high` exits 1 and reports six high-severity findings covering brace-expansion, js-yaml, linkify-it, liquidjs, smol-toml, and the affected markdownlint-cli2 dependency chain. This is a confirmed release blocker under backbone IV (security by default), not a new Bold API implementation defect. The manifest, lockfile, and workflow are unchanged from origin/main; the earlier local review already noted audit warnings, but CI now confirms they fail the shipping check.
+
+Resolve the affected dependency versions/lockfile through a compatible dependency update, validate Markdown lint and the static-content pipeline, and obtain a passing PR validation run. Do not disable the audit threshold or assume the history-check exception waives security findings. The audit suggests a markdownlint-cli2 update outside the currently pinned version; that dependency change needs compatibility validation rather than an unexamined force update.
+
+**Validation evidence:** CI reports success for Markdown lint, static content pipeline tests, .NET restore, and .NET solution tests. The audit is the only failed step. Existing local evidence remains 201 passing tests. `git diff --check origin/main..HEAD` passed. No redundant local tests were run because application/test code is unchanged. This review did not modify dependencies or post GitHub comments.
+
+**Disposition:** R1-R8 resolved; R9 open. Route R9 to `bold.ship address` for remediation, then re-review the dependency diff and CI result. PR remains draft; no merge/deployment performed. This review note and collector log are local uncommitted artifacts.
+
+
+## R9 remediation — 2026-09-12
+
+Fix commit: `7754b58`. Updated markdownlint-cli2 from 0.23.0 to 0.23.2 and refreshed vulnerable transitive packages within their supported ranges. Added a targeted markdownlint-cli2/smol-toml override to 1.8.0 because the linter still pins vulnerable 1.7.0. The web package now declares Node >=22 and Validate uses Node 22, matching the linter's published engine requirement (the old linter already required >=22). The audit threshold is unchanged.
+
+Resolved versions: brace-expansion 1.1.18; js-yaml 3.15.2, 4.3.2 and 5.2.2 in their existing dependency branches; linkify-it 5.0.2; liquidjs 10.29.0; smol-toml 1.8.0. Eleventy remains 3.1.6. Remove the targeted override once the linter itself depends on a patched smol-toml version.
+
+Local validation: clean `npm ci` succeeded; `npm run lint:markdown` passed; `npm test` passed normal-build, failed-build output-preservation and duplicate-output cases; `npm audit --audit-level=high` reports zero vulnerabilities; `dotnet test MakeBoldSpark.slnx --verbosity minimal` passed 201/201 tests (16 seconds). Local Node is 26.7.0; GitHub CI validates the Node 22 runtime. `git diff --check` passed.
+
+R9 is resolved in code with passing local validation, pending confirmation from the updated PR workflow. Its fix paths are disjoint from this tracking commit. No audit exception, application behavior change, or new test mirroring package versions was introduced.
