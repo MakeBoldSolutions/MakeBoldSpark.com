@@ -298,3 +298,8 @@ Operational details clarified by remediation:
 - The request byte limit is checked during reading, including requests without Content-Length, before deserialization. OpenAPI explicitly declares the JSON completion request and typed status responses.
 
 No public contract deviation, new dependency, or database migration was introduced by the remediation. Production DNS/deployment and live-provider validation remain outside this milestone.
+
+
+## Shipping process exception — 2026-09-12
+
+Ratified by Mark Hazleton in this session: proceed with a draft PR despite the gate-commit-order check for this feature. Gate artifacts and implementation were introduced together in `e89fc36`, so the historical prerequisite cannot be established by the collector. The exception is limited to that ordering check; no backbone principle is waived, no framework check is changed, and no commit history is rewritten. All 23 tasks are complete, 201 tests pass, and re-review found no new findings. See `gates/review.md` for the approval context. Merge and deployment are not authorized by this exception.

@@ -119,3 +119,10 @@ The accidental agent-worktree gitlink has been removed in a dedicated cleanup co
 The publish collector rejects the historical ordering of analyze/critic/checklist: all three first appear in `e89fc36`, the same commit that introduced the implementation. The collector cannot establish that those gates preceded implementation from this history. Re-running a gate today cannot repair that historical fact. The existing backbone-waiver format is not a bypass for this collector check.
 
 A one-time exception to the gate-commit-order requirement for `0005-bold-api` is proposed, not yet ratified. Its basis is the completed gate artifacts, 23/23 checked tasks, eight separately committed review fixes, 201 passing tests, and a completed remediation re-review with no new findings. If approved, disclose the exception in the PR; retain the original commit history and leave framework checks unchanged. No exception is proposed for tests, authorization, branch synchronization, or unresolved review findings.
+
+
+## Shipping exception ratified — 2026-09-12
+
+Mark Hazleton approved proceeding with the explicitly proposed one-time gate-history exception and draft PR creation by replying “continue” to the confirmation request. The exception applies only to the gate-commit-order check for `0005-bold-api`: analyze, critic, checklist, and implementation were first committed together in `e89fc36`. It does not claim that the automated publish collector passes. Original history and framework enforcement remain unchanged.
+
+Before publication, the working tree was clean and a fresh fetch showed zero commits behind `origin/main`. The existing 201-test passing result and completed remediation re-review apply to the unchanged application/test code. This authorization is for a draft PR, not merge or production deployment.
