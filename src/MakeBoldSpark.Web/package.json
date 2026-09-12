@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "scripts": {
     "build": "node scripts/build-and-swap.mjs",
@@ -15,6 +15,11 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6",
-    "markdownlint-cli2": "0.23.0"
+    "markdownlint-cli2": "0.23.2"
+  },
+  "overrides": {
+    "markdownlint-cli2": {
+      "smol-toml": "1.8.0"
+    }
   }
 }

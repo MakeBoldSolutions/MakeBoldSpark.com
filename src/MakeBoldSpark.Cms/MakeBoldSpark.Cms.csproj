@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.4" />
+    <PackageReference Update="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.5" />
   </ItemGroup>
 
   <!-- Runs npm as part of dotnet build, same as MakeBoldSpark.Api's BuildStaticContent target for MakeBoldSpark.Web; requires Node available in the build environment. -->

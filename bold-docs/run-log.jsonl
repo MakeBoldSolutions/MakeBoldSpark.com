@@ -1,0 +1,15 @@
+{"ts":"2026-07-21T13:56:15Z","command":"plan","collector":"collect-triage-context","user":"mark-hazleton"}
+{"ts":"2026-07-21T14:14:41Z","command":"plan","collector":"collect-triage-context","user":"mark-hazleton"}
+{"ts":"2026-07-21T14:15:05Z","command":"plan","collector":"collect-triage-context","user":"mark-hazleton"}
+{"ts":"2026-07-21T14:25:12Z","command":"build","collector":"collect-gate-status","user":"mark-hazleton"}
+{"ts":"2026-07-21T14:25:25Z","command":"build","collector":"collect-gate-status","user":"mark-hazleton"}
+{"ts":"2026-07-21T14:27:16Z","command":"plan","collector":"collect-triage-context","user":"mark-hazleton"}
+{"ts":"2026-07-21T14:31:59Z","command":"build","collector":"collect-gate-status","user":"mark-hazleton"}
+{"ts":"2026-07-21T14:42:42Z","command":"build","collector":"collect-gate-status","user":"mark-hazleton"}
+{"ts":"2026-07-21T14:46:08Z","command":"build","collector":"collect-gate-status","user":"mark-hazleton"}
+{"ts":"2026-09-11T12:04:29Z","command":"plan","collector":"collect-triage-context","user":"mark-hazleton"}
+{"ts":"2026-09-11T12:05:40Z","command":"build","collector":"collect-gate-status","user":"mark-hazleton"}
+{"ts":"2026-09-11T12:19:00Z","command":"ship","collector":"collect-ship-context","user":"mark-hazleton"}
+{"ts":"2026-09-11T15:57:58Z","command":"ship","collector":"collect-ship-context","user":"mark-hazleton"}
+{"ts":"2026-09-11T18:56:20Z","command":"ship","collector":"collect-ship-context","user":"mark-hazleton"}
+{"ts":"2026-09-12T13:05:16Z","command":"ship","collector":"collect-ship-context","user":"mark-hazleton"}
