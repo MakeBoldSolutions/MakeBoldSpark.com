@@ -17,3 +17,4 @@
 {"ts":"2026-09-12T17:59:33Z","command":"plan","collector":"collect-triage-context","user":"mark-hazleton"}
 {"ts":"2026-09-12T18:00:13Z","command":"build","collector":"collect-gate-status","user":"mark-hazleton"}
 {"ts":"2026-09-12T18:13:43Z","command":"build","collector":"collect-gate-status","user":"mark-hazleton"}
+{"ts":"2026-10-11T17:27:10Z","command":"ship","collector":"collect-ship-context","user":"mark-hazleton"}

@@ -1,5 +1,9 @@
 # Family Memories validation
 
+## Review follow-up
+
+- Review finding (low): admin `createdDate`/`updatedDate` lacked a UTC `Z` suffix after SQLite reads (AC3). Fixed with a UTC value converter and test `Admin_timestamps_are_serialized_as_utc`. Full API suite: 242 passed; no pending EF model changes.
+
 ## Local runtime revalidation (2026-09-14)
 
 - Started the Development host with `dotnet run --no-build --project src/MakeBoldSpark.Api --launch-profile http` at `http://localhost:5290`; startup reported successful database migrations.
