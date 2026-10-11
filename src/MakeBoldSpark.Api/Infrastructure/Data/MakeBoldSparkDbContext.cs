@@ -1,5 +1,6 @@
 using MakeBoldSpark.Api.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using MakeBoldSpark.Api.Features.FamilyMemories;
 
 namespace MakeBoldSpark.Api.Infrastructure.Data;
 
@@ -9,9 +10,22 @@ public class MakeBoldSparkDbContext(DbContextOptions<MakeBoldSparkDbContext> opt
     public DbSet<Tag> Tags => Set<Tag>();
     public DbSet<BoldInstallToken> BoldInstallTokens => Set<BoldInstallToken>();
     public DbSet<BoldRun> BoldRuns => Set<BoldRun>();
+    public DbSet<FamilyMemory> FamilyMemories => Set<FamilyMemory>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<FamilyMemory>(entity =>
+        {
+            entity.HasKey(m => m.Id);
+            entity.Property(m => m.PersonName).IsRequired().HasMaxLength(200);
+            entity.Property(m => m.PersonPronouns).IsRequired().HasMaxLength(100);
+            entity.Property(m => m.RelationshipToJared).IsRequired().HasMaxLength(300);
+            entity.Property(m => m.Body).IsRequired().HasMaxLength(100000);
+            entity.HasIndex(m => new { m.IsPublished, m.SortOrder, m.Id });
+            // SQLite returns Kind=Unspecified; mark as UTC so JSON carries the trailing Z.
+            entity.Property(m => m.CreatedDate).HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+            entity.Property(m => m.UpdatedDate).HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+        });
         modelBuilder.Entity<Article>(entity =>
         {
             entity.HasKey(a => a.Id);

@@ -6,6 +6,15 @@ export interface BaseEntity {
   updatedID: number | null;
 }
 
+export interface FamilyMemory extends BaseEntity {
+  personName: string;
+  personPronouns: string;
+  relationshipToJared: string;
+  body: string;
+  sortOrder: number;
+  isPublished: boolean;
+}
+
 export interface WebSite extends BaseEntity {
   name: string;
   description: string;

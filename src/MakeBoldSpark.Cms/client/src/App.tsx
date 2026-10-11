@@ -6,6 +6,7 @@ import { CmsLayout } from './cms/CmsLayout';
 import { DashboardPage } from './cms/DashboardPage';
 import { EntityCrudPage } from './cms/EntityCrudPage';
 import {
+  familyMemoryConfig,
   siteConfig,
   blogConfig,
   authorConfig,
@@ -38,6 +39,7 @@ function AppRoutes() {
             <CmsLayout>
               <Routes>
                 <Route path="/" element={<DashboardPage />} />
+                <Route path="/family-memories" element={<EntityCrudPage config={familyMemoryConfig} />} />
                 <Route path="/sites" element={<EntityCrudPage config={siteConfig} />} />
                 <Route path="/blogs" element={<EntityCrudPage config={blogConfig} />} />
                 <Route path="/authors" element={<EntityCrudPage config={authorConfig} />} />

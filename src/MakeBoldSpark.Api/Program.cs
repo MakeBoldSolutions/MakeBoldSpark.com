@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.OpenApi;
+using MakeBoldSpark.Api.Features.FamilyMemories;
 using Microsoft.OpenApi;
 using MakeBoldSpark.Api.Features.AsyncDemo.CancellationPatterns;
 using MakeBoldSpark.Api.Features.AsyncDemo.ConcurrencyPatterns;
@@ -151,6 +152,7 @@ builder.Services.AddMakeBoldSparkAuth(builder.Configuration, builder.Environment
 
 // CORS
 builder.Services.AddMakeBoldSparkCors(builder.Configuration, builder.Environment);
+builder.Services.AddFamilyMemories(builder.Configuration);
 
 // Login throttle (FR-014) — IP/global-keyed half of the dual-layer design (research.md);
 // the email-keyed half is applied explicitly inside AuthEndpoints.MapAuthApi. Either layer
@@ -394,6 +396,7 @@ app.UseRateLimiter();
 app.MapOpenApi();                // /openapi/v1.json
 
 // Route groups
+app.MapFamilyMemories();
 var publicApi = app.MapGroup("/api/public");
 publicApi.MapPublicContentApi();
 publicApi.MapPublicRecipeApi();

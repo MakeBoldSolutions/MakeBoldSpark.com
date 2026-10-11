@@ -32,6 +32,51 @@ namespace MakeBoldSpark.Api.Migrations
                     b.ToTable("ArticleTag", (string)null);
                 });
 
+            modelBuilder.Entity("MakeBoldSpark.Api.Features.FamilyMemories.FamilyMemory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasMaxLength(100000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsPublished")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PersonName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PersonPronouns")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RelationshipToJared")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsPublished", "SortOrder", "Id");
+
+                    b.ToTable("FamilyMemories");
+                });
+
             modelBuilder.Entity("MakeBoldSpark.Api.Infrastructure.Data.Entities.Article", b =>
                 {
                     b.Property<int>("Id")
