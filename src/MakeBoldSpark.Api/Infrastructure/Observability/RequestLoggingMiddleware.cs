@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using MakeBoldSpark.Api.Features.ArrowSparkReactions;
 using System.Security.Claims;
 
 namespace MakeBoldSpark.Api.Infrastructure.Observability;
@@ -29,6 +30,9 @@ public class RequestLoggingMiddleware(RequestDelegate next, ILogger<RequestLoggi
         });
 
         await next(context);
+
+        // ArrowSpark reactions are not logged per request (API-94); failures are logged by the endpoint filter.
+        if (ArrowSparkReactionEndpoints.IsReactionRoute(context.Request.Path)) return;
 
         sw.Stop();
 

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.OpenApi;
+using MakeBoldSpark.Api.Features.ArrowSparkReactions;
 using MakeBoldSpark.Api.Features.FamilyMemories;
 using Microsoft.OpenApi;
 using MakeBoldSpark.Api.Features.AsyncDemo.CancellationPatterns;
@@ -153,6 +154,7 @@ builder.Services.AddMakeBoldSparkAuth(builder.Configuration, builder.Environment
 // CORS
 builder.Services.AddMakeBoldSparkCors(builder.Configuration, builder.Environment);
 builder.Services.AddFamilyMemories(builder.Configuration);
+builder.Services.AddArrowSparkReactions(builder.Configuration);
 
 // Login throttle (FR-014) — IP/global-keyed half of the dual-layer design (research.md);
 // the email-keyed half is applied explicitly inside AuthEndpoints.MapAuthApi. Either layer
@@ -170,6 +172,13 @@ builder.Services.AddRateLimiter(options =>
         }
 
         context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+        if (ArrowSparkReactionEndpoints.IsReactionRoute(context.HttpContext.Request.Path))
+        {
+            context.HttpContext.Response.Headers.CacheControl = "no-store";
+            await context.HttpContext.Response.WriteAsJsonAsync(new { message = "Too many requests. Retry shortly." }, cancellationToken: token);
+            return;
+        }
+
         await context.HttpContext.Response.WriteAsJsonAsync(
             new { message = "Too many publisher recipe operations. Retry shortly." },
             cancellationToken: token);
@@ -397,6 +406,7 @@ app.MapOpenApi();                // /openapi/v1.json
 
 // Route groups
 app.MapFamilyMemories();
+app.MapArrowSparkReactions();
 var publicApi = app.MapGroup("/api/public");
 publicApi.MapPublicContentApi();
 publicApi.MapPublicRecipeApi();
