@@ -13,6 +13,10 @@ export interface FieldConfig<T> {
   label: string;
   type: FieldType;
   required?: boolean;
+  maxLength?: number;
+  min?: number;
+  max?: number;
+  step?: number;
   /** Excluded entirely from the create/edit form (e.g. Author.password rendered separately, never round-tripped as plain text — FR-006). */
   hiddenInForm?: boolean;
   /** Makes a field span the entire responsive form grid. */
@@ -32,6 +36,7 @@ export interface EntityConfig<T extends BaseEntity> {
   allowDelete?: boolean;
   /** False for Subscribers/Newsletters/Mail Configuration, whose GET also requires Admin — see client.ts's adminCrud. Defaults to true (anonymous read, admin write). */
   publicRead?: boolean;
+  compareRecords?: (a: T, b: T) => number;
 }
 
 export interface EntityListRenderProps<T extends BaseEntity> {
@@ -241,7 +246,7 @@ export function EntityCrudPage<T extends BaseEntity>({ config, listQuery, render
             </tr>
           </thead>
           <tbody>
-            {records.map((record) => (
+            {(config.compareRecords ? [...records].sort(config.compareRecords) : records).map((record) => (
               <tr
                 key={record.id}
                 className={config.allowEdit !== false ? 'cms-editable-row' : undefined}
@@ -336,6 +341,9 @@ function FormField({
           <input
             id={id}
             type="number"
+            min={field.min}
+            max={field.max}
+            step={field.step}
             required={field.required}
             value={value == null ? '' : Number(value)}
             onChange={(e) => onChange(e.target.valueAsNumber)}
@@ -348,6 +356,7 @@ function FormField({
           {field.label}
           <textarea
             id={id}
+            maxLength={field.maxLength}
             required={field.required}
             value={String(value ?? '')}
             onChange={(e) => onChange(e.target.value)}
@@ -409,6 +418,7 @@ function FormField({
           <input
             id={id}
             type="text"
+            maxLength={field.maxLength}
             required={field.required}
             value={String(value ?? '')}
             onChange={(e) => onChange(e.target.value)}

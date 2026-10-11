@@ -4,6 +4,7 @@ import { useAuth } from '../auth/AuthContext';
 import { ReauthPrompt } from './ReauthPrompt';
 
 export const navSections: Array<{ to: string; label: string }> = [
+  { to: '/family-memories', label: 'Family Memories' },
   { to: '/sites', label: 'Sites' },
   { to: '/blogs', label: 'Blogs' },
   { to: '/authors', label: 'Authors' },

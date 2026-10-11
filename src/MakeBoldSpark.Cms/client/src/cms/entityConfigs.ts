@@ -1,4 +1,5 @@
 import type {
+  FamilyMemory,
   WebSite,
   Blog,
   Author,
@@ -12,6 +13,27 @@ import type {
   MailSetting,
 } from '../api/types';
 import type { EntityConfig } from './EntityCrudPage';
+
+export const familyMemoryConfig: EntityConfig<FamilyMemory> = {
+  resource: 'family-memories',
+  label: 'Family Memory',
+  publicRead: false,
+  compareRecords: (a, b) => a.sortOrder - b.sortOrder || a.id - b.id,
+  columns: [
+    { key: 'personName', label: 'Name', type: 'text' },
+    { key: 'sortOrder', label: 'Editorial Order', type: 'number' },
+    { key: 'isPublished', label: 'Published', type: 'boolean' },
+  ],
+  fields: [
+    { key: 'personName', label: 'Name (up to 200 characters)', type: 'text', required: true, maxLength: 200 },
+    { key: 'personPronouns', label: 'Pronouns (optional, up to 100 characters)', type: 'text', maxLength: 100 },
+    { key: 'relationshipToJared', label: 'Relationship to Jared (up to 300 characters)', type: 'text', required: true, maxLength: 300 },
+    { key: 'body', label: 'Memory (up to 100,000 characters; paragraphs and HTTP(S) Markdown links)', type: 'textarea', required: true, maxLength: 100000, layout: 'full' },
+    { key: 'sortOrder', label: 'Editorial Order (lowest first)', type: 'number', required: true, min: 0, max: 2147483647, step: 1 },
+    { key: 'isPublished', label: 'Published', type: 'boolean' },
+  ],
+  defaultValues: { personName: '', personPronouns: '', relationshipToJared: '', body: '', sortOrder: 0, isPublished: false },
+};
 
 export const siteConfig: EntityConfig<WebSite> = {
   resource: 'domains',
