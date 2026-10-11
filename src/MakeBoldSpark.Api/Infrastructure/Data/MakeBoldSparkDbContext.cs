@@ -22,6 +22,9 @@ public class MakeBoldSparkDbContext(DbContextOptions<MakeBoldSparkDbContext> opt
             entity.Property(m => m.RelationshipToJared).IsRequired().HasMaxLength(300);
             entity.Property(m => m.Body).IsRequired().HasMaxLength(100000);
             entity.HasIndex(m => new { m.IsPublished, m.SortOrder, m.Id });
+            // SQLite returns Kind=Unspecified; mark as UTC so JSON carries the trailing Z.
+            entity.Property(m => m.CreatedDate).HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+            entity.Property(m => m.UpdatedDate).HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
         });
         modelBuilder.Entity<Article>(entity =>
         {

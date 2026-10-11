@@ -55,6 +55,16 @@ public class FamilyMemoryTests
     }
 
     [TestMethod]
+    public async Task Admin_timestamps_are_serialized_as_utc()
+    {
+        await Create(Fixture());
+        using var admin = factory.CreateAdminClient();
+        var list = await admin.GetFromJsonAsync<JsonElement>(Admin);
+        foreach (var name in new[] { "createdDate", "updatedDate" })
+            Assert.IsTrue(list[0].GetProperty(name).GetString()!.EndsWith('Z'), name);
+    }
+
+    [TestMethod]
     public async Task Empty_is_200_with_exact_envelope_and_no_secrets()
     {
         using var client = factory.CreateClient();
