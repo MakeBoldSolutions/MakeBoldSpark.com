@@ -37,4 +37,6 @@ None. Clarification scan: scope, data lifecycle, edge cases, security, integrati
 None.
 
 
+## Shipping process exception — 2026-10-11
 
+Approved by Mark Hazleton in this session (reply "1" to: record the exception and open a draft PR): proceed with a draft PR despite the gate-commit-order check for this feature. The analyze, critic and checklist gate files and the implementation were first committed together in `b9d3890`, so the publish collector cannot establish that the gates preceded implementation (the run log shows `plan` and `build` gate checks on 2026-09-12 before the migration was generated, but the collector reads git history only). The exception is limited to that ordering check; no backbone principle is waived, no framework check is changed, and no history is rewritten. All 4 tasks are complete, 242 API tests and 18 CMS tests pass, and `/bold-ship-review` found one low-severity issue that was fixed in `c5ed82e`. This authorizes a draft PR only; merge and deployment are not authorized.
