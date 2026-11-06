@@ -79,8 +79,11 @@ export function CategoryMaintenancePage() {
   return (
     <>
       <header className="page-header">
-        <h1>Recipe Categories</h1>
-        <button type="button" onClick={() => setEdit({ ...blankCategory })} disabled={!activeDomainId}>
+        <div>
+          <p className="eyebrow">Make Bold Spark</p>
+          <h1>Recipe Categories</h1>
+        </div>
+        <button type="button" className="primary" onClick={() => setEdit({ ...blankCategory })} disabled={!activeDomainId}>
           New category
         </button>
       </header>
@@ -88,17 +91,17 @@ export function CategoryMaintenancePage() {
       {message && <p role="alert">{message}</p>}
       {activeDomainId > 0 && (
         <section aria-label="Category inventory">
-          {loading && <p>Loading categories...</p>}
-          {!loading && items.length === 0 && <p>No categories in this domain.</p>}
+          {loading && <p className="empty">Loading categories...</p>}
+          {!loading && items.length === 0 && <p className="empty">No categories in this domain.</p>}
           {!loading && items.length > 0 && (
-            <ul className="recipe-list">
+            <ul className="recipe-list compact">
               {items.map((category) => (
                 <li key={category.id}>
                   <button type="button" onClick={() => setEdit(category)}>
                     {category.name}
                   </button>
-                  <span>{category.isActive ? 'Active' : 'Inactive'}</span>
-                  <button type="button" onClick={() => void deleteCategory(category)}>
+                  <span className={`badge ${category.isActive ? "active" : "inactive"}`}>{category.isActive ? "Active" : "Inactive"}</span>
+                  <button type="button" className="danger" onClick={() => void deleteCategory(category)}>
                     Delete
                   </button>
                 </li>

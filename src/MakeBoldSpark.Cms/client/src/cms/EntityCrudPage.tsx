@@ -204,10 +204,10 @@ export function EntityCrudPage<T extends BaseEntity>({ config, listQuery, render
             ))}
           {formError && <p role="alert" className="cms-form-error">{formError}</p>}
           <div className="cms-form-actions">
-            <button type="submit" disabled={saving}>
+            <button type="submit" className="primary" disabled={saving}>
               {saving ? 'Saving…' : 'Save'}
             </button>
-            <button type="button" onClick={cancelEdit} disabled={saving}>
+            <button type="button" className="ghost" onClick={cancelEdit} disabled={saving}>
               Cancel
             </button>
           </div>
@@ -215,7 +215,7 @@ export function EntityCrudPage<T extends BaseEntity>({ config, listQuery, render
         {isExistingRecord && config.allowDelete !== false && (
           <div className="cms-destructive-actions">
             <p>Deleting this record cannot be undone.</p>
-            <button type="button" onClick={() => handleDelete(editing as T)}>
+            <button type="button" className="danger" onClick={() => handleDelete(editing as T)}>
               Delete {config.label}
             </button>
           </div>
@@ -228,7 +228,7 @@ export function EntityCrudPage<T extends BaseEntity>({ config, listQuery, render
     <div className="cms-entity-list">
       <div className="cms-entity-list-header">
         <h2>{config.label}</h2>
-        <button type="button" onClick={startCreate}>
+        <button type="button" className="primary" onClick={startCreate}>
           New {config.label}
         </button>
       </div>
@@ -267,7 +267,7 @@ export function EntityCrudPage<T extends BaseEntity>({ config, listQuery, render
                 {config.allowEdit === false && (
                   <td>
                     {config.allowDelete !== false && (
-                    <button type="button" onClick={() => handleDelete(record)}>
+                    <button type="button" className="danger" onClick={() => handleDelete(record)}>
                       Delete
                     </button>
                     )}

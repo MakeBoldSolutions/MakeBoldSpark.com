@@ -4,6 +4,7 @@ import { useAuth } from '../auth/AuthContext';
 import { DomainSelector } from './DomainSelector';
 import { RecipeEditor } from './RecipeEditor';
 import { RecipeListPage } from './RecipeListPage';
+import { RecipeWizard } from './RecipeWizard';
 import { useActiveDomain } from './useActiveDomain';
 
 const emptyRecipe: Partial<Recipe> = {
@@ -20,7 +21,7 @@ const emptyRecipe: Partial<Recipe> = {
 const emptyPage: Page<Recipe> = { items: [], page: 1, pageSize: 50, totalCount: 0 };
 
 export function RecipeMaintenancePage() {
-  const { token } = useAuth();
+  const { token, session } = useAuth();
   const { activeDomainId, selectDomain } = useActiveDomain();
   const [page, setPage] = useState(1);
   const [inventory, setInventory] = useState<Page<Recipe>>(emptyPage);
@@ -74,19 +75,19 @@ export function RecipeMaintenancePage() {
     return '';
   }
 
-  async function saveRecipe() {
-    if (!edit || !activeDomainId) return;
-    const validation = validateRecipe(edit);
+  async function saveRecipe(candidate: Partial<Recipe> | null = edit) {
+    if (!candidate || !activeDomainId) return;
+    const validation = validateRecipe(candidate);
     if (validation) {
       setMessage(validation);
       return;
     }
 
     try {
-      await recipeApi.saveRecipe(token, activeDomainId, edit);
+      await recipeApi.saveRecipe(token, activeDomainId, candidate);
       setEdit(null);
       await load(activeDomainId, page);
-      setMessage('Recipe saved.');
+      setMessage(!candidate.id && candidate.isApproved ? 'Recipe published.' : 'Recipe saved.');
     } catch (error) {
       if (error instanceof ApiError && error.status === 412) setMessage('Recipe changed elsewhere. Reload before saving.');
       else setMessage('Unable to save recipe.');
@@ -110,17 +111,34 @@ export function RecipeMaintenancePage() {
     await load(activeDomainId, nextPage);
   }
 
+  const creating = edit !== null && !edit.id;
+  const editing = edit !== null && Boolean(edit.id);
+
   return (
     <>
       <header className="page-header">
-        <h1>Recipe Maintenance</h1>
-        <button type="button" onClick={() => setEdit({ ...emptyRecipe })} disabled={!activeDomainId}>
-          New recipe
-        </button>
+        <div>
+          <p className="eyebrow">Make Bold Spark</p>
+          <h1>{creating ? 'New recipe' : 'Recipe Maintenance'}</h1>
+        </div>
+        {!creating && (
+          <button type="button" className="primary" onClick={() => setEdit({ ...emptyRecipe })} disabled={!activeDomainId}>
+            New recipe
+          </button>
+        )}
       </header>
-      <DomainSelector token={token} value={activeDomainId} onChange={changeDomain} onError={setMessage} />
+      {!creating && <DomainSelector token={token} value={activeDomainId} onChange={changeDomain} onError={setMessage} />}
       {message && <p role="alert">{message}</p>}
-      {activeDomainId > 0 && (
+      {creating && (
+        <RecipeWizard
+          initial={edit}
+          categories={categories}
+          defaultAuthor={session?.displayName ?? ''}
+          onSave={(recipe) => void saveRecipe(recipe)}
+          onCancel={() => setEdit(null)}
+        />
+      )}
+      {!creating && activeDomainId > 0 && (
         <RecipeListPage
           recipes={inventory.items}
           page={inventory.page}
@@ -133,7 +151,7 @@ export function RecipeMaintenancePage() {
           onNext={() => void goToPage(page + 1)}
         />
       )}
-      {edit && (
+      {editing && (
         <RecipeEditor
           recipe={edit}
           categories={categories}

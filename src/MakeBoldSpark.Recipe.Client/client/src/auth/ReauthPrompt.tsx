@@ -31,7 +31,7 @@ export function ReauthPrompt() {
           <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
         </label>
         {error && <p role="alert">{error}</p>}
-        <button type="submit">Sign in</button>
+        <button type="submit" className="primary">Sign in</button>
       </form>
     </section>
   );

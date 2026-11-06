@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
+import { BrandMark } from '../BrandMark';
 import { useAuth } from '../auth/AuthContext';
 import { ReauthPrompt } from './ReauthPrompt';
 
@@ -24,7 +25,11 @@ export function CmsLayout({ children }: { children: ReactNode }) {
   return (
     <div className="cms-shell">
       <aside className="cms-sidebar">
-        <img src="/assets/makebold/logos/make-bold-solutions-logo.svg" alt="MakeBold Solutions" className="cms-sidebar-logo" />
+        <div className="cms-brand">
+          <BrandMark onDark />
+          <span className="eyebrow">Make Bold Spark</span>
+          <strong>CMS</strong>
+        </div>
         <nav>
           <NavLink to="/" end>
             Dashboard

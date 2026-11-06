@@ -67,10 +67,10 @@ export function RecipeEditor({ recipe, categories, onChange, onSave, onCancel }:
         <span>Published</span>
       </label>
       <div className="actions">
-        <button type="button" onClick={onSave}>
+        <button type="button" className="primary" onClick={onSave}>
           Save
         </button>
-        <button type="button" onClick={onCancel}>
+        <button type="button" className="ghost" onClick={onCancel}>
           Cancel
         </button>
       </div>

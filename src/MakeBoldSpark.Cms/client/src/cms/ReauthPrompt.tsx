@@ -48,7 +48,7 @@ export function ReauthPrompt() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit" disabled={submitting}>
+        <button type="submit" className="primary" disabled={submitting}>
           {submitting ? 'Signing in…' : 'Sign in'}
         </button>
         {error && <span role="alert">{error}</span>}

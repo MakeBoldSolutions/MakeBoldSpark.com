@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.10" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="10.0.14" />
   </ItemGroup>
   <PropertyGroup>
     <_SpaSentinel>$(IntermediateOutputPath)spa-built.sentinel</_SpaSentinel>

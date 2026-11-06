@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { BrandMark } from '../BrandMark';
 import { useAuth } from './AuthContext';
 
 export function LoginPage() {
@@ -25,8 +26,12 @@ export function LoginPage() {
 
   return (
     <div className="cms-login">
-      <img src="/assets/makebold/logos/make-bold-solutions-logo.svg" alt="MakeBold Solutions" className="cms-login-logo" />
-      <h1>MakeBoldSpark CMS</h1>
+      <div className="cms-login-card">
+      <BrandMark />
+      <div>
+        <p className="eyebrow">Make Bold Spark</p>
+        <h1>MakeBoldSpark CMS</h1>
+      </div>
       <form onSubmit={handleSubmit}>
         <label htmlFor="email">Email</label>
         <input
@@ -51,10 +56,11 @@ export function LoginPage() {
 
         {error && <p role="alert" className="cms-login-error">{error}</p>}
 
-        <button type="submit" disabled={submitting}>
+        <button type="submit" className="primary" disabled={submitting}>
           {submitting ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
+      </div>
     </div>
   );
 }

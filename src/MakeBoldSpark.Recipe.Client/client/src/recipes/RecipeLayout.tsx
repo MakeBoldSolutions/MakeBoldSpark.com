@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
+import { BrandMark } from '../BrandMark';
 import { useAuth } from '../auth/AuthContext';
 import { ReauthPrompt } from '../auth/ReauthPrompt';
 
@@ -9,7 +10,11 @@ export function RecipeLayout({ children }: { children: ReactNode }) {
   return (
     <div className="recipe-shell">
       <aside className="recipe-sidebar">
-        <div className="recipe-brand">MakeBoldSpark Recipes</div>
+        <div className="recipe-brand">
+          <BrandMark onDark />
+          <span className="eyebrow">Make Bold Spark</span>
+          <strong>Recipes</strong>
+        </div>
         <nav>
           <NavLink to="/" end>
             Recipes
