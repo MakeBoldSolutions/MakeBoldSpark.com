@@ -102,8 +102,15 @@ describe('RecipeMaintenancePage', () => {
     expect(screen.getByText('Draft')).toBeInTheDocument();
   });
 
-  it('validates required editor fields before saving', async () => {
-    mockRecipeFetch();
+  it('walks through the new recipe wizard and publishes', async () => {
+    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation((input, init) => {
+      const url = String(input);
+      const method = init?.method ?? 'GET';
+      if (url.endsWith('/domains')) return jsonResponse([{ id: 1, name: 'Recipes' }]);
+      if (url.includes('/categories') && method === 'GET') return jsonResponse([category]);
+      if (method === 'POST') return jsonResponse({ ...recipe, id: 10 }, 201);
+      return jsonResponse({ items: [recipe], page: 1, pageSize: 50, totalCount: 1 });
+    });
     renderPage();
 
     await waitFor(() => expect(screen.getByRole('option', { name: 'Recipes' })).toBeInTheDocument());
@@ -111,9 +118,32 @@ describe('RecipeMaintenancePage', () => {
     await screen.findByText('Pancakes');
 
     fireEvent.click(screen.getByRole('button', { name: /new recipe/i }));
-    fireEvent.click(screen.getByRole('button', { name: /^save$/i }));
-
+    fireEvent.click(screen.getByRole('button', { name: /^next$/i }));
     expect(await screen.findByRole('alert')).toHaveTextContent('Recipe name is required.');
+
+    fireEvent.change(screen.getByLabelText('Recipe name'), { target: { value: 'Waffles' } });
+    fireEvent.change(screen.getByLabelText('Category'), { target: { value: '9' } });
+    fireEvent.click(screen.getByRole('button', { name: /^next$/i }));
+
+    fireEvent.click(screen.getByRole('button', { name: /^next$/i }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('Add at least one ingredient.');
+    fireEvent.change(screen.getByLabelText('Ingredient 1'), { target: { value: 'Batter' } });
+    fireEvent.click(screen.getByRole('button', { name: /^next$/i }));
+
+    fireEvent.change(screen.getByLabelText('Step 1'), { target: { value: 'Cook' } });
+    fireEvent.click(screen.getByRole('button', { name: /^next$/i }));
+
+    fireEvent.click(screen.getByRole('button', { name: /publish recipe/i }));
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Recipe published.');
+    const createCall = fetchSpy.mock.calls.find(([, init]) => init?.method === 'POST');
+    expect(JSON.parse(String(createCall?.[1]?.body))).toMatchObject({
+      name: 'Waffles',
+      ingredients: 'Batter',
+      instructions: 'Cook',
+      isApproved: true,
+      recipeCategoryId: 9,
+    });
   });
 
   it('saves an edited recipe and keeps the If-Match header', async () => {

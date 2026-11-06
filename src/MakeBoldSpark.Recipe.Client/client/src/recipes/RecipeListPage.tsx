@@ -26,20 +26,20 @@ export function RecipeListPage({
   const hasPrevious = page > 1;
   const hasNext = page * pageSize < totalCount;
 
-  if (loading) return <p>Loading recipes...</p>;
-  if (recipes.length === 0) return <p>No recipes in this domain.</p>;
+  if (loading) return <p className="empty">Loading recipes...</p>;
+  if (recipes.length === 0) return <p className="empty">No recipes in this domain.</p>;
 
   return (
     <section aria-label="Recipe inventory">
       <div className="list-toolbar">
-        <span>
+        <span className="eyebrow">
           Page {page} of {Math.max(1, Math.ceil(totalCount / pageSize))}
         </span>
-        <div>
-          <button type="button" onClick={onPrevious} disabled={!hasPrevious}>
+        <div className="actions">
+          <button type="button" className="ghost" onClick={onPrevious} disabled={!hasPrevious}>
             Previous
           </button>
-          <button type="button" onClick={onNext} disabled={!hasNext}>
+          <button type="button" className="ghost" onClick={onNext} disabled={!hasNext}>
             Next
           </button>
         </div>
@@ -50,9 +50,11 @@ export function RecipeListPage({
             <button type="button" onClick={() => onEdit(recipe)}>
               {recipe.name}
             </button>
-            <span>{recipe.recipeCategoryName}</span>
-            <span>{recipe.isApproved ? 'Published' : 'Draft'}</span>
-            <button type="button" onClick={() => onDelete(recipe)}>
+            <span className="meta">{recipe.recipeCategoryName}</span>
+            <span className={`badge ${recipe.isApproved ? 'published' : 'draft'}`}>
+              {recipe.isApproved ? 'Published' : 'Draft'}
+            </span>
+            <button type="button" className="danger" onClick={() => onDelete(recipe)}>
               Delete
             </button>
           </li>
